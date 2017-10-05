@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "_id": "1",
+      "username": "francoischalifour",
+      "name": "François Chalifour",
+      "description": "Freelancer • CS Student • Code • Design • 🎷 • 🎸 – GitHub: https://github.com/francoischalifour",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/870713221333884928/AUeuxQ0f_400x400.jpg",
+      "location": "Québec, Canada",
+      "url": "https://francoischalifour.com",
+      "email": "francois.chalifour@gmail.com",
+      "created_at": "2017-10-03"
+    },
+    {
+      "_id": "2",
+      "username": "dan_abramov",
+      "name": "Dan Abramov",
+      "description": "Working on @reactjs. Co-author of Redux and Create React App. Building tools for humans.",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/906557353549598720/oapgW_Fp_400x400.jpg",
+      "location": "London, England",
+      "created_at": "2009-08-17"
+    },
+    {
+      "_id": "3",
+      "username": "jongold",
+      "name": "@jongold  🤖 ",
+      "description": "deep learning & design tools @airbnbdesign • writing http://jon.gold/txt",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/833785170285178881/loBb32g3_400x400.jpg",
+      "location": "Black Rock City, NV",
+      "url": "jon.gold",
+      "created_at": "2008-03-12"
+    },
+    {
+      "_id": "4",
+      "username": "michaelbouffard",
+      "name": "Michael Bouffard",
+      "email": "michaelbouffard1992@gmail.com",
+      "created_at": "2017-10-04"
+    }
+  ]
+}
