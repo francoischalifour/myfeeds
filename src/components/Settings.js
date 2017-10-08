@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { getPublicUserById } from './api/users'
-import { getCurrentUserId } from './utils'
+import { getPublicUserById } from '../api/users'
+import { getCurrentUserId } from '../utils'
 
 export default class Settings extends Component {
   componentDidMount() {

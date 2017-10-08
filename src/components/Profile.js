@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { getUserByUsername } from './api/users'
+import { getUserByUsername } from '../api/users'
 import ProfileSidebar from './ProfileSidebar'
 import Scaffold from './Scaffold'
 import Main from './Main'

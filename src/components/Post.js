@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { getUserById } from './api/users'
-import { formatText } from './utils'
+import { getUserById } from '../api/users'
+import { formatText } from '../utils'
 import glamorous from 'glamorous'
 import ProfilePicture from './ProfilePicture'
 

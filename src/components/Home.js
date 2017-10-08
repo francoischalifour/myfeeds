@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { getCurrentUserId } from './utils'
-import { getUserById } from './api/users'
+import { getCurrentUserId } from '../utils'
+import { getUserById } from '../api/users'
 import Scaffold from './Scaffold'
 import Main from './Main'
 import ProfileSidebar from './ProfileSidebar'
 import Feed from './Feed'
 import PostForm from './PostForm'
 
-export default class App extends Component {
+export default class Home extends Component {
   state = {
     userId: getCurrentUserId(),
   }

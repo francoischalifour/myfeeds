@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { getFeeds } from './api/feeds'
+import { getFeeds } from '../api/feeds'
 import Post from './Post'
 
 const Item = glamorous('li', { propsAreCssOverrides: true })({

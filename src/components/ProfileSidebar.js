@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import { Link } from 'react-router-dom'
-import { getLocationLink, formatText, getCurrentUserId } from './utils'
+import { getLocationLink, formatText, getCurrentUserId } from '../utils'
 import MdLocation from 'react-icons/lib/md/location-on'
 import MdLink from 'react-icons/lib/md/link'
 import MdDateRange from 'react-icons/lib/md/date-range'

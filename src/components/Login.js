@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { getUserByEmail } from './api/users'
+import { getUserByEmail } from '../api/users'
 
 const Container = glamorous.div({
   padding: 24,

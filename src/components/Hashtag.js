@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { getUserById } from './api/users'
-import { getCurrentUserId } from './utils'
+import { getUserById } from '../api/users'
+import { getCurrentUserId } from '../utils'
 import ProfileSidebar from './ProfileSidebar'
 import Scaffold from './Scaffold'
 import Main from './Main'

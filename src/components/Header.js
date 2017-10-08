@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
-import { deleteCurrentUserId } from './utils'
+import { deleteCurrentUserId } from '../utils'
 
 const Navbar = glamorous.header({
   backgroundColor: '#fff',
