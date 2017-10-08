@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import glamorous from 'glamorous'
 import { getFeeds } from '../api/feeds'
 import Post from './Post'
@@ -11,25 +11,27 @@ const Item = glamorous('li', { propsAreCssOverrides: true })({
   },
 })
 
-export default class Feed extends Component {
-  render() {
-    const feeds = getFeeds({
-      from: this.props.from,
-      containing: this.props.containing,
-    })
+const Feed = ({ from, containing, renderHeader, renderEmpty }) => {
+  const feeds = getFeeds({
+    from: from,
+    containing: containing,
+  })
 
-    return (
-      <ul>
-        {this.props.renderHeader && (
-          <Item backgroundColor="#d8dee2">{this.props.renderHeader()}</Item>
-        )}
-
-        {feeds.map(post => (
-          <Item key={post._id}>
-            <Post {...post} />
-          </Item>
-        ))}
-      </ul>
-    )
+  if (feeds.length === 0 && renderEmpty) {
+    return renderEmpty()
   }
+
+  return (
+    <ul>
+      {renderHeader && <Item backgroundColor="#d8dee2">{renderHeader()}</Item>}
+
+      {feeds.map(post => (
+        <Item key={post._id}>
+          <Post {...post} />
+        </Item>
+      ))}
+    </ul>
+  )
 }
+
+export default Feed

@@ -1,30 +1,50 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { getUserByUsername } from '../api/users'
+import React from 'react'
+import { MdFindInPage } from 'react-icons/lib/md'
+import { getUserById, getUserByUsername } from '../api/users'
+import { getCurrentUserId } from '../utils'
 import ProfileSidebar from './ProfileSidebar'
 import Scaffold from './Scaffold'
 import Main from './Main'
 import Feed from './Feed'
 
-export default class Profile extends Component {
-  render() {
-    const user = getUserByUsername(this.props.match.params.username)
+const Profile = ({ match }) => {
+  const user = getUserByUsername(match.params.username)
 
-    return !user ? (
-      <Scaffold textAlign="center">
-        <p>This user doesn't exist.</p>
+  if (!user) {
+    const currentUser = getUserById(getCurrentUserId())
 
-        <Link to="/" className="button">
-          Back home
-        </Link>
-      </Scaffold>
-    ) : (
+    return (
       <Scaffold grid>
-        <ProfileSidebar {...user} />
-        <Main>
-          <Feed from={user.username} />
+        <ProfileSidebar {...currentUser} />
+        <Main style={{ textAlign: 'center' }}>
+          <MdFindInPage size={212} color="#d8dee2" />
+
+          <p>
+            The user <strong>@{match.params.username}</strong> doesn't exist.
+          </p>
         </Main>
       </Scaffold>
     )
   }
+
+  return (
+    <Scaffold grid>
+      <ProfileSidebar {...user} />
+      <Main>
+        <Feed
+          from={user.username}
+          renderEmpty={() => (
+            <div style={{ textAlign: 'center' }}>
+              <MdFindInPage size={212} color="#d8dee2" />
+              <p>
+                <strong>@{user.username}</strong> hasn't posted yet.
+              </p>
+            </div>
+          )}
+        />
+      </Main>
+    </Scaffold>
+  )
 }
+
+export default Profile
