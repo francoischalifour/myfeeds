@@ -1,4 +1,5 @@
 import Parser from 'simple-text-parser'
+import { getUserByUsername } from '../api/users'
 
 export const getCurrentUserId = () =>
   window.localStorage.getItem('myfeeds-userid') // TODO: check token
@@ -17,7 +18,13 @@ export const formatText = text => {
     tag => `<a href="/hashtag/${tag.substr(1)}">${tag}</a>`
   )
 
-  parser.addRule(/@[\S]+/gi, mention => `<a href="/${mention}">${mention}</a>`)
+  parser.addRule(
+    /@[\S]+/gi,
+    mention =>
+      getUserByUsername(mention.substr(1))
+        ? `<a href="/${mention}">${mention}</a>`
+        : mention
+  )
 
   parser.addRule(/https?[\S]+/gi, url => `<a href="${url}">${url}</a>`)
 
