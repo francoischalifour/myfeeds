@@ -23,7 +23,7 @@ const Feed = ({ from, containing, renderHeader, renderEmpty }) => {
 
   return (
     <ul>
-      {renderHeader && <Item backgroundColor="#d8dee2">{renderHeader()}</Item>}
+      {renderHeader && <Item backgroundColor="#eceff1">{renderHeader()}</Item>}
 
       {feeds.map(post => (
         <Item key={post._id}>

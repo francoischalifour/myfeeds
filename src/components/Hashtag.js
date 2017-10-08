@@ -20,7 +20,7 @@ const Hashtag = ({ match }) => {
           containing={`#${hashtag}`}
           renderEmpty={() => (
             <div style={{ textAlign: 'center' }}>
-              <MdFindInPage size={212} color="#d8dee2" />
+              <MdFindInPage size={212} color="#eceff1" />
               <p>
                 No results for <strong>#{hashtag}</strong>.
               </p>

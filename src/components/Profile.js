@@ -17,7 +17,7 @@ const Profile = ({ match }) => {
       <Scaffold grid>
         <ProfileSidebar {...currentUser} />
         <Main style={{ textAlign: 'center' }}>
-          <MdFindInPage size={212} color="#d8dee2" />
+          <MdFindInPage size={212} color="#eceff1" />
 
           <p>
             The user <strong>@{match.params.username}</strong> doesn't exist.
@@ -35,7 +35,7 @@ const Profile = ({ match }) => {
           from={user.username}
           renderEmpty={() => (
             <div style={{ textAlign: 'center' }}>
-              <MdFindInPage size={212} color="#d8dee2" />
+              <MdFindInPage size={212} color="#eceff1" />
               <p>
                 <strong>@{user.username}</strong> hasn't posted yet.
               </p>

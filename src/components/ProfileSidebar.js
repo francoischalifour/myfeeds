@@ -16,7 +16,7 @@ const Sidebar = glamorous.aside({
 
 const Header = glamorous.header({
   position: 'relative',
-  backgroundColor: '#d8dee2',
+  backgroundColor: '#eceff1',
   height: 114,
 })
 

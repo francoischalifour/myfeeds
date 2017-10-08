@@ -1,54 +1,64 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
-import { deleteCurrentUserId } from '../utils'
+import MdLineWeight from 'react-icons/lib/md/line-weight'
+import MdSearch from 'react-icons/lib/md/search'
 
 const Navbar = glamorous.header({
-  backgroundColor: '#fff',
-  padding: '16px',
-  color: '#333',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  height: 56,
+  backgroundColor: '#212121',
+  padding: '16px 24px',
+  color: '#fff',
   boxShadow: '0 1px 3px rgba(50,50,50,.16)',
-})
-
-const Ul = glamorous.ul({
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr 1fr',
-  textAlign: 'center',
-  maxWidth: 1200,
-  margin: '0 auto',
-  padding: '0 24px',
-  '> li:first-child': {
-    textAlign: 'left',
-  },
-  '> li:last-child': {
-    textAlign: 'right',
+  '& a': {
+    color: '#4fc3f7',
   },
 })
 
 const Title = glamorous.h1({
-  fontSize: '1.5em',
+  flex: 2,
+  fontSize: '1.2em',
+  color: '#4fc3f7',
 })
 
-const logout = () => {
-  deleteCurrentUserId()
-  window.location.reload()
-}
+const Searchbar = glamorous.div({
+  display: 'flex',
+  flex: 1,
+})
+
+const Input = glamorous.input({
+  background: 'none',
+  border: 'none',
+  borderRadius: 0,
+  color: '#fff',
+  maxWidth: 300,
+  marginBottom: '0 !important',
+  paddingLeft: '6px !important',
+})
+
+const MoreList = glamorous.ul()
 
 const Header = () => (
   <Navbar>
-    <Ul>
-      <li>
-        <Link to="/">
-          <Title>MyFeeds</Title>
-        </Link>
-      </li>
+    <Title>
+      <Link to="/">
+        <MdLineWeight size="24" color="#fff" /> myfeeds
+      </Link>
+    </Title>
 
-      <li>Search</li>
+    <Searchbar>
+      <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
+      <Input type="search" placeholder="Search myfeeds" />
+    </Searchbar>
 
+    <MoreList>
       <li>
-        <button onClick={logout}>Logout</button>
+        <Link to="/logout">Logout</Link>
       </li>
-    </Ul>
+    </MoreList>
   </Navbar>
 )
 
