@@ -8,7 +8,8 @@
     },
     {
       "_id": "2",
-      "text": "My attempt to reproduce @Medium Image zoom in vanilla #JavaScript\n\n🔎 GitHub: https://github.com/francoischalifour/medium-zoom\n📘 Article: https://francoischalifour.com/lab/medium-image-zoom",
+      "text":
+        "My attempt to reproduce @Medium Image zoom in vanilla #JavaScript\n\n🔎 GitHub: https://github.com/francoischalifour/medium-zoom\n📘 Article: https://francoischalifour.com/lab/medium-image-zoom",
       "created_at": "2016-07-26 10:58:02",
       "userid": "1"
     },
@@ -26,7 +27,8 @@
     },
     {
       "_id": "5",
-      "text": "yo who's interested in a \"everyday category theory. for humans. not mathematicians\" talk? can do it to a bunch of ya on Twitch or something",
+      "text":
+        "yo who's interested in a \"everyday category theory. for humans. not mathematicians\" talk? can do it to a bunch of ya on Twitch or something",
       "created_at": "2017-10-03 18:36:02",
       "userid": "3"
     }

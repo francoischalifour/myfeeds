@@ -25,12 +25,12 @@ strong {
 }
 
 a {
-  color: #03A9F4;
+  color: #03a9f4;
   text-decoration: none;
 }
 
 a:hover {
-  color: #0288D1;
+  color: #0288d1;
   text-decoration: underline;
 }
 
@@ -41,8 +41,8 @@ a.button {
   padding: 8px 16px;
   font: inherit;
   border-radius: 4px;
-  background-color: #03A9F4;
-  border: 2px solid #03A9F4;
+  background-color: #03a9f4;
+  border: 2px solid #03a9f4;
   color: #fff;
   text-decoration: none;
   transition: background-color 150ms, border-color 150ms;
@@ -50,33 +50,32 @@ a.button {
 
 button.button:hover,
 a.button:hover {
-  background-color: #0288D1;
-  border-color: #0288D1;
+  background-color: #0288d1;
+  border-color: #0288d1;
 }
 
 button.button.outline,
 a.button.outline {
   background-color: #fff;
-  border-color:#03A9F4;
-  color: #03A9F4;
+  border-color: #03a9f4;
+  color: #03a9f4;
 }
 
-button.button.outline:hover
-a.button.outline:hover {
-  color: #FFF;
-  background-color: #0288D1;
-  border-color: #0288D1;
+button.button.outline:hover a.button.outline:hover {
+  color: #fff;
+  background-color: #0288d1;
+  border-color: #0288d1;
 }
 
 button.button[disabled] {
-  background-color: #4FC3F7;
-  border-color: #4FC3F7;
+  background-color: #4fc3f7;
+  border-color: #4fc3f7;
   cursor: not-allowed;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="search"] {
+input[type='text'],
+input[type='password'],
+input[type='search'] {
   border: none;
   outline: none;
   padding: 6px 12px;
