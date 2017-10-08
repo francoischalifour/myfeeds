@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { getUserById } from '../api/users'
 import { formatText } from '../utils'
@@ -36,41 +36,39 @@ const PostText = glamorous.p({
   color: '#333',
 })
 
-export default class Post extends Component {
-  render() {
-    const { text, created_at: createdAt, userid: userId } = this.props
+const Post = ({ text, created_at: createdAt, userid: userId }) => {
+  const [, month, day] = String(new Date(createdAt)).split(' ')
 
-    const [, month, day] = String(new Date(createdAt)).split(' ')
+  const { profile_image_url: userImageUrl, name, username } = getUserById(
+    userId
+  )
 
-    const { profile_image_url: userImageUrl, name, username } = getUserById(
-      userId
-    )
+  return (
+    <Container>
+      <LeftContainer>
+        <Link to={`/@${username}`}>
+          <ProfilePicture src={userImageUrl} alt={username} width={48} />
+        </Link>
+      </LeftContainer>
 
-    return (
-      <Container>
-        <LeftContainer>
+      <RightContainer>
+        <Header>
           <Link to={`/@${username}`}>
-            <ProfilePicture src={userImageUrl} alt={username} width={48} />
+            <strong>{name}</strong>
           </Link>
-        </LeftContainer>
+          <Small>
+            {' '}
+            <Link to={`/@${username}`}>@{username}</Link>
+            <time>
+              {''} • {month} {day}
+            </time>
+          </Small>
+        </Header>
 
-        <RightContainer>
-          <Header>
-            <Link to={`/@${username}`}>
-              <strong>{name}</strong>
-            </Link>
-            <Small>
-              {' '}
-              <Link to={`/@${username}`}>@{username}</Link>
-              <time>
-                {''} • {month} {day}
-              </time>
-            </Small>
-          </Header>
-
-          <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
-        </RightContainer>
-      </Container>
-    )
-  }
+        <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
+      </RightContainer>
+    </Container>
+  )
 }
+
+export default Post
