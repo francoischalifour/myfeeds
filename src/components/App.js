@@ -1,5 +1,10 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
 import { getUserById } from '../api/users'
 import { getCurrentUserId } from '../utils'
 import Home from './Home'
@@ -16,14 +21,17 @@ const App = () => (
     <div>
       <Header />
 
-      <Route
-        exact
-        path="/"
-        render={() => (isLoggedIn ? <Home /> : <Login />)}
-      />
-      <Route exact path="/settings" component={Settings} />
-      <Route path="/@:username" component={Profile} />
-      <Route path="/hashtag/:hashtag" component={Hashtag} />
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => (isLoggedIn ? <Home /> : <Login />)}
+        />
+        <Route exact path="/settings" component={Settings} />
+        <Route path="/@:username" component={Profile} />
+        <Route path="/hashtag/:hashtag" component={Hashtag} />
+        <Route render={() => <Redirect to="/" />} />
+      </Switch>
     </div>
   </Router>
 )
