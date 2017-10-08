@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdLineWeight from 'react-icons/lib/md/line-weight'
 import MdSearch from 'react-icons/lib/md/search'
+import SearchForm from './SearchForm'
 
 const Navbar = glamorous.header({
   display: 'flex',
@@ -29,37 +30,30 @@ const Searchbar = glamorous.div({
   flex: 1,
 })
 
-const Input = glamorous.input({
-  background: 'none',
-  border: 'none',
-  borderRadius: 0,
-  color: '#fff',
-  maxWidth: 300,
-  marginBottom: '0 !important',
-  paddingLeft: '6px !important',
-})
+const Header = () => {
+  const params = new URLSearchParams(window.location.search)
+  const search = params.get('q')
 
-const MoreList = glamorous.ul()
+  return (
+    <Navbar>
+      <Title>
+        <Link to="/">
+          <MdLineWeight size="24" color="#fff" /> myfeeds
+        </Link>
+      </Title>
 
-const Header = () => (
-  <Navbar>
-    <Title>
-      <Link to="/">
-        <MdLineWeight size="24" color="#fff" /> myfeeds
-      </Link>
-    </Title>
+      <Searchbar>
+        <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
+        <SearchForm value={search} />
+      </Searchbar>
 
-    <Searchbar>
-      <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
-      <Input type="search" placeholder="Search myfeeds" />
-    </Searchbar>
-
-    <MoreList>
-      <li>
-        <Link to="/logout">Logout</Link>
-      </li>
-    </MoreList>
-  </Navbar>
-)
+      <ul>
+        <li>
+          <Link to="/logout">Logout</Link>
+        </li>
+      </ul>
+    </Navbar>
+  )
+}
 
 export default Header

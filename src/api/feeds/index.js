@@ -5,5 +5,7 @@ export const getFeeds = ({ from, containing }) =>
   from
     ? feeds.filter(post => post.userid === getUserByUsername(from)._id)
     : containing
-      ? feeds.filter(post => post.text.includes(`${containing}`))
+      ? feeds.filter(post =>
+          post.text.toLowerCase().includes(containing.toLowerCase())
+        )
       : feeds

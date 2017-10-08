@@ -35,7 +35,7 @@ const Profile = ({ match }) => {
           from={user.username}
           renderEmpty={() => (
             <div style={{ textAlign: 'center' }}>
-              <MdFindInPage size={212} color="#eceff1" />
+              <MdFindInPage size={212} color="#ddd" />
               <p>
                 <strong>@{user.username}</strong> hasn't posted yet.
               </p>

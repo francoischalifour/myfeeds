@@ -14,6 +14,7 @@ import Settings from './Settings'
 import Logout from './Logout'
 import Profile from './Profile'
 import Hashtag from './Hashtag'
+import Search from './Search'
 
 const isLoggedIn = !!getUserById(getCurrentUserId())
 
@@ -36,6 +37,7 @@ const App = () => (
         />
         <Route path="/@:username" component={Profile} />
         <Route path="/hashtag/:hashtag" component={Hashtag} />
+        <Route path="/search" component={Search} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     </div>

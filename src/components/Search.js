@@ -7,22 +7,23 @@ import Scaffold from './Scaffold'
 import Main from './Main'
 import Feed from './Feed'
 
-const Hashtag = ({ match }) => {
+const Search = ({ location }) => {
   const currentUser = getUserById(getCurrentUserId())
-  const hashtag = match.params.hashtag
+  const params = new URLSearchParams(location.search)
+  const search = params.get('q')
 
   return (
     <Scaffold grid>
       <ProfileSidebar {...currentUser} />
       <Main>
-        <h2>#{hashtag}</h2>
+        <h2>Results for "{search}"</h2>
         <Feed
-          containing={`#${hashtag}`}
+          containing={`${search}`}
           renderEmpty={() => (
             <div style={{ textAlign: 'center' }}>
               <MdFindInPage size={212} color="#ddd" />
               <p>
-                No results for <strong>#{hashtag}</strong>.
+                No results for <strong>{search}</strong>.
               </p>
             </div>
           )}
@@ -32,4 +33,4 @@ const Hashtag = ({ match }) => {
   )
 }
 
-export default Hashtag
+export default Search
