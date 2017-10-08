@@ -7,7 +7,7 @@ import registerServiceWorker from './registerServiceWorker'
 import { getUserById } from './api/users'
 import { getCurrentUserId } from './utils'
 import App from './App'
-import LoginForm from './LoginForm'
+import Login from './Login'
 import Header from './Header'
 import Settings from './Settings'
 import Profile from './Profile'
@@ -20,14 +20,10 @@ ReactDOM.render(
     <div>
       <Header />
 
-      <Route exact path='/' render={() =>
-        isLoggedIn
-          ? <App />
-          : <LoginForm />
-      } />
-      <Route exact path='/settings' component={Settings} />
-      <Route path='/@:username' component={Profile} />
-      <Route path='/hashtag/:hashtag' component={Hashtag} />
+      <Route exact path="/" render={() => (isLoggedIn ? <App /> : <Login />)} />
+      <Route exact path="/settings" component={Settings} />
+      <Route path="/@:username" component={Profile} />
+      <Route path="/hashtag/:hashtag" component={Hashtag} />
     </div>
   </Router>,
   document.getElementById('root')

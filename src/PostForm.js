@@ -4,19 +4,19 @@ import ProfilePicture from './ProfilePicture'
 
 const Container = glamorous.div({
   display: 'flex',
-  padding: 16
+  padding: 16,
 })
 
 const LeftContainer = glamorous.div({
   width: 64,
   paddingRight: 16,
-  textAlign: 'right'
+  textAlign: 'right',
 })
 
 const RightContainer = glamorous.div({
   flex: 1,
   flexDirection: 'row',
-  textAlign: 'right'
+  textAlign: 'right',
 })
 
 const Textarea = glamorous.textarea({
@@ -26,13 +26,13 @@ const Textarea = glamorous.textarea({
   backgroundColor: '#fff',
   font: 'inherit',
   padding: 8,
-  outline: 'none'
+  outline: 'none',
 })
 
 export default class PostForm extends Component {
   state = {
     value: '',
-    isFocused: false
+    isFocused: false,
   }
 
   onChange = value => {
@@ -48,43 +48,38 @@ export default class PostForm extends Component {
     // TODO: post `this.state.value`
 
     this.setState({
-      value: ''
+      value: '',
     })
   }
 
-  render () {
-    const {
-      profile_image_url: userImageUrl,
-      username
-    } = this.props
+  render() {
+    const { profile_image_url: userImageUrl, username } = this.props
 
     return (
       <Container>
         <LeftContainer>
-          <ProfilePicture
-            src={userImageUrl}
-            alt={username}
-            width={36}
-          />
+          <ProfilePicture src={userImageUrl} alt={username} width={36} />
         </LeftContainer>
 
         <RightContainer>
           <form onSubmit={this.onSubmit}>
             <Textarea
-              rows='1'
+              rows="1"
               placeholder="What's happening?"
               value={this.state.value}
               onChange={event => this.onChange(event.target.value.trim())}
               onFocus={() => this.setState({ isFocused: true })}
               onBlur={() => this.setState({ isFocused: false })}
-              innerRef={textarea => this.textarea = textarea}
+              innerRef={textarea => (this.textarea = textarea)}
             />
             <button
-              className='button'
-              type='submit'
+              className="button"
+              type="submit"
               hidden={!this.state.value && !this.state.isFocused}
               disabled={!this.state.value}
-            >Post</button>
+            >
+              Post
+            </button>
           </form>
         </RightContainer>
       </Container>

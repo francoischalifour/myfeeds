@@ -7,14 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "standard",
-    "lint:fix": "standard --fix"
-  },
-  "standard": {
-    "globals": [
-      "URL",
-      "fetch"
-    ]
+    "prettier": "./node_modules/.bin/prettier --write 'src/**/*.js'"
   },
   "dependencies": {
     "glamor": "^2.20.40",
@@ -27,6 +20,6 @@
     "simple-text-parser": "^1.0.0"
   },
   "devDependencies": {
-    "standard": "^10.0.3"
+    "prettier": "1.7.4"
   }
 }

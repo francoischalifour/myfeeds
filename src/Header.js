@@ -7,7 +7,7 @@ const Navbar = glamorous.header({
   backgroundColor: '#fff',
   padding: '16px',
   color: '#333',
-  boxShadow: '0 1px 3px rgba(50,50,50,.16)'
+  boxShadow: '0 1px 3px rgba(50,50,50,.16)',
 })
 
 const Ul = glamorous.ul({
@@ -18,15 +18,15 @@ const Ul = glamorous.ul({
   margin: '0 auto',
   padding: '0 24px',
   '> li:first-child': {
-    textAlign: 'left'
+    textAlign: 'left',
   },
   '> li:last-child': {
-    textAlign: 'right'
-  }
+    textAlign: 'right',
+  },
 })
 
 const Title = glamorous.h1({
-  fontSize: '1.5em'
+  fontSize: '1.5em',
 })
 
 const logout = () => {
@@ -34,25 +34,22 @@ const logout = () => {
   window.location.reload()
 }
 
-const Header = () =>
+const Header = () => (
   <Navbar>
     <Ul>
       <li>
-        <Link to='/'>
+        <Link to="/">
           <Title>MyFeeds</Title>
         </Link>
       </li>
 
-      <li>
-        Search
-      </li>
+      <li>Search</li>
 
       <li>
-        <button onClick={logout}>
-          Logout
-        </button>
+        <button onClick={logout}>Logout</button>
       </li>
     </Ul>
   </Navbar>
+)
 
 export default Header

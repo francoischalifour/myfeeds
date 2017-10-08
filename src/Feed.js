@@ -7,30 +7,28 @@ const Item = glamorous('li', { propsAreCssOverrides: true })({
   backgroundColor: '#fff',
   boxShadow: '0 1px 4px rgba(0,0,0,.1)',
   ':not(:last-of-type)': {
-    borderBottom: '1px solid #e6ecf0'
-  }
+    borderBottom: '1px solid #e6ecf0',
+  },
 })
 
 export default class Feed extends Component {
-  render () {
+  render() {
     const feeds = getFeeds({
       from: this.props.from,
-      containing: this.props.containing
+      containing: this.props.containing,
     })
 
     return (
       <ul>
-        {this.props.renderHeader &&
-          <Item backgroundColor='#d8dee2'>
-            {this.props.renderHeader()}
-          </Item>
-        }
+        {this.props.renderHeader && (
+          <Item backgroundColor="#d8dee2">{this.props.renderHeader()}</Item>
+        )}
 
-        {feeds.map(post =>
+        {feeds.map(post => (
           <Item key={post._id}>
             <Post {...post} />
           </Item>
-        )}
+        ))}
       </ul>
     )
   }

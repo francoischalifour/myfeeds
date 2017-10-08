@@ -7,7 +7,7 @@ import Main from './Main'
 import Feed from './Feed'
 
 export default class Hashtag extends Component {
-  render () {
+  render() {
     const currentUser = getUserById(getCurrentUserId())
     const hashtag = this.props.match.params.hashtag
 

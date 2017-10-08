@@ -5,5 +5,5 @@ export default glamorous.img(props => ({
   maxWidth: props.width || 200,
   borderRadius: 4,
   backgroundColor: '#fff',
-  ...props
+  ...props,
 }))

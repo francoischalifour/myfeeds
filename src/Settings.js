@@ -3,12 +3,12 @@ import { getPublicUserById } from './api/users'
 import { getCurrentUserId } from './utils'
 
 export default class Settings extends Component {
-  componentDidMount () {
+  componentDidMount() {
     this.user = getPublicUserById(getCurrentUserId())
 
     Object.keys(this.user).forEach(prop => {
       this.setState({
-        [prop]: this.user[prop]
+        [prop]: this.user[prop],
       })
     })
   }
@@ -18,29 +18,27 @@ export default class Settings extends Component {
     const value = event.target.value
 
     this.setState({
-      [prop]: value
+      [prop]: value,
     })
   }
 
-  render () {
-    return (
-      !this.user
-      ? 'Loading settings...'
-      : (
-        <ul>
-          {Object.keys(this.user).map(prop =>
-            <li key={prop}>
-              <label htmlFor={prop}>{prop}</label>
-              <input
-                id={prop}
-                type='text'
-                value={this.state[prop]}
-                onChange={this.onChange}
-              />
-            </li>
-          )}
-        </ul>
-      )
+  render() {
+    return !this.user ? (
+      'Loading settings...'
+    ) : (
+      <ul>
+        {Object.keys(this.user).map(prop => (
+          <li key={prop}>
+            <label htmlFor={prop}>{prop}</label>
+            <input
+              id={prop}
+              type="text"
+              value={this.state[prop]}
+              onChange={this.onChange}
+            />
+          </li>
+        ))}
+      </ul>
     )
   }
 }
