@@ -13,6 +13,7 @@ import Header from './Header'
 import Settings from './Settings'
 import Logout from './Logout'
 import Profile from './Profile'
+import PostFeed from './PostFeed'
 import Hashtag from './Hashtag'
 import Search from './Search'
 
@@ -36,6 +37,7 @@ const App = () => (
           render={() => (isLoggedIn ? <Logout /> : <Redirect to="/" />)}
         />
         <Route path="/@:username" component={Profile} />
+        <Route path="/posts/:postid" component={PostFeed} />
         <Route path="/hashtag/:hashtag" component={Hashtag} />
         <Route path="/search" component={Search} />
         <Route render={() => <Redirect to="/" />} />
