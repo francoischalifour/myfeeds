@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import { Link } from 'react-router-dom'
-import { getLocationLink, formatText, getCurrentUserId } from '../utils'
+import {
+  getLocationLink,
+  cleanUrl,
+  formatText,
+  getCurrentUserId,
+} from '../utils'
 import MdLocation from 'react-icons/lib/md/location-on'
 import MdLink from 'react-icons/lib/md/link'
 import MdDateRange from 'react-icons/lib/md/date-range'
@@ -117,7 +122,7 @@ export default class ProfileSidebar extends Component {
             )}
             {url && (
               <li>
-                <MdLink /> <a href={url}>{url}</a>
+                <MdLink /> <a href={url}>{cleanUrl(url)}</a>
               </li>
             )}
             {createdAt && (

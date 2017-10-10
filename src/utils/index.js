@@ -10,6 +10,8 @@ export const deleteCurrentUserId = () =>
 export const getLocationLink = location =>
   `https://www.google.com/maps/place/${location.replace(' ', '+')}`
 
+export const cleanUrl = url => url.substr(url.indexOf('://') + 3)
+
 export const formatText = text => {
   const parser = new Parser()
 
@@ -26,7 +28,10 @@ export const formatText = text => {
         : mention
   )
 
-  parser.addRule(/https?[\S]+/gi, url => `<a href="${url}">${url}</a>`)
+  parser.addRule(
+    /https?[\S]+/gi,
+    url => `<a href="${url}">${cleanUrl(url)}</a>`
+  )
 
   return parser.render(text).replace(/[\\\n\r]/g, '<br>')
 }
