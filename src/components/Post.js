@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import MdChatBubbleOutline from 'react-icons/lib/md/chat-bubble-outline'
+import MdChatBubble from 'react-icons/lib/md/chat-bubble'
+import MdStarBorder from 'react-icons/lib/md/star-border'
+import MdStar from 'react-icons/lib/md/star'
 import { getUserById } from '../api/users'
-import { formatText } from '../utils'
+import { formatText, getCurrentUserId } from '../utils'
 import glamorous from 'glamorous'
 import ProfilePicture from './ProfilePicture'
 
@@ -36,39 +40,103 @@ const PostText = glamorous.p({
   color: '#333',
 })
 
-const Post = ({ text, created_at: createdAt, userid: userId }) => {
-  const [, month, day] = String(new Date(createdAt)).split(' ')
+const FooterList = glamorous.ul({
+  display: 'flex',
+  maxWidth: 200,
+  color: '#999',
+  fontWeight: 500,
+  '& > li': {
+    paddingRight: 24,
+    '&:hover': {
+      color: '#03a9f4',
+    },
+  },
+})
 
-  const { profile_image_url: userImageUrl, name, username } = getUserById(
-    userId
-  )
+export default class Post extends Component {
+  state = {
+    starred:
+      this.props.stars &&
+      this.props.stars.find(star => star.userid === getCurrentUserId()),
+  }
 
-  return (
-    <Container>
-      <LeftContainer>
-        <Link to={`/@${username}`}>
-          <ProfilePicture src={userImageUrl} alt={username} width={48} />
-        </Link>
-      </LeftContainer>
+  onStarred = (event, isStarred) => {
+    event.preventDefault()
+    event.stopPropagation()
 
-      <RightContainer>
-        <Header>
+    this.setState({
+      starred: isStarred,
+    })
+  }
+
+  render() {
+    const {
+      text,
+      created_at: createdAt,
+      userid: userId,
+      comment_count: commentCount,
+      comments,
+      star_count: starCount,
+    } = this.props
+    const [, month, day] = String(new Date(createdAt)).split(' ')
+
+    const { profile_image_url: userImageUrl, name, username } = getUserById(
+      userId
+    )
+
+    return (
+      <Container>
+        <LeftContainer>
           <Link to={`/@${username}`}>
-            <strong>{name}</strong>
+            <ProfilePicture src={userImageUrl} alt={username} width={48} />
           </Link>
-          <Small>
-            {' '}
-            <Link to={`/@${username}`}>@{username}</Link>
-            <time>
-              {''} • {month} {day}
-            </time>
-          </Small>
-        </Header>
+        </LeftContainer>
 
-        <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
-      </RightContainer>
-    </Container>
-  )
+        <RightContainer>
+          <Header>
+            <Link to={`/@${username}`}>
+              <strong>{name}</strong>
+            </Link>
+            <Small>
+              {' '}
+              <Link to={`/@${username}`}>@{username}</Link>
+              <time>
+                {''} • {month} {day}
+              </time>
+            </Small>
+          </Header>
+
+          <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
+
+          <FooterList>
+            <li>
+              {comments &&
+              comments.find(
+                comment => comment.userid === getCurrentUserId()
+              ) ? (
+                <MdChatBubble size="18" />
+              ) : (
+                <MdChatBubbleOutline size="18" />
+              )}{' '}
+              {commentCount > 0 && commentCount}
+            </li>
+            <li>
+              {this.state.starred ? (
+                <MdStar
+                  onClick={event => this.onStarred(event, false)}
+                  size="18"
+                />
+              ) : (
+                <MdStarBorder
+                  onClick={event => this.onStarred(event, true)}
+                  size="18"
+                />
+              )}{' '}
+              {starCount > 0 && starCount}
+            </li>
+          </FooterList>
+        </RightContainer>
+      </Container>
+    )
+  }
 }
-
-export default Post
