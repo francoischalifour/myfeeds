@@ -16,7 +16,7 @@ const Scaffold = glamorous('div', { propsAreCssOverrides: true })(props =>
     {
       maxWidth: 1200,
       margin: '0 auto',
-      padding: '0 24px',
+      padding: '0 24px 48px 24px',
     },
     props.grid && gridProps
   )
