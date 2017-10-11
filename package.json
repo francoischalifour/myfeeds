@@ -15,6 +15,7 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-icons": "^2.2.5",
+    "react-image-palette": "^0.1.2",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.14",
     "simple-text-parser": "^1.0.0"

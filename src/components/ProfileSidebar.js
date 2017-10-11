@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import { Link } from 'react-router-dom'
+import ImagePalette from 'react-image-palette'
 import {
   getLocationLink,
   cleanUrl,
@@ -19,7 +20,7 @@ const Sidebar = glamorous.aside({
   borderRadius: '3px',
 })
 
-const Header = glamorous.header({
+const Header = glamorous('header', { propsAreCssOverrides: true })({
   position: 'relative',
   backgroundColor: '#eceff1',
   height: 114,
@@ -46,6 +47,12 @@ const Username = glamorous.small({
 
 const Description = glamorous.p({
   marginTop: '1rem',
+})
+
+const Footer = glamorous.footer({
+  display: 'flex',
+  justifyContent: 'center',
+  paddingTop: 16,
 })
 
 const Ul = glamorous.ul({
@@ -82,22 +89,26 @@ export default class ProfileSidebar extends Component {
 
     return (
       <Sidebar>
-        <Header>
-          <Link to={`/@${username}`}>
-            <ProfilePicture
-              src={imageUrl}
-              alt={name}
-              width="150"
-              height="150"
-              borderRadius="50%"
-              border="3px solid white"
-              bottom="-85px"
-              left="50%"
-              transform="translateX(-50%)"
-              position="absolute"
-            />
-          </Link>
-        </Header>
+        <ImagePalette image={imageUrl} crossOrigin={true}>
+          {({ backgroundColor, color, alternativeColor }) => (
+            <Header backgroundColor={backgroundColor}>
+              <Link to={`/@${username}`}>
+                <ProfilePicture
+                  src={imageUrl}
+                  alt={name}
+                  width="150"
+                  height="150"
+                  borderRadius="50%"
+                  border="2px solid white"
+                  bottom="-85px"
+                  left="50%"
+                  transform="translateX(-50%)"
+                  position="absolute"
+                />
+              </Link>
+            </Header>
+          )}
+        </ImagePalette>
 
         <Content>
           <Name>
@@ -132,22 +143,25 @@ export default class ProfileSidebar extends Component {
             )}
           </Ul>
 
-          {getCurrentUserId() !== userId &&
-            (!this.state.isFollowing ? (
-              <button
-                className="button"
-                onClick={() => this.handleFollow(true)}
-              >
-                Follow
-              </button>
-            ) : (
-              <button
-                className="button outline"
-                onClick={() => this.handleFollow(false)}
-              >
-                Unfollow
-              </button>
-            ))}
+          {getCurrentUserId() !== userId && (
+            <Footer>
+              {!this.state.isFollowing ? (
+                <button
+                  className="button"
+                  onClick={() => this.handleFollow(true)}
+                >
+                  Follow
+                </button>
+              ) : (
+                <button
+                  className="button outline"
+                  onClick={() => this.handleFollow(false)}
+                >
+                  Unfollow
+                </button>
+              )}
+            </Footer>
+          )}
         </Content>
       </Sidebar>
     )
