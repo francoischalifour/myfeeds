@@ -5,6 +5,8 @@ import MdChatBubble from 'react-icons/lib/md/chat-bubble'
 import MdStarBorder from 'react-icons/lib/md/star-border'
 import MdStar from 'react-icons/lib/md/star'
 import { getUserById } from '../api/users'
+import { getPostRepliesById } from '../api/posts'
+import { getStarsByPostId } from '../api/stars'
 import { formatText, getCurrentUserId } from '../utils'
 import glamorous from 'glamorous'
 import ProfilePicture from './ProfilePicture'
@@ -53,20 +55,35 @@ const FooterList = glamorous.ul({
   },
 })
 
-export default class Post extends Component {
-  state = {
-    starred:
-      this.props.stars &&
-      this.props.stars.find(star => star.user_id === getCurrentUserId()),
+class Post extends Component {
+  constructor(props) {
+    super(props)
+
+    const currentUserId = getCurrentUserId()
+    const { _id: postId } = props
+
+    const replies = getPostRepliesById(postId)
+    const currentUserHasReplied =
+      replies &&
+      replies.findIndex(reply => reply.user_id === currentUserId) > -1
+
+    const stars = getStarsByPostId(postId)
+    const currentUserHasStarred =
+      stars && stars.findIndex(star => star.user_id === currentUserId) > -1
+
+    this.state = {
+      starred: currentUserHasStarred,
+      replied: currentUserHasReplied,
+    }
   }
 
   onStarred = (event, isStarred) => {
     event.preventDefault()
     event.stopPropagation()
 
-    this.setState({
+    this.setState(state => ({
       starred: isStarred,
-    })
+    }))
   }
 
   render() {
@@ -74,9 +91,8 @@ export default class Post extends Component {
       text,
       created_at: createdAt,
       user_id: userId,
-      comment_count: commentCount,
-      comments,
-      star_count: starCount,
+      reply_count: replyCount = 0,
+      star_count: starCount = 0,
     } = this.props
     const [, month, day] = String(new Date(createdAt)).split(' ')
 
@@ -110,15 +126,12 @@ export default class Post extends Component {
 
           <FooterList>
             <li>
-              {comments &&
-              comments.find(
-                comment => comment.user_id === getCurrentUserId()
-              ) ? (
+              {this.state.replied ? (
                 <MdChatBubble size="18" />
               ) : (
                 <MdChatBubbleOutline size="18" />
               )}{' '}
-              {commentCount > 0 && commentCount}
+              {replyCount > 0 && replyCount}
             </li>
             <li>
               {this.state.starred ? (
@@ -140,3 +153,5 @@ export default class Post extends Component {
     )
   }
 }
+
+export default Post

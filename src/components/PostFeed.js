@@ -3,7 +3,7 @@ import glamorous from 'glamorous'
 import { MdFindInPage } from 'react-icons/lib/md'
 import { getCurrentUserId } from '../utils'
 import { getUserById } from '../api/users'
-import { getPostById } from '../api/posts'
+import { getPostById, getPostRepliesById } from '../api/posts'
 import Scaffold from './Scaffold'
 import Main from './Main'
 import ProfileSidebar from './ProfileSidebar'
@@ -28,6 +28,7 @@ const PostFeed = ({ match }) => {
   const user = getUserById(getCurrentUserId())
   const postId = match.params.postid
   const post = getPostById(postId)
+  const replies = getPostRepliesById(postId)
 
   return (
     <Scaffold grid>
@@ -44,17 +45,17 @@ const PostFeed = ({ match }) => {
 
             <PostFormContainer>
               <PostForm
-                placeholder={`Reply to @${user.username}`}
+                placeholder={`Reply to @${getUserById(post.user_id).username}`}
                 parentId={postId}
                 {...user}
               />
             </PostFormContainer>
 
-            {post.comments && (
+            {replies && (
               <ul>
-                {post.comments.map(comment => (
-                  <li key={comment._id}>
-                    <Post {...comment} />
+                {replies.map(reply => (
+                  <li key={reply._id}>
+                    <Post {...reply} />
                   </li>
                 ))}
               </ul>
