@@ -18,7 +18,7 @@ const Search = ({ location }) => {
       <Main>
         <h2>Results for "{search}"</h2>
         <Feed
-          containing={`${search}`}
+          matching={search}
           renderEmpty={() => (
             <div style={{ textAlign: 'center' }}>
               <MdFindInPage size={212} color="#ddd" />

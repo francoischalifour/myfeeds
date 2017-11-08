@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import glamorous from 'glamorous'
-import { getFeeds } from '../api/feeds'
+import { getPosts } from '../api/posts'
 import Post from './Post'
 
 const Item = glamorous('li', { propsAreCssOverrides: true })(props => ({
@@ -32,14 +32,14 @@ export default class Feed extends Component {
   }
 
   render() {
-    const { from, containing, renderHeader, renderEmpty } = this.props
+    const { username, matching, renderHeader, renderEmpty } = this.props
 
-    const feeds = getFeeds({
-      from: from,
-      containing: containing,
+    const posts = getPosts({
+      username,
+      matching,
     })
 
-    if (feeds.length === 0 && renderEmpty) {
+    if (posts.length === 0 && renderEmpty) {
       return renderEmpty()
     }
 
@@ -53,7 +53,7 @@ export default class Feed extends Component {
           <Item backgroundColor="#eceff1">{renderHeader()}</Item>
         )}
 
-        {feeds.map(post => (
+        {posts.map(post => (
           <Item
             key={post._id}
             onClick={event => this.onItemClick(event, post._id)}

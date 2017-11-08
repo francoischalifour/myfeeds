@@ -32,7 +32,7 @@ const Profile = ({ match }) => {
       <ProfileSidebar {...user} />
       <Main>
         <Feed
-          from={user.username}
+          username={user.username}
           renderEmpty={() => (
             <div style={{ textAlign: 'center' }}>
               <MdFindInPage size={212} color="#ddd" />

@@ -1,0 +1,65 @@
+[
+  {
+    "_id": "1",
+    "text": "No more PATENTS. React is now re-licensed as MIT.",
+    "created_at": "2017-09-22 17:52:20",
+    "userid": "2",
+    "comment_count": 2,
+    "star_count": 1,
+    "comments": [
+      {
+        "_id": "100",
+        "text": "That's awesome!",
+        "created_at": "2017-10-8 10:51:56",
+        "userid": "1"
+      },
+      {
+        "_id": "101",
+        "text": "Just in time ⚛️",
+        "created_at": "2017-10-8 10:51:56",
+        "userid": "1"
+      }
+    ],
+    "stars": [
+      {
+        "_id": "201",
+        "created_at": "2017-10-9 02:21:34",
+        "userid": "1"
+      }
+    ]
+  },
+  {
+    "_id": "2",
+    "text":
+      "My attempt to reproduce @Medium Image zoom in vanilla #JavaScript\n\n🔎 GitHub: https://github.com/francoischalifour/medium-zoom\n📘 Article: https://francoischalifour.com/lab/medium-image-zoom",
+    "created_at": "2016-07-26 10:58:02",
+    "userid": "1"
+  },
+  {
+    "_id": "3",
+    "text": "Hello @dan_abramov",
+    "created_at": "2017-10-03 22:36:02",
+    "userid": "1",
+    "star_count": 1,
+    "stars": [
+      {
+        "_id": "202",
+        "created_at": "2017-10-9 12:21:46",
+        "userid": "2"
+      }
+    ]
+  },
+  {
+    "_id": "4",
+    "text": "I like #JavaScript",
+    "created_at": "2017-10-03 22:36:02",
+    "userid": "1"
+  },
+  {
+    "_id": "5",
+    "text":
+      "yo who's interested in a \"everyday category theory. for humans. not mathematicians\" talk? can do it to a bunch of ya on Twitch or something",
+    "created_at": "2017-10-03 18:36:02",
+    "userid": "3"
+  }
+]

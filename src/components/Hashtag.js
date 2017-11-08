@@ -17,7 +17,7 @@ const Hashtag = ({ match }) => {
       <Main>
         <h2>#{hashtag}</h2>
         <Feed
-          containing={`#${hashtag}`}
+          matching={`#${hashtag}`}
           renderEmpty={() => (
             <div style={{ textAlign: 'center' }}>
               <MdFindInPage size={212} color="#ddd" />
