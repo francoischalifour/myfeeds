@@ -1,11 +1,12 @@
 import Parser from 'simple-text-parser'
+import { STORAGE_TOKEN_USER_ID } from '../constants'
 import { getUserByUsername } from '../api/users'
 
 export const getCurrentUserId = () =>
-  window.localStorage.getItem('myfeeds-userid') // TODO: check token
+  window.localStorage.getItem(STORAGE_TOKEN_USER_ID) // TODO: check validation token
 
 export const deleteCurrentUserId = () =>
-  window.localStorage.removeItem('myfeeds-userid')
+  window.localStorage.removeItem(STORAGE_TOKEN_USER_ID)
 
 export const getLocationLink = location =>
   `https://www.google.com/maps/place/${location.replace(' ', '+')}`

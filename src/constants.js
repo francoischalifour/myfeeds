@@ -1,0 +1,1 @@
+export const STORAGE_TOKEN_USER_ID = 'MYFEEDS_USERID'

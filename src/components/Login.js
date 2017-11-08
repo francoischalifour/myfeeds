@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
+import { STORAGE_TOKEN_USER_ID } from '../constants'
 import { getUserByEmail } from '../api/users'
 
 const Container = glamorous.div({
@@ -37,7 +38,7 @@ export default class Login extends Component {
         error: 'Invalid email address or password.',
       })
     } else {
-      window.localStorage.setItem('myfeeds-user_id', user._id)
+      window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
       window.location.href = '/'
     }
   }
