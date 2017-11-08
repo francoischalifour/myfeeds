@@ -37,7 +37,7 @@ export default class Login extends Component {
         error: 'Invalid email address or password.',
       })
     } else {
-      window.localStorage.setItem('myfeeds-userid', user._id)
+      window.localStorage.setItem('myfeeds-user_id', user._id)
       window.location.href = '/'
     }
   }

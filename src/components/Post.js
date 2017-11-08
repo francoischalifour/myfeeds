@@ -57,7 +57,7 @@ export default class Post extends Component {
   state = {
     starred:
       this.props.stars &&
-      this.props.stars.find(star => star.userid === getCurrentUserId()),
+      this.props.stars.find(star => star.user_id === getCurrentUserId()),
   }
 
   onStarred = (event, isStarred) => {
@@ -73,7 +73,7 @@ export default class Post extends Component {
     const {
       text,
       created_at: createdAt,
-      userid: userId,
+      user_id: userId,
       comment_count: commentCount,
       comments,
       star_count: starCount,
@@ -112,7 +112,7 @@ export default class Post extends Component {
             <li>
               {comments &&
               comments.find(
-                comment => comment.userid === getCurrentUserId()
+                comment => comment.user_id === getCurrentUserId()
               ) ? (
                 <MdChatBubble size="18" />
               ) : (

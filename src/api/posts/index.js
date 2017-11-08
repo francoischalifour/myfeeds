@@ -12,6 +12,6 @@ export const getPosts = ({ username, matching }) => {
 }
 
 export const getUserPosts = username =>
-  allPosts.filter(post => post.userid === getUserByUsername(username)._id)
+  allPosts.filter(post => post.user_id === getUserByUsername(username)._id)
 
 export const getPostById = postId => allPosts.find(post => post._id === postId)
