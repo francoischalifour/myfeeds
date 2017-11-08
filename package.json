@@ -1,7 +1,9 @@
 {
-  "name": "myfeeds",
+  "name": "@myfeeds/client",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
+  "repository": "https://github.com/francoischalifour/myfeeds",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
