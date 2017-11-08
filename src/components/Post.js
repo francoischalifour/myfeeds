@@ -81,9 +81,9 @@ class Post extends Component {
     event.preventDefault()
     event.stopPropagation()
 
-    this.setState(state => ({
+    this.setState({
       starred: isStarred,
-    }))
+    })
   }
 
   render() {
