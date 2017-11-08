@@ -16,7 +16,8 @@ This is a basic and not secure frontend app built with [React](https://github.co
 
 * Install Node dependencies: `yarn` or `npm install`
 * Run the app: `yarn start` or `npm start`
-* Listening on: [`http://localhost:3000`](http://localhost:3000)
+* Server listening on: [`http://localhost:9000`](http://localhost:9000)
+* App listening on: [`http://localhost:3000`](http://localhost:3000)
 
 ## License
 
