@@ -3,9 +3,9 @@ require('dotenv').config()
 const { REACT_APP_SERVER_HOST, REACT_APP_SERVER_PORT } = process.env
 const ENDPOINT = `http://${REACT_APP_SERVER_HOST}:${REACT_APP_SERVER_PORT}`
 
-const get = resource => fetch(`${ENDPOINT}${resource}`).then(res => res.json())
-const getV1 = resource =>
-  fetch(`${ENDPOINT}/v1${resource}`).then(res => res.json())
+const get = (resource, prefix = '', endpoint = ENDPOINT) =>
+  fetch(`${endpoint}${prefix}${resource}`).then(res => res.json())
+const getV1 = resource => get(resource, '/v1')
 
 const isServerUp = async () => {
   try {
