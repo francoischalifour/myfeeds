@@ -53,9 +53,7 @@ const Posts = {
         parent_id: { $exists: false },
       })
       .toArray()
-
     await mergePostsWithAuthors(result, db)
-
     await db.close()
 
     return result
@@ -66,9 +64,7 @@ const Posts = {
     const author = await db
       .collection(COLLECTION_USERS)
       .findOne({ _id: result.user_id })
-
     Object.assign(result, getAuthorData(author))
-
     await db.close()
 
     return result
@@ -79,9 +75,7 @@ const Posts = {
       .collection(COLLECTION_POSTS)
       .find({ parent_id: id })
       .toArray()
-
     await mergePostsWithAuthors(result, db)
-
     await db.close()
 
     return result
@@ -114,9 +108,7 @@ const Posts = {
       .collection(COLLECTION_POSTS)
       .find({ $text: { $search: query } })
       .toArray()
-
     await mergePostsWithAuthors(result, db)
-
     await db.close()
 
     return result
