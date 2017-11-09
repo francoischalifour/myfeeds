@@ -5,7 +5,6 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
-import { getUserById } from '../api/users'
 import { getCurrentUserId } from '../utils'
 import Home from './Home'
 import Login from './Login'
@@ -17,7 +16,7 @@ import PostFeed from './PostFeed'
 import Hashtag from './Hashtag'
 import Search from './Search'
 
-const isLoggedIn = !!getUserById(getCurrentUserId())
+const isLoggedIn = !!getCurrentUserId()
 
 const App = () => (
   <Router>

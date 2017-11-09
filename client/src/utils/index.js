@@ -1,6 +1,5 @@
 import Parser from 'simple-text-parser'
 import { STORAGE_TOKEN_USER_ID } from '../constants'
-import { getUserByUsername } from '../api/users'
 
 export const getCurrentUserId = () =>
   window.localStorage.getItem(STORAGE_TOKEN_USER_ID) // TODO: check validation token
@@ -21,13 +20,7 @@ export const formatText = text => {
     tag => `<a href="/hashtag/${tag.substr(1)}">${tag}</a>`
   )
 
-  parser.addRule(
-    /@[\S]+/gi,
-    mention =>
-      getUserByUsername(mention.substr(1))
-        ? `<a href="/${mention}">${mention}</a>`
-        : mention
-  )
+  parser.addRule(/@[\S]+/gi, mention => `<a href="/${mention}">${mention}</a>`)
 
   parser.addRule(
     /https?[\S]+/gi,
