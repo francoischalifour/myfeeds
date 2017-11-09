@@ -4,6 +4,8 @@ const { REACT_APP_SERVER_HOST, REACT_APP_SERVER_PORT } = process.env
 const ENDPOINT = `http://${REACT_APP_SERVER_HOST}:${REACT_APP_SERVER_PORT}`
 
 const get = resource => fetch(`${ENDPOINT}${resource}`).then(res => res.json())
+const getV1 = resource =>
+  fetch(`${ENDPOINT}/v1${resource}`).then(res => res.json())
 
 const isServerUp = async () => {
   try {
@@ -15,7 +17,7 @@ const isServerUp = async () => {
 }
 
 const getAllPosts = async () => {
-  const posts = await get('/posts')
+  const posts = await getV1('/posts')
   const postsWithAuthor = posts.map(async post => {
     const { username, name, profile_image_url } = await getUserById(
       post.user_id
@@ -33,7 +35,7 @@ const getAllPosts = async () => {
 }
 
 const getPostById = async id => {
-  const post = await get(`/posts/${id}`)
+  const post = await getV1(`/posts/${id}`)
   const { username, name, profile_image_url } = await getUserById(post.user_id)
 
   return Promise.resolve({
@@ -45,7 +47,7 @@ const getPostById = async id => {
 }
 
 const getPostRepliesById = async id => {
-  const replies = await get(`/posts/${id}/replies`)
+  const replies = await getV1(`/posts/${id}/replies`)
   const repliesWithAuthor = replies.map(async reply => {
     const { username, name, profile_image_url } = await getUserById(
       reply.user_id
@@ -62,14 +64,14 @@ const getPostRepliesById = async id => {
   return Promise.all(repliesWithAuthor)
 }
 
-const getUserById = id => get(`/users/${id}`)
+const getUserById = id => getV1(`/users/${id}`)
 
-const getUserByUsername = username => get(`/users/@${username}`)
+const getUserByUsername = username => getV1(`/users/@${username}`)
 
-const getUserByEmail = email => get(`/users/email/${email}`)
+const getUserByEmail = email => getV1(`/users/email/${email}`)
 
 const getAllPostsByUsername = async username => {
-  const posts = await get(`/users/@${username}/posts`)
+  const posts = await getV1(`/users/@${username}/posts`)
   const postsWithAuthor = posts.map(async post => {
     const { username, name, profile_image_url } = await getUserById(
       post.user_id
@@ -87,7 +89,7 @@ const getAllPostsByUsername = async username => {
 }
 
 const getAllPostsMatching = async query => {
-  const posts = await get(`/search/${query}`)
+  const posts = await getV1(`/search/${query}`)
   const postsWithAuthor = posts.map(async post => {
     const { username, name, profile_image_url } = await getUserById(
       post.user_id
@@ -104,7 +106,7 @@ const getAllPostsMatching = async query => {
   return Promise.all(postsWithAuthor)
 }
 
-const getPublicProfileById = id => get(`/users/${id}/public`)
+const getPublicProfileById = id => getV1(`/users/${id}/public`)
 
 export default {
   isServerUp,
