@@ -14,6 +14,18 @@ const {
 
 const DB_COLLECTIONS = [COLLECTION_USERS, COLLECTION_POSTS, COLLECTION_STARS]
 
+const createIndexes = async db => {
+  await db
+    .collection(COLLECTION_USERS)
+    .createIndex({ username: 1 })
+    .catch(err => console.error(err))
+
+  await db
+    .collection(COLLECTION_POSTS)
+    .createIndex({ text: 'text' })
+    .catch(err => console.error(err))
+}
+
 const run = async () => {
   const db = await connect()
 
@@ -30,7 +42,7 @@ const run = async () => {
   }
 
   console.log(`⚡️ Settings indexes...`)
-  await db.collection(COLLECTION_POSTS).createIndex({ text: 'text' })
+  await createIndexes(db)
 
   await db.close().catch(err => console.error(err))
   console.log('\n👍 All done!')
