@@ -15,9 +15,7 @@ class Hashtag extends Component {
 
   async componentDidMount() {
     const user = await api.getUserById(getCurrentUserId())
-    const posts = await api.getAllPostsMatching(
-      `${this.props.match.params.hashtag}`
-    )
+    const posts = await api.getAllPostsHashtag(this.props.match.params.hashtag)
 
     this.setState({
       user,

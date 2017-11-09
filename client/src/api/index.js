@@ -32,6 +32,8 @@ const getAllPostsByUsername = username => getV1(`/users/@${username}/posts`)
 
 const getAllPostsMatching = query => getV1(`/search/${query}`)
 
+const getAllPostsHashtag = hashtag => getV1(`/hashtags/${hashtag}`)
+
 const getPublicProfileById = id => getV1(`/users/${id}/public`)
 
 export default {
@@ -44,5 +46,6 @@ export default {
   getUserByEmail,
   getAllPostsByUsername,
   getAllPostsMatching,
+  getAllPostsHashtag,
   getPublicProfileById,
 }

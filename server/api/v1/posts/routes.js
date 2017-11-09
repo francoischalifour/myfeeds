@@ -22,6 +22,10 @@ module.exports = (fastify, opts, next) => {
       reply.type('application/json').code(200)
       return Posts.searchQuery(request.params.query)
     })
+    .get('/hashtags/:hashtag', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.searchHashtag(request.params.hashtag)
+    })
 
   next()
 }

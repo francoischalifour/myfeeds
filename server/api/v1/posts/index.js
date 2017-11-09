@@ -115,7 +115,25 @@ const Posts = {
     const db = await connect()
     const result = await db
       .collection(COLLECTION_POSTS)
-      .find({ $text: { $search: query } })
+      .find({ $text: { $search: query } }, { score: { $meta: 'textScore' } })
+      .sort({
+        score: { $meta: 'textScore' },
+        created_at: -1,
+      })
+      .toArray()
+    await mergePostsWithAuthors(result, db)
+    await db.close()
+
+    return result
+  },
+  async searchHashtag(hashtag) {
+    const db = await connect()
+    const result = await db
+      .collection(COLLECTION_POSTS)
+      .find({ hashtags: { $in: [hashtag.toLowerCase()] } })
+      .sort({
+        created_at: -1,
+      })
       .toArray()
     await mergePostsWithAuthors(result, db)
     await db.close()
