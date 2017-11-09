@@ -8,7 +8,7 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/posts', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getAll()
+      return Posts.getFeed()
     })
     .get('/posts/:id', async (request, reply) => {
       reply.type('application/json').code(200)

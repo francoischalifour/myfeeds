@@ -3,7 +3,7 @@ const connect = require('../../../utils/connect')
 const { COLLECTION_POSTS, COLLECTION_USERS } = require('../../../constants')
 
 const Posts = {
-  async getAll() {
+  async getFeed() {
     const db = await connect()
     const result = db
       .collection(COLLECTION_POSTS)
@@ -32,7 +32,7 @@ const Posts = {
 
     return result
   },
-  async getAllByUsername(username) {
+  async getUserFeedByUsername(username) {
     const db = await connect()
     const user = await db
       .collection(COLLECTION_USERS)
