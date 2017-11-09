@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MdFindInPage } from 'react-icons/lib/md'
+import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from '../api'
 import { getCurrentUserId } from '../utils'
 import ProfileSidebar from './ProfileSidebar'

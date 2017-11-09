@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { MdFindInPage } from 'react-icons/lib/md'
+import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import { getCurrentUserId } from '../utils'
 import api from '../api'
 import Scaffold from './Scaffold'

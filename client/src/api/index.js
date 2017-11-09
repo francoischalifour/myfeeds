@@ -5,6 +5,15 @@ const ENDPOINT = `http://${REACT_APP_SERVER_HOST}:${REACT_APP_SERVER_PORT}`
 
 const get = resource => fetch(`${ENDPOINT}${resource}`).then(res => res.json())
 
+const isServerUp = async () => {
+  try {
+    await get('/status')
+    return true
+  } catch (err) {
+    return false
+  }
+}
+
 const getAllPosts = async () => {
   const posts = await get('/posts')
   const postsWithAuthor = posts.map(async post => {
@@ -98,6 +107,7 @@ const getAllPostsMatching = async query => {
 const getPublicProfileById = id => get(`/users/${id}/public`)
 
 export default {
+  isServerUp,
   getAllPosts,
   getPostById,
   getPostRepliesById,

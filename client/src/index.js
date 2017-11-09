@@ -4,6 +4,13 @@ import './reset.css'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import App from './components/App'
+import Maintenance from './components/Maintenance'
+import api from './api'
 
-ReactDOM.render(<App />, document.getElementById('root'))
-registerServiceWorker()
+api.isServerUp().then(isUp => {
+  ReactDOM.render(
+    isUp ? <App /> : <Maintenance />,
+    document.getElementById('root')
+  )
+  registerServiceWorker()
+})

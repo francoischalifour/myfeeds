@@ -8,6 +8,11 @@ const { SERVER_HOST, SERVER_PORT } = process.env
 
 fastify.use(cors())
 
+fastify.get('/status', async (request, reply) => {
+  reply.type('application/json').code(200)
+  return true
+})
+
 fastify.get('/posts', async (request, reply) => {
   reply.type('application/json').code(200)
   return Posts.getAll()
