@@ -9,7 +9,8 @@
     "start:server": "npm start --prefix ./server",
     "start:client": "npm start --prefix ./client",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
-    "build": "npm run build --prefix ./client && npm run start:server"
+    "build": "npm run build --prefix ./client && npm run start:server",
+    "format": "npm run format --prefix ./client && npm run format --prefix ./server"
   },
   "dependencies": {
     "concurrently": "^3.5.0"

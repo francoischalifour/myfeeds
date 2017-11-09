@@ -9,7 +9,8 @@
     "db:init": "node scripts/db/init",
     "db:populate": "node scripts/db/populate",
     "start": "node index",
-    "dev": "nodemon index"
+    "dev": "nodemon index",
+    "format": "./node_modules/.bin/prettier --write './*.js' '{api,scripts,utils}/**/*.{js,json}'"
   },
   "dependencies": {
     "cors": "^2.8.4",
@@ -18,6 +19,7 @@
     "mongodb": "^2.2.33"
   },
   "devDependencies": {
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "prettier": "^1.8.2"
   }
 }

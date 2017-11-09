@@ -27,6 +27,7 @@ You'll find the appropriate documentations for the [client](client/) and the [se
 
 * Run the server: `yarn start:server`
 * Run the client: `yarn start:client`
+* Format code: `yarn format`
 
 More commands are available in the [client](client/) and the [server](server/).
 
