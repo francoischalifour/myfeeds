@@ -16,53 +16,11 @@ const isServerUp = async () => {
   }
 }
 
-const getAllPosts = async () => {
-  const posts = await getV1('/posts')
-  const postsWithAuthor = posts.map(async post => {
-    const { username, name, profile_image_url } = await getUserById(
-      post.user_id
-    )
+const getAllPosts = () => getV1('/posts')
 
-    return {
-      ...post,
-      username,
-      name,
-      profile_image_url,
-    }
-  })
+const getPostById = id => getV1(`/posts/${id}`)
 
-  return Promise.all(postsWithAuthor)
-}
-
-const getPostById = async id => {
-  const post = await getV1(`/posts/${id}`)
-  const { username, name, profile_image_url } = await getUserById(post.user_id)
-
-  return Promise.resolve({
-    ...post,
-    username,
-    name,
-    profile_image_url,
-  })
-}
-
-const getPostRepliesById = async id => {
-  const replies = await getV1(`/posts/${id}/replies`)
-  const repliesWithAuthor = replies.map(async reply => {
-    const { username, name, profile_image_url } = await getUserById(
-      reply.user_id
-    )
-
-    return {
-      ...reply,
-      username,
-      name,
-      profile_image_url,
-    }
-  })
-
-  return Promise.all(repliesWithAuthor)
-}
+const getPostRepliesById = id => getV1(`/posts/${id}/replies`)
 
 const getUserById = id => getV1(`/users/${id}`)
 
@@ -70,41 +28,9 @@ const getUserByUsername = username => getV1(`/users/@${username}`)
 
 const getUserByEmail = email => getV1(`/users/email/${email}`)
 
-const getAllPostsByUsername = async username => {
-  const posts = await getV1(`/users/@${username}/posts`)
-  const postsWithAuthor = posts.map(async post => {
-    const { username, name, profile_image_url } = await getUserById(
-      post.user_id
-    )
+const getAllPostsByUsername = username => getV1(`/users/@${username}/posts`)
 
-    return {
-      ...post,
-      username,
-      name,
-      profile_image_url,
-    }
-  })
-
-  return Promise.all(postsWithAuthor)
-}
-
-const getAllPostsMatching = async query => {
-  const posts = await getV1(`/search/${query}`)
-  const postsWithAuthor = posts.map(async post => {
-    const { username, name, profile_image_url } = await getUserById(
-      post.user_id
-    )
-
-    return {
-      ...post,
-      username,
-      name,
-      profile_image_url,
-    }
-  })
-
-  return Promise.all(postsWithAuthor)
-}
+const getAllPostsMatching = query => getV1(`/search/${query}`)
 
 const getPublicProfileById = id => getV1(`/users/${id}/public`)
 
