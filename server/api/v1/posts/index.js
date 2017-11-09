@@ -35,16 +35,12 @@ const Posts = {
     const user = await db
       .collection(COLLECTION_USERS)
       .findOne({ username }, { _id: 1 })
-    let result
-
-    if (!user) {
-      result = []
-    } else {
-      result = db
-        .collection(COLLECTION_POSTS)
-        .find({ user_id: user._id })
-        .toArray()
-    }
+    const result = user
+      ? db
+          .collection(COLLECTION_POSTS)
+          .find({ user_id: user._id })
+          .toArray()
+      : []
 
     db.close()
 

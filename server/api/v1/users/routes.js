@@ -1,4 +1,5 @@
 const Users = require('.')
+const Posts = require('../posts')
 
 module.exports = (fastify, opts, next) => {
   fastify
