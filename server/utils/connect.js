@@ -8,8 +8,7 @@ const { MongoClient } = require('mongodb')
 const { DB_HOST, DB_PORT, DB_NAME } = process.env
 
 if (!DB_HOST || !DB_PORT || !DB_NAME) {
-  console.error('Missing database connection information.')
-  process.exit(1)
+  throw new Error('⚠️ Missing database connection information.')
 }
 
 const DB_URL = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
