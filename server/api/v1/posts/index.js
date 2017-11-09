@@ -7,7 +7,9 @@ const Posts = {
     const db = await connect()
     const result = db
       .collection(COLLECTION_POSTS)
-      .find({})
+      .find({
+        parent_id: { $exists: false },
+      })
       .toArray()
     db.close()
 
