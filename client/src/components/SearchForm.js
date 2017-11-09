@@ -10,23 +10,24 @@ const Input = glamorous.input({
   paddingLeft: '6px !important',
 })
 
-export default class SearchForm extends Component {
+class SearchForm extends Component {
   state = {
     search: this.props.value || '',
   }
 
   render() {
     return (
-      <form action="/search" onSubmit={this.onSubmit}>
+      <form action="/search">
         <Input
           type="search"
           name="q"
           value={this.state.search}
-          onChange={event =>
-            this.setState({ search: event.target.value.trim() })}
+          onChange={event => this.setState({ search: event.target.value })}
           placeholder="Search myfeeds"
         />
       </form>
     )
   }
 }
+
+export default SearchForm

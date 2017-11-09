@@ -89,26 +89,28 @@ export default class ProfileSidebar extends Component {
 
     return (
       <Sidebar>
-        <ImagePalette image={imageUrl} crossOrigin={true}>
-          {({ backgroundColor, color, alternativeColor }) => (
-            <Header backgroundColor={backgroundColor}>
-              <Link to={`/@${username}`}>
-                <ProfilePicture
-                  src={imageUrl}
-                  alt={name}
-                  width="150"
-                  height="150"
-                  borderRadius="50%"
-                  border="2px solid white"
-                  bottom="-85px"
-                  left="50%"
-                  transform="translateX(-50%)"
-                  position="absolute"
-                />
-              </Link>
-            </Header>
-          )}
-        </ImagePalette>
+        {imageUrl && (
+          <ImagePalette image={imageUrl} crossOrigin={true}>
+            {({ backgroundColor, color, alternativeColor }) => (
+              <Header backgroundColor={backgroundColor}>
+                <Link to={`/@${username}`}>
+                  <ProfilePicture
+                    src={imageUrl}
+                    alt={name}
+                    width="150"
+                    height="150"
+                    borderRadius="50%"
+                    border="2px solid white"
+                    bottom="-85px"
+                    left="50%"
+                    transform="translateX(-50%)"
+                    position="absolute"
+                  />
+                </Link>
+              </Header>
+            )}
+          </ImagePalette>
+        )}
 
         <Content>
           <Name>

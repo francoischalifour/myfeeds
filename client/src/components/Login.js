@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import { STORAGE_TOKEN_USER_ID } from '../constants'
-import { getUserByEmail } from '../api/users'
+import api from '../api'
 
 const Container = glamorous.div({
   padding: 24,
@@ -30,17 +30,17 @@ export default class Login extends Component {
   onSubmit = event => {
     event.preventDefault()
 
-    const user = getUserByEmail(this.state.email)
-    // TODO: check `this.state.password`
-
-    if (!user) {
-      this.setState({
-        error: 'Invalid email address or password.',
-      })
-    } else {
-      window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
-      window.location.href = '/'
-    }
+    api.getUserByEmail(this.state.email).then(user => {
+      // TODO: check `this.state.password`
+      if (!user) {
+        this.setState({
+          error: 'Invalid email address or password.',
+        })
+      } else {
+        window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
+        window.location.href = '/'
+      }
+    })
   }
 
   render() {

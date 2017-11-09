@@ -32,7 +32,6 @@ const Textarea = glamorous.textarea({
 export default class PostForm extends Component {
   state = {
     value: '',
-    placeholder: this.props.placeholder || "What's happening?",
     isFocused: false,
     parent: this.props.parentId,
   }
@@ -47,7 +46,7 @@ export default class PostForm extends Component {
   onSubmit = event => {
     event.preventDefault()
 
-    // TODO: post `this.state.value`
+    // TODO: post `this.state.value.trim()`
 
     this.setState({
       value: '',
@@ -67,9 +66,9 @@ export default class PostForm extends Component {
           <form onSubmit={this.onSubmit}>
             <Textarea
               rows="1"
-              placeholder={this.state.placeholder}
+              placeholder={this.props.placeholder || "What's happening?"}
               value={this.state.value}
-              onChange={event => this.onChange(event.target.value.trim())}
+              onChange={event => this.onChange(event.target.value)}
               onFocus={() => this.setState({ isFocused: true })}
               onBlur={() => this.setState({ isFocused: false })}
               innerRef={textarea => (this.textarea = textarea)}

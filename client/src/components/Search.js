@@ -1,36 +1,51 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { MdFindInPage } from 'react-icons/lib/md'
-import { getUserById } from '../api/users'
+import api from '../api'
 import { getCurrentUserId } from '../utils'
 import ProfileSidebar from './ProfileSidebar'
 import Scaffold from './Scaffold'
 import Main from './Main'
 import Feed from './Feed'
 
-const Search = ({ location }) => {
-  const currentUser = getUserById(getCurrentUserId())
-  const params = new URLSearchParams(location.search)
-  const search = params.get('q')
+class Search extends Component {
+  state = {
+    search: '',
+    posts: [],
+  }
 
-  return (
-    <Scaffold grid>
-      <ProfileSidebar {...currentUser} />
-      <Main>
-        <h2>Results for "{search}"</h2>
-        <Feed
-          matching={search}
-          renderEmpty={() => (
-            <div style={{ textAlign: 'center' }}>
-              <MdFindInPage size={212} color="#ddd" />
-              <p>
-                No results for <strong>{search}</strong>.
-              </p>
-            </div>
-          )}
-        />
-      </Main>
-    </Scaffold>
-  )
+  async componentDidMount() {
+    this.activeUser = await api.getUserById(getCurrentUserId())
+    const params = new URLSearchParams(this.props.location.search)
+    const search = params.get('q')
+    const posts = await api.getAllPostsMatching(search)
+
+    this.setState({
+      posts,
+      search,
+    })
+  }
+
+  render() {
+    return (
+      <Scaffold grid>
+        <ProfileSidebar {...this.activeUser} />
+        <Main>
+          <h2>Results for "{this.state.search}"</h2>
+          <Feed
+            posts={this.state.posts}
+            renderEmpty={() => (
+              <div style={{ textAlign: 'center' }}>
+                <MdFindInPage size={212} color="#ddd" />
+                <p>
+                  No results for <strong>{this.state.search}</strong>.
+                </p>
+              </div>
+            )}
+          />
+        </Main>
+      </Scaffold>
+    )
+  }
 }
 
 export default Search

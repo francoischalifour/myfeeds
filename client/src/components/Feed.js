@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import glamorous from 'glamorous'
-import { getPosts } from '../api/posts'
 import Post from './Post'
 
 const Item = glamorous('li', { propsAreCssOverrides: true })(props => ({
@@ -16,7 +15,7 @@ const Item = glamorous('li', { propsAreCssOverrides: true })(props => ({
   },
 }))
 
-export default class Feed extends Component {
+class Feed extends Component {
   state = {
     redirect: '',
   }
@@ -32,12 +31,7 @@ export default class Feed extends Component {
   }
 
   render() {
-    const { username, matching, renderHeader, renderEmpty } = this.props
-
-    const posts = getPosts({
-      username,
-      matching,
-    })
+    const { posts, renderHeader, renderEmpty } = this.props
 
     if (posts.length === 0 && renderEmpty) {
       return renderEmpty()
@@ -65,3 +59,5 @@ export default class Feed extends Component {
     )
   }
 }
+
+export default Feed

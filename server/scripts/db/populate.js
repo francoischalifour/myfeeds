@@ -1,7 +1,12 @@
 const { MongoClient } = require('mongodb')
-const connect = require('./connect')
+const connect = require('../../utils/connect')
+const {
+  COLLECTION_USERS,
+  COLLECTION_POSTS,
+  COLLECTION_STARS,
+} = require('../../constants')
 
-const DB_COLLECTIONS = ['users', 'posts', 'stars']
+const DB_COLLECTIONS = [COLLECTION_USERS, COLLECTION_POSTS, COLLECTION_STARS]
 
 const run = async () => {
   const db = await connect()
@@ -13,7 +18,7 @@ const run = async () => {
   }
 
   await db.close().catch(err => console.error(err))
-  console.log('🛑 Connection closed.')
+  console.log('\n👍 All done!')
 }
 
 run()

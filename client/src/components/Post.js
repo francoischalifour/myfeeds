@@ -4,10 +4,7 @@ import MdChatBubbleOutline from 'react-icons/lib/md/chat-bubble-outline'
 import MdChatBubble from 'react-icons/lib/md/chat-bubble'
 import MdStarBorder from 'react-icons/lib/md/star-border'
 import MdStar from 'react-icons/lib/md/star'
-import { getUserById } from '../api/users'
-import { getPostRepliesById } from '../api/posts'
-import { getStarsByPostId } from '../api/stars'
-import { formatText, getCurrentUserId } from '../utils'
+import { formatText } from '../utils'
 import glamorous from 'glamorous'
 import ProfilePicture from './ProfilePicture'
 
@@ -59,21 +56,9 @@ class Post extends Component {
   constructor(props) {
     super(props)
 
-    const currentUserId = getCurrentUserId()
-    const { _id: postId } = props
-
-    const replies = getPostRepliesById(postId)
-    const currentUserHasReplied =
-      replies &&
-      replies.findIndex(reply => reply.user_id === currentUserId) > -1
-
-    const stars = getStarsByPostId(postId)
-    const currentUserHasStarred =
-      stars && stars.findIndex(star => star.user_id === currentUserId) > -1
-
     this.state = {
-      starred: currentUserHasStarred,
-      replied: currentUserHasReplied,
+      starred: false,
+      replied: false,
     }
   }
 
@@ -90,15 +75,13 @@ class Post extends Component {
     const {
       text,
       created_at: createdAt,
-      user_id: userId,
       reply_count: replyCount = 0,
       star_count: starCount = 0,
+      profile_image_url: userImageUrl,
+      name,
+      username,
     } = this.props
     const [, month, day] = String(new Date(createdAt)).split(' ')
-
-    const { profile_image_url: userImageUrl, name, username } = getUserById(
-      userId
-    )
 
     return (
       <Container>

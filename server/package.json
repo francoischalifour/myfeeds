@@ -8,11 +8,16 @@
   "scripts": {
     "db:init": "node scripts/db/init",
     "db:populate": "node scripts/db/populate",
-    "start": "node index"
+    "start": "node index",
+    "dev": "nodemon index"
   },
   "dependencies": {
+    "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "fastify": "^0.33.0",
     "mongodb": "^2.2.33"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
   }
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { getPublicUserById } from '../api/users'
+import api from '../api'
 import { getCurrentUserId } from '../utils'
 
 export default class Settings extends Component {
-  componentDidMount() {
-    this.user = getPublicUserById(getCurrentUserId())
+  async componentDidMount() {
+    this.user = await api.getPublicProfileById(getCurrentUserId())
 
     Object.keys(this.user).forEach(prop => {
       this.setState({
