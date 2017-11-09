@@ -1,3 +1,9 @@
+/**
+ * This script initializes the database:
+ *  - Drops all existing collections
+ *  - Creates the necessary collections
+ *  - Creates indexes
+ */
 const { MongoClient } = require('mongodb')
 const connect = require('../../utils/connect')
 const {

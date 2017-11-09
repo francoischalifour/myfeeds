@@ -1,3 +1,6 @@
+/**
+ * This script populates the database with fake data from `fixtures/`.
+ */
 const { MongoClient } = require('mongodb')
 const connect = require('../../utils/connect')
 const {

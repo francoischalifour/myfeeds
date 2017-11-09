@@ -9,7 +9,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "prettier": "./node_modules/.bin/prettier --write 'src/**/*.{js,json,css}'"
+    "format": "./node_modules/.bin/prettier --write 'src/**/*.{js,json,css}'"
   },
   "dependencies": {
     "dotenv": "^4.0.0",

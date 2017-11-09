@@ -1,3 +1,7 @@
+/**
+ * This script connects to the MongoDB database with the given environment variables
+ * and returns the database instance.
+ */
 require('dotenv').config()
 const { MongoClient } = require('mongodb')
 
