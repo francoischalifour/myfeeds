@@ -52,6 +52,9 @@ const Posts = {
       .find({
         parent_id: { $exists: false },
       })
+      .sort({
+        created_at: -1,
+      })
       .toArray()
     await mergePostsWithAuthors(result, db)
     await db.close()
@@ -74,6 +77,9 @@ const Posts = {
     const result = await db
       .collection(COLLECTION_POSTS)
       .find({ parent_id: id })
+      .sort({
+        created_at: 1,
+      })
       .toArray()
     await mergePostsWithAuthors(result, db)
     await db.close()
@@ -93,6 +99,9 @@ const Posts = {
       result = await db
         .collection(COLLECTION_POSTS)
         .find({ user_id: user._id })
+        .sort({
+          created_at: -1,
+        })
         .toArray()
 
       await mergePostsWithAuthors(result, db)
