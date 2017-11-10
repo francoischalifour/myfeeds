@@ -15,10 +15,11 @@ export const cleanUrl = url => url.substr(url.indexOf('://') + 3)
 export const formatText = text => {
   const parser = new Parser()
 
-  parser.addRule(
-    /#[\S]+/gi,
-    tag => `<a href="/hashtag/${tag.substr(1)}">${tag}</a>`
-  )
+  parser.addRule(/(^|\s)(#[a-z\d-]+)/gi, tag => {
+    const space = tag.startsWith(' ') ? ' ' : ''
+    const cleanTag = tag.trim()
+    return `${space}<a href="/hashtag/${cleanTag.substr(1)}">${cleanTag}</a>`
+  })
 
   parser.addRule(/@[\S]+/gi, mention => `<a href="/${mention}">${mention}</a>`)
 
