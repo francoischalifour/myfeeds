@@ -43,7 +43,8 @@
     "text": "That's awesome!",
     "created_at": "2017-10-8 10:51:56",
     "user_id": "1",
-    "parent_id": "1"
+    "parent_id": "1",
+    "reply_count": 1
   },
   {
     "_id": "7",
@@ -67,5 +68,14 @@
     "user_id": "2",
     "reply_count": 0,
     "star_count": 0
+  },
+  {
+    "_id": "10",
+    "text": "I know 🙂",
+    "created_at": "2017-09-22 18:52:20",
+    "user_id": "2",
+    "reply_count": 0,
+    "star_count": 1,
+    "parent_id": "6"
   }
 ]
