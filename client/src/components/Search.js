@@ -17,7 +17,7 @@ class Search extends Component {
     this.activeUser = await api.getUserById(getCurrentUserId())
     const params = new URLSearchParams(this.props.location.search)
     const search = params.get('q')
-    const posts = await api.getAllPostsMatching(search)
+    const posts = await api.getAllPostsMatching(search.replace('/', ' ')) // '/' leads to another route, remove it
 
     this.setState({
       posts,
