@@ -44,6 +44,39 @@ const getAuthorData = author => ({
   profile_image_url: author.profile_image_url,
 })
 
+/**
+ * Returns posts with highlighted search results.
+ *
+ * This is a custom function because MongoDB cannot return matching elements.
+ *
+ * Uses a regex to ignore all non-alphanumerical characters.
+ *  - `\w` is any digit, letter, or underscore.
+ *  - `\s` is any whitespace.
+ *  - `[^\w\s]` is anything that's not a digit, letter, whitespace, or underscore.
+ *  - `[^\w\s]|_` is the same as #3 except with the underscores added back in.
+ * See: https://stackoverflow.com/a/4328546
+ *
+ * @param {object[]} posts The posts to highlight terms in
+ * @param {string} terms The terms to highlight
+ * @param {string} tag The tag to wrap the terms with
+ * @return {object[]}
+ * @private
+ */
+const highlightTerms = (posts, terms, tag = 'em') => {
+  const words = terms
+    .replace(/[^\w\s]|_/g, ' ')
+    .replace(/\s+/g, ' ')
+    .split(' ')
+
+  return posts.map(post => {
+    words.forEach(word => {
+      const regex = new RegExp(word, 'gi')
+      post.text = post.text.replace(regex, `<${tag}>${word}</${tag}>`)
+    })
+    return post
+  })
+}
+
 const Posts = {
   async getFeed() {
     const db = await connect()
@@ -121,20 +154,22 @@ const Posts = {
         created_at: -1,
       })
       .toArray()
+      .then(posts => highlightTerms(posts, query))
     await mergePostsWithAuthors(result, db)
     await db.close()
 
     return result
   },
-  async searchHashtag(hashtag) {
+  async searchHashtag(query) {
     const db = await connect()
     const result = await db
       .collection(COLLECTION_POSTS)
-      .find({ hashtags: { $in: [hashtag.toLowerCase()] } })
+      .find({ hashtags: { $in: [query.toLowerCase()] } })
       .sort({
         created_at: -1,
       })
       .toArray()
+      .then(posts => highlightTerms(posts, query))
     await mergePostsWithAuthors(result, db)
     await db.close()
 

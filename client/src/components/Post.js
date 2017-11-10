@@ -37,6 +37,9 @@ const Header = glamorous.header({
 const PostText = glamorous.p({
   marginTop: 4,
   color: '#333',
+  '& em': {
+    fontWeight: 'bold',
+  },
 })
 
 const FooterList = glamorous.ul({
