@@ -2,13 +2,17 @@
 
 > Social network application managed by a NoSQL database.
 
-This project is part of the *Bases de données avancées* (Advanced Databases) course at *Laval University*.
+This is a basic and non-secure frontend app built with [React](https://github.com/facebook/react) to showcase our work with [MongoDB](https://github.com/mongodb/mongo).
 
-This is a basic and not secure frontend app built with [React](https://github.com/facebook/react) to showcase our work with [MongoDB](https://github.com/mongodb/mongo).
+This project is part of the *Advanced Databases* course at *Laval University*.
 
 ## Features
 
 > In progress
+
+## Documentation
+
+You'll find the appropriate documentations for the [client](client/) and the [server](server/) in their respective folders.
 
 ## Usage
 
@@ -16,7 +20,16 @@ This is a basic and not secure frontend app built with [React](https://github.co
 
 * Install Node dependencies: `yarn` or `npm install`
 * Run the app: `yarn start` or `npm start`
-* Listening on: [`http://localhost:3000`](http://localhost:3000)
+* Server listening on: [`http://localhost:9000`](http://localhost:9000)
+* Client listening on: [`http://localhost:3000`](http://localhost:3000)
+
+#### More commands
+
+* Run the server: `yarn start:server`
+* Run the client: `yarn start:client`
+* Format code: `yarn format`
+
+More commands are available in the [client](client/) and the [server](server/).
 
 ## License
 

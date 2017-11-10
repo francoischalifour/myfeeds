@@ -1,0 +1,26 @@
+{
+  "name": "@myfeeds/server",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/francoischalifour/myfeeds",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "db:init": "node scripts/db/init",
+    "db:populate": "node scripts/db/populate",
+    "start": "node index",
+    "dev": "nodemon index",
+    "format": "./node_modules/.bin/prettier --write './*.js' '{api,scripts,utils}/**/*.{js,json}'"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "fastify": "^0.33.0",
+    "mongodb": "^2.2.33"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "nodemon": "^1.12.1",
+    "prettier": "^1.8.2"
+  }
+}

@@ -1,26 +1,18 @@
 {
   "name": "myfeeds",
   "version": "0.1.0",
+  "repository": "https://github.com/francoischalifour/myfeeds.git",
+  "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "prettier": "./node_modules/.bin/prettier --write 'src/**/*.{js,json,css}'"
+    "postinstall": "npm install --prefix ./server && npm install --prefix ./client",
+    "start:server": "npm start --prefix ./server",
+    "start:client": "npm start --prefix ./client",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "build": "npm run build --prefix ./client && npm run start:server",
+    "format": "npm run format --prefix ./client && npm run format --prefix ./server"
   },
   "dependencies": {
-    "glamor": "^2.20.40",
-    "glamorous": "^4.9.7",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-icons": "^2.2.5",
-    "react-image-palette": "^0.1.2",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.14",
-    "simple-text-parser": "^1.0.0"
-  },
-  "devDependencies": {
-    "prettier": "1.7.4"
+    "concurrently": "^3.5.0"
   }
 }
