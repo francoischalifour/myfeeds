@@ -16,7 +16,7 @@ const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
 
 class Feed extends Component {
   onItemClick = (event, postId) => {
-    if (event.target.tagName === 'A') {
+    if (['A', 'IMG'].includes(event.target.tagName)) {
       return
     }
 

@@ -29,7 +29,7 @@ const Textarea = glamorous.textarea({
   outline: 'none',
 })
 
-export default class PostForm extends Component {
+class PostForm extends Component {
   state = {
     value: '',
     isFocused: false,
@@ -87,3 +87,5 @@ export default class PostForm extends Component {
     )
   }
 }
+
+export default PostForm
