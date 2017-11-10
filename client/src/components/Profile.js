@@ -31,7 +31,7 @@ class Profile extends Component {
         <Scaffold grid>
           <ProfileSidebar {...this.activeUser} />
           <Main style={{ textAlign: 'center' }}>
-            <MdFindInPage size={212} color="#eceff1" />
+            <MdFindInPage size={212} color="#ddd" />
 
             <p>
               The user <strong>@{this.props.match.params.username}</strong>{' '}
