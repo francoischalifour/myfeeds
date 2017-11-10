@@ -1,4 +1,4 @@
-const { MongoClient, ObjectID } = require('mongodb')
+const { ObjectID } = require('mongodb')
 
 /**
  * Returns an objectified version of the object.
