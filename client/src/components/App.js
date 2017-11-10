@@ -5,16 +5,16 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
-import { getCurrentUserId } from '../utils'
-import Home from './Home'
-import Login from './Login'
-import Header from './Header'
-import Settings from './Settings'
-import Logout from './Logout'
-import Profile from './Profile'
-import PostFeed from './PostFeed'
-import Hashtag from './Hashtag'
-import Search from './Search'
+import { getCurrentUserId } from 'utils'
+import Timeline from 'scenes/Timeline'
+import Profile from 'scenes/Profile'
+import Post from 'scenes/Post'
+import Hashtag from 'scenes/Hashtag'
+import Search from 'scenes/Search'
+import Login from 'scenes/Login'
+import Settings from 'scenes/Settings'
+import Header from 'components/Header'
+import Logout from 'components/Logout'
 
 const isLoggedIn = !!getCurrentUserId()
 
@@ -27,7 +27,7 @@ const App = () => (
         <Route
           exact
           path="/"
-          render={() => (isLoggedIn ? <Home /> : <Login />)}
+          render={() => (isLoggedIn ? <Timeline /> : <Login />)}
         />
         <Route exact path="/settings" component={Settings} />
         <Route
@@ -36,7 +36,7 @@ const App = () => (
           render={() => (isLoggedIn ? <Logout /> : <Redirect to="/" />)}
         />
         <Route path="/@:username" component={Profile} />
-        <Route path="/posts/:postid" component={PostFeed} />
+        <Route path="/posts/:postid" component={Post} />
         <Route path="/hashtag/:hashtag" component={Hashtag} />
         <Route path="/search" component={Search} />
         <Route render={() => <Redirect to="/" />} />

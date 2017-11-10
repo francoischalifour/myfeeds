@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import { getCurrentUserId } from '../utils'
-import api from '../api'
-import Scaffold from './Scaffold'
-import Main from './Main'
-import ProfileSidebar from './ProfileSidebar'
-import Post from './Post'
-import PostForm from './PostForm'
+import { getCurrentUserId } from 'utils'
+import api from 'api'
+import Scaffold from 'components/Scaffold'
+import Content from 'components/Content'
+import ProfileSidebar from 'components/ProfileSidebar'
+import Post from 'components/Post'
+import PostForm from 'components/PostForm'
 
-const PostContainer = glamorous.div({
+const Container = glamorous.div({
   backgroundColor: '#fff',
   boxShadow: '0 1px 4px rgba(0,0,0,.1)',
   ':not(:last-of-type)': {
@@ -23,7 +23,7 @@ const PostFormContainer = glamorous.div({
   borderBottom: '1px solid #ddd',
 })
 
-class PostFeed extends Component {
+class PostScene extends Component {
   state = {
     post: {},
     replies: [],
@@ -45,14 +45,14 @@ class PostFeed extends Component {
     return (
       <Scaffold grid>
         <ProfileSidebar {...this.activeUser} />
-        <Main>
+        <Content>
           {!this.state.post ? (
             <div style={{ textAlign: 'center' }}>
               <MdFindInPage size={212} color="#ddd" />
               <p>This post doesn't exist.</p>
             </div>
           ) : (
-            <PostContainer>
+            <Container>
               <Post {...this.state.post} />
 
               <PostFormContainer>
@@ -72,12 +72,12 @@ class PostFeed extends Component {
                   ))}
                 </ul>
               )}
-            </PostContainer>
+            </Container>
           )}
-        </Main>
+        </Content>
       </Scaffold>
     )
   }
 }
 
-export default PostFeed
+export default PostScene

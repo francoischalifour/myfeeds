@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import glamorous from 'glamorous'
 import MdChatBubbleOutline from 'react-icons/lib/md/chat-bubble-outline'
 import MdChatBubble from 'react-icons/lib/md/chat-bubble'
 import MdStarBorder from 'react-icons/lib/md/star-border'
 import MdStar from 'react-icons/lib/md/star'
-import { formatText } from '../utils'
-import glamorous from 'glamorous'
-import ProfilePicture from './ProfilePicture'
+import { formatText } from 'utils'
+import ProfilePicture from 'components/ProfilePicture'
 
 const Container = glamorous.div({
   display: 'flex',

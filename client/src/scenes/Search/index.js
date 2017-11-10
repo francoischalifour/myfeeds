@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import api from '../api'
-import { getCurrentUserId } from '../utils'
-import ProfileSidebar from './ProfileSidebar'
-import Scaffold from './Scaffold'
-import Main from './Main'
-import Feed from './Feed'
+import api from 'api'
+import { getCurrentUserId } from 'utils'
+import ProfileSidebar from 'components/ProfileSidebar'
+import Scaffold from 'components/Scaffold'
+import Content from 'components/Content'
+import Feed from 'components/Feed'
 
-class Search extends Component {
+class SearchScene extends Component {
   state = {
     search: '',
     posts: [],
@@ -29,7 +29,7 @@ class Search extends Component {
     return (
       <Scaffold grid>
         <ProfileSidebar {...this.activeUser} />
-        <Main>
+        <Content>
           <h2>Results for "{this.state.search}"</h2>
           <Feed
             posts={this.state.posts}
@@ -42,10 +42,10 @@ class Search extends Component {
               </div>
             )}
           />
-        </Main>
+        </Content>
       </Scaffold>
     )
   }
 }
 
-export default Search
+export default SearchScene

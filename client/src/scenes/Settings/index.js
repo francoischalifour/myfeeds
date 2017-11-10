@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import api from '../api'
-import { getCurrentUserId } from '../utils'
+import api from 'api'
+import { getCurrentUserId } from 'utils'
 
-export default class Settings extends Component {
+class SettingsScene extends Component {
   async componentDidMount() {
     this.user = await api.getPublicProfileById(getCurrentUserId())
 
@@ -42,3 +42,5 @@ export default class Settings extends Component {
     )
   }
 }
+
+export default SettingsScene

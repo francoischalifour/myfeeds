@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import api from '../api'
-import { getCurrentUserId } from '../utils'
-import ProfileSidebar from './ProfileSidebar'
-import Scaffold from './Scaffold'
-import Main from './Main'
-import Feed from './Feed'
+import api from 'api'
+import { getCurrentUserId } from 'utils'
+import ProfileSidebar from 'components/ProfileSidebar'
+import Scaffold from 'components/Scaffold'
+import Content from 'components/Content'
+import Feed from 'components/Feed'
 
-class Hashtag extends Component {
+class HashtagScene extends Component {
   state = {
     user: {},
     posts: [],
@@ -27,7 +27,7 @@ class Hashtag extends Component {
     return (
       <Scaffold grid>
         <ProfileSidebar {...this.state.user} />
-        <Main>
+        <Content>
           <h2>#{this.props.match.params.hashtag}</h2>
           <Feed
             posts={this.state.posts}
@@ -41,10 +41,10 @@ class Hashtag extends Component {
               </div>
             )}
           />
-        </Main>
+        </Content>
       </Scaffold>
     )
   }
 }
 
-export default Hashtag
+export default HashtagScene

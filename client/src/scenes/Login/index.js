@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { STORAGE_TOKEN_USER_ID } from '../constants'
-import api from '../api'
+import { STORAGE_TOKEN_USER_ID } from 'constants'
+import api from 'api'
 
 const Container = glamorous.div({
   padding: 24,
@@ -20,7 +20,7 @@ const Error = glamorous.p({
   textAlign: 'center',
 })
 
-export default class Login extends Component {
+class LoginScene extends Component {
   state = {
     email: '',
     password: '',
@@ -70,3 +70,5 @@ export default class Login extends Component {
     )
   }
 }
+
+export default LoginScene

@@ -6,8 +6,8 @@ const gridProps = {
   gridTemplateRows: 'auto',
   gridGap: 24,
   gridTemplateAreas: `"header header"
-    "sidebar main"
-    ". main"`,
+    "sidebar content"
+    ". content"`,
 }
 
 const Scaffold = glamorous('div', { propsAreCssOverrides: true })(props =>

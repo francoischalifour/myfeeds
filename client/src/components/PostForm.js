@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import ProfilePicture from './ProfilePicture'
+import ProfilePicture from 'components/ProfilePicture'
 
 const Container = glamorous.div({
   display: 'flex',

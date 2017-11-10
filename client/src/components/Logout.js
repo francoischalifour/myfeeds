@@ -1,4 +1,4 @@
-import { deleteCurrentUserId } from '../utils'
+import { deleteCurrentUserId } from 'utils'
 
 const Logout = () => {
   deleteCurrentUserId()

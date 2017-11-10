@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import api from '../api'
-import { getCurrentUserId } from '../utils'
-import ProfileSidebar from './ProfileSidebar'
-import Scaffold from './Scaffold'
-import Main from './Main'
-import Feed from './Feed'
+import api from 'api'
+import { getCurrentUserId } from 'utils'
+import ProfileSidebar from 'components/ProfileSidebar'
+import Scaffold from 'components/Scaffold'
+import Content from 'components/Content'
+import Feed from 'components/Feed'
 
-class Profile extends Component {
+class ProfileScene extends Component {
   state = {
     user: {},
     posts: [],
@@ -30,14 +30,14 @@ class Profile extends Component {
       return (
         <Scaffold grid>
           <ProfileSidebar {...this.activeUser} />
-          <Main style={{ textAlign: 'center' }}>
+          <Content style={{ textAlign: 'center' }}>
             <MdFindInPage size={212} color="#ddd" />
 
             <p>
               The user <strong>@{this.props.match.params.username}</strong>{' '}
               doesn't exist.
             </p>
-          </Main>
+          </Content>
         </Scaffold>
       )
     }
@@ -45,7 +45,7 @@ class Profile extends Component {
     return (
       <Scaffold grid>
         <ProfileSidebar {...this.state.user} />
-        <Main>
+        <Content>
           <Feed
             posts={this.state.posts}
             renderEmpty={() => (
@@ -58,10 +58,10 @@ class Profile extends Component {
               </div>
             )}
           />
-        </Main>
+        </Content>
       </Scaffold>
     )
   }
 }
 
-export default Profile
+export default ProfileScene

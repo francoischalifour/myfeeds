@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdLineWeight from 'react-icons/lib/md/line-weight'
 import MdSearch from 'react-icons/lib/md/search'
-import SearchForm from './SearchForm'
+import SearchForm from 'components/SearchForm'
 
 const Navbar = glamorous.header({
   backgroundColor: '#212121',

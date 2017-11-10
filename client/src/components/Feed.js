@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import glamorous from 'glamorous'
-import Post from './Post'
+import Post from 'components/Post'
 
 const Item = glamorous('li', { propsAreCssOverrides: true })(props => ({
   backgroundColor: '#fff',

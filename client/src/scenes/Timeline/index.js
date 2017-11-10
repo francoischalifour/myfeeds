@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { getCurrentUserId } from '../utils'
-import api from '../api'
-import Scaffold from './Scaffold'
-import Main from './Main'
-import ProfileSidebar from './ProfileSidebar'
-import Feed from './Feed'
-import PostForm from './PostForm'
+import { getCurrentUserId } from 'utils'
+import api from 'api'
+import Scaffold from 'components/Scaffold'
+import Content from 'components/Content'
+import ProfileSidebar from 'components/ProfileSidebar'
+import Feed from 'components/Feed'
+import PostForm from 'components/PostForm'
 
-class Home extends Component {
+class TimelineScene extends Component {
   state = {
     posts: [],
   }
@@ -25,15 +25,15 @@ class Home extends Component {
     return (
       <Scaffold grid>
         <ProfileSidebar {...this.activeUser} />
-        <Main>
+        <Content>
           <Feed
             posts={this.state.posts}
             renderHeader={() => <PostForm {...this.activeUser} />}
           />
-        </Main>
+        </Content>
       </Scaffold>
     )
   }
 }
 
-export default Home
+export default TimelineScene

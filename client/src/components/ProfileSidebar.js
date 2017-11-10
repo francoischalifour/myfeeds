@@ -2,16 +2,11 @@ import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import { Link } from 'react-router-dom'
 import ImagePalette from 'react-image-palette'
-import {
-  getLocationLink,
-  cleanUrl,
-  formatText,
-  getCurrentUserId,
-} from '../utils'
+import { getLocationLink, cleanUrl, formatText, getCurrentUserId } from 'utils'
 import MdLocation from 'react-icons/lib/md/location-on'
 import MdLink from 'react-icons/lib/md/link'
 import MdDateRange from 'react-icons/lib/md/date-range'
-import ProfilePicture from './ProfilePicture'
+import ProfilePicture from 'components/ProfilePicture'
 
 const Sidebar = glamorous.aside({
   gridArea: 'sidebar',
@@ -62,7 +57,7 @@ const Ul = glamorous.ul({
   lineHeight: '1.6rem',
 })
 
-export default class ProfileSidebar extends Component {
+class ProfileSidebar extends Component {
   state = {
     isFollowing: false, // TODO: fetch from BD
   }
@@ -169,3 +164,5 @@ export default class ProfileSidebar extends Component {
     )
   }
 }
+
+export default ProfileSidebar
