@@ -15,11 +15,17 @@ const {
 const DB_COLLECTIONS = [COLLECTION_USERS, COLLECTION_POSTS, COLLECTION_STARS]
 
 const createIndexes = async db => {
+  // Users
   await db
     .collection(COLLECTION_USERS)
     .createIndex({ username: 1 })
     .catch(err => console.error(err))
+  await db
+    .collection(COLLECTION_USERS)
+    .createIndex({ email: 1 })
+    .catch(err => console.error(err))
 
+  // Posts
   await db
     .collection(COLLECTION_POSTS)
     .createIndex({ text: 'text' })
