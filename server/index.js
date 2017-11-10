@@ -14,9 +14,10 @@ fastify.get('/status', async (request, reply) => {
   return true
 })
 
+fastify.register(require('./api/v1/auth/routes'), { prefix: '/v1' })
 fastify.register(require('./api/v1/users/routes'), { prefix: '/v1' })
 fastify.register(require('./api/v1/posts/routes'), { prefix: '/v1' })
-fastify.register(require('./api/v1/auth/routes'), { prefix: '/v1' })
+fastify.register(require('./api/v1/stars/routes'), { prefix: '/v1' })
 
 fastify.listen(SERVER_PORT, SERVER_HOST, err => {
   if (err) {
