@@ -120,8 +120,12 @@ const Posts = {
       created_at: new Date(),
     })
 
-    // TODO: populate hashtags
-    const hashtags = []
+    const hashtags = (post.text.match(/(^|\s)(#[a-z\d-]+)/gi) || []).map(tag =>
+      tag
+        .trim()
+        .substr(1)
+        .toLowerCase()
+    )
     hashtags.length > 0 && (post.hashtags = hashtags)
 
     const db = await connect()
