@@ -55,6 +55,10 @@ const FooterList = glamorous.ul({
   },
 })
 
+const FooterItem = glamorous.li({
+  cursor: 'pointer',
+})
+
 class Post extends Component {
   constructor(props) {
     super(props)
@@ -111,15 +115,15 @@ class Post extends Component {
           <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
 
           <FooterList>
-            <li>
+            <FooterItem>
               {this.state.replied ? (
                 <MdChatBubble size="18" />
               ) : (
                 <MdChatBubbleOutline size="18" />
               )}{' '}
               {replyCount > 0 && replyCount}
-            </li>
-            <li>
+            </FooterItem>
+            <FooterItem>
               {this.state.starred ? (
                 <MdStar
                   onClick={event => this.onStarred(event, false)}
@@ -132,7 +136,7 @@ class Post extends Component {
                 />
               )}{' '}
               {starCount > 0 && starCount}
-            </li>
+            </FooterItem>
           </FooterList>
         </RightContainer>
       </Container>

@@ -6,6 +6,7 @@ import api from 'api'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
 import ProfileSidebar from 'components/ProfileSidebar'
+import Feed from 'components/Feed'
 import Post from 'components/Post'
 import PostForm from 'components/PostForm'
 
@@ -63,15 +64,7 @@ class PostScene extends Component {
                 />
               </PostFormContainer>
 
-              {this.state.replies && (
-                <ul>
-                  {this.state.replies.map(reply => (
-                    <li key={reply._id}>
-                      <Post {...reply} />
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <Feed posts={this.state.replies} />
             </Container>
           )}
         </Content>

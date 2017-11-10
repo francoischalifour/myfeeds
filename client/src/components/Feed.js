@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 import glamorous from 'glamorous'
 import Post from 'components/Post'
 
-const Item = glamorous('li', { propsAreCssOverrides: true })(props => ({
+const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
   backgroundColor: '#fff',
   boxShadow: '0 1px 4px rgba(0,0,0,.1)',
   ':not(:last-of-type)': {
@@ -16,18 +15,12 @@ const Item = glamorous('li', { propsAreCssOverrides: true })(props => ({
 }))
 
 class Feed extends Component {
-  state = {
-    redirect: '',
-  }
-
   onItemClick = (event, postId) => {
     if (event.target.tagName === 'A') {
       return
     }
 
-    this.setState({
-      redirect: `/posts/${postId}`,
-    })
+    window.location.href = `/posts/${postId}`
   }
 
   render() {
@@ -37,23 +30,17 @@ class Feed extends Component {
       return renderEmpty()
     }
 
-    if (this.state.redirect) {
-      return <Redirect push to={this.state.redirect} />
-    }
-
     return (
       <ul>
-        {renderHeader && (
-          <Item backgroundColor="#eceff1">{renderHeader()}</Item>
-        )}
+        {renderHeader && <Li backgroundColor="#eceff1">{renderHeader()}</Li>}
 
         {posts.map(post => (
-          <Item
+          <Li
             key={post._id}
             onClick={event => this.onItemClick(event, post._id)}
           >
             <Post {...post} />
-          </Item>
+          </Li>
         ))}
       </ul>
     )
