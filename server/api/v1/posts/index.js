@@ -1,5 +1,6 @@
-const { MongoClient, ObjectID } = require('mongodb')
+const { ObjectID } = require('mongodb')
 const connect = require('../../../utils/connect')
+const { objectifyProps } = require('../../../utils')
 const { COLLECTION_POSTS, COLLECTION_USERS } = require('../../../constants')
 
 /**
@@ -94,11 +95,11 @@ const Posts = {
 
     return result
   },
-  async getById(id) {
+  async get(objectFilter) {
+    const filter = objectifyProps(objectFilter)
+
     const db = await connect()
-    const result = await db
-      .collection(COLLECTION_POSTS)
-      .findOne({ _id: new ObjectID(id) })
+    const result = await db.collection(COLLECTION_POSTS).findOne(filter)
     const author = await db
       .collection(COLLECTION_USERS)
       .findOne({ _id: result.user_id })
@@ -107,11 +108,13 @@ const Posts = {
 
     return result
   },
-  async getRepliesById(id) {
+  async getReplies(objectFilter) {
+    const filter = objectifyProps(objectFilter)
+
     const db = await connect()
     const result = await db
       .collection(COLLECTION_POSTS)
-      .find({ parent_id: new ObjectID(id) })
+      .find(filter)
       .sort({
         created_at: 1,
       })
@@ -121,11 +124,13 @@ const Posts = {
 
     return result
   },
-  async getUserFeedByUsername(username) {
+  async getUserFeed(objectFilter) {
+    const filter = objectifyProps(objectFilter)
+
     const db = await connect()
     const user = await db
       .collection(COLLECTION_USERS)
-      .findOne({ username }, { _id: 1 })
+      .findOne(filter, { _id: 1 })
     let result
 
     if (!user) {

@@ -12,11 +12,15 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/posts/:id', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getById(request.params.id)
+      return Posts.get({
+        _id: request.params.id,
+      })
     })
     .get('/posts/:id/replies', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getRepliesById(request.params.id)
+      return Posts.getReplies({
+        parent_id: request.params.id,
+      })
     })
     .get('/search/:query', async (request, reply) => {
       reply.type('application/json').code(200)
