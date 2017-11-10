@@ -20,11 +20,5 @@ module.exports = (fastify, opts, next) => {
       return Posts.getUserFeedByUsername(request.params.username)
     })
 
-  fastify.post('/login', async (request, reply) => {
-    reply.type('application/json').code(200)
-    // TODO: check password
-    return Users.getByEmail(request.body.email)
-  })
-
   next()
 }

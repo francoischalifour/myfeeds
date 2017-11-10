@@ -19,13 +19,6 @@ const Users = {
 
     return result
   },
-  async getByEmail(email) {
-    const db = await connect()
-    const result = await db.collection(COLLECTION_USERS).findOne({ email })
-    db.close()
-
-    return result
-  },
   async getPublicById(id) {
     const db = await connect()
     const result = await db.collection(COLLECTION_USERS).findOne(

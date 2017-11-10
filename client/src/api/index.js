@@ -36,11 +36,6 @@ const getUserById = id => getV1(`/users/${id}`)
 
 const getUserByUsername = username => getV1(`/users/@${username}`)
 
-const getUserByEmail = email =>
-  postV1('/login', {
-    email,
-  })
-
 const getAllPostsByUsername = username => getV1(`/users/@${username}/posts`)
 
 const getAllPostsMatching = query => getV1(`/search/${query}`)
@@ -48,6 +43,12 @@ const getAllPostsMatching = query => getV1(`/search/${query}`)
 const getAllPostsHashtag = hashtag => getV1(`/hashtags/${hashtag}`)
 
 const getPublicProfileById = id => getV1(`/users/${id}/public`)
+
+const login = (email, password) =>
+  postV1('/login', {
+    email,
+    password,
+  })
 
 const addPost = post => postV1('/posts', post)
 
@@ -58,10 +59,10 @@ export default {
   getPostRepliesById,
   getUserById,
   getUserByUsername,
-  getUserByEmail,
   getAllPostsByUsername,
   getAllPostsMatching,
   getAllPostsHashtag,
   getPublicProfileById,
+  login,
   addPost,
 }

@@ -27,19 +27,19 @@ class LoginScene extends Component {
     error: '',
   }
 
-  onSubmit = event => {
+  onSubmit = async event => {
     event.preventDefault()
 
-    api.getUserByEmail(this.state.email, this.state.password).then(user => {
-      if (user && user._id) {
-        window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
-        window.location.href = '/'
-      } else {
-        this.setState({
-          error: 'Invalid email address or password.',
-        })
-      }
-    })
+    const user = await api.login(this.state.email, this.state.password)
+
+    if (user && user._id) {
+      window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
+      window.location.href = '/'
+    } else {
+      this.setState({
+        error: 'Invalid email address or password.',
+      })
+    }
   }
 
   render() {
