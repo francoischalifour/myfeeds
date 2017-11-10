@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
+import api from 'api'
 import ProfilePicture from 'components/ProfilePicture'
+import { getCurrentUserId } from 'utils'
 
 const Container = glamorous.div({
   display: 'flex',
@@ -33,7 +35,6 @@ class PostForm extends Component {
   state = {
     value: '',
     isFocused: false,
-    parent: this.props.parentId,
   }
 
   onChange = value => {
@@ -46,7 +47,20 @@ class PostForm extends Component {
   onSubmit = event => {
     event.preventDefault()
 
-    // TODO: post `this.state.value.trim()`
+    const text = this.state.value.trim()
+
+    if (text.length < 2) {
+      return
+    }
+
+    const post = {
+      text,
+      user_id: getCurrentUserId(),
+    }
+    this.props.parentId && (post.parent_id = this.props.parentId)
+    api.addPost(post)
+
+    window.location.reload()
 
     this.setState({
       value: '',

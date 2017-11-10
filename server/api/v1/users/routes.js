@@ -11,10 +11,6 @@ module.exports = (fastify, opts, next) => {
       reply.type('application/json').code(200)
       return Users.getByUsername(request.params.username)
     })
-    .get('/users/email/:email', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Users.getByEmail(request.params.email)
-    })
     .get('/users/:id/public', async (request, reply) => {
       reply.type('application/json').code(200)
       return Users.getPublicById(request.params.id)
@@ -23,6 +19,12 @@ module.exports = (fastify, opts, next) => {
       reply.type('application/json').code(200)
       return Posts.getUserFeedByUsername(request.params.username)
     })
+
+  fastify.post('/login', async (request, reply) => {
+    reply.type('application/json').code(200)
+    // TODO: check password
+    return Users.getByEmail(request.body.email)
+  })
 
   next()
 }

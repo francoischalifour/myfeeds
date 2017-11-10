@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { STORAGE_TOKEN_USER_ID } from 'constants'
+import { STORAGE_TOKEN_USER_ID } from '../../constants'
 import api from 'api'
 
 const Container = glamorous.div({
@@ -30,15 +30,14 @@ class LoginScene extends Component {
   onSubmit = event => {
     event.preventDefault()
 
-    api.getUserByEmail(this.state.email).then(user => {
-      // TODO: check `this.state.password`
-      if (!user) {
+    api.getUserByEmail(this.state.email, this.state.password).then(user => {
+      if (user && user._id) {
+        window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
+        window.location.href = '/'
+      } else {
         this.setState({
           error: 'Invalid email address or password.',
         })
-      } else {
-        window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
-        window.location.href = '/'
       }
     })
   }

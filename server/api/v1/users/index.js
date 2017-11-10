@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectID } = require('mongodb')
 const connect = require('../../../utils/connect')
 const { COLLECTION_USERS } = require('../../../constants')
 
@@ -12,7 +12,9 @@ const Users = {
   },
   async getById(id) {
     const db = await connect()
-    const result = await db.collection(COLLECTION_USERS).findOne({ _id: id })
+    const result = await db
+      .collection(COLLECTION_USERS)
+      .findOne({ _id: new ObjectID(id) })
     db.close()
 
     return result
@@ -27,7 +29,7 @@ const Users = {
   async getPublicById(id) {
     const db = await connect()
     const result = await db.collection(COLLECTION_USERS).findOne(
-      { _id: id },
+      { _id: new ObjectID(id) },
       {
         _id: 0,
         username: 1,

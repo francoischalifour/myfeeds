@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectID } = require('mongodb')
 const connect = require('../../../utils/connect')
 const { COLLECTION_POSTS, COLLECTION_USERS } = require('../../../constants')
 
@@ -96,7 +96,9 @@ const Posts = {
   },
   async getById(id) {
     const db = await connect()
-    const result = await db.collection(COLLECTION_POSTS).findOne({ _id: id })
+    const result = await db
+      .collection(COLLECTION_POSTS)
+      .findOne({ _id: new ObjectID(id) })
     const author = await db
       .collection(COLLECTION_USERS)
       .findOne({ _id: result.user_id })
@@ -109,7 +111,7 @@ const Posts = {
     const db = await connect()
     const result = await db
       .collection(COLLECTION_POSTS)
-      .find({ parent_id: id })
+      .find({ parent_id: new ObjectID(id) })
       .sort({
         created_at: 1,
       })
@@ -131,7 +133,7 @@ const Posts = {
     } else {
       result = await db
         .collection(COLLECTION_POSTS)
-        .find({ user_id: user._id })
+        .find({ user_id: new ObjectID(user._id) })
         .sort({
           created_at: -1,
         })
@@ -171,6 +173,40 @@ const Posts = {
       .toArray()
       .then(posts => highlightTerms(posts, query))
     await mergePostsWithAuthors(result, db)
+    db.close()
+
+    return result
+  },
+  async add(rawPost) {
+    const post = {
+      ...rawPost,
+      user_id: new ObjectID(rawPost.user_id),
+      reply_count: 0,
+      star_count: 0,
+      created_at: new Date(),
+    }
+
+    post.parent_id && (post.parent_id = new ObjectID(post.parent_id))
+
+    // TODO: populate hashtags
+    const hashtags = []
+
+    if (hashtags) {
+      Object.assign(post, hashtags)
+    }
+
+    const db = await connect()
+    const result = await db.collection(COLLECTION_POSTS).insert(post)
+
+    if (post.parent_id) {
+      await db
+        .collection(COLLECTION_POSTS)
+        .update(
+          { _id: new ObjectID(post.parent_id) },
+          { $inc: { reply_count: 1 } }
+        )
+    }
+
     db.close()
 
     return result

@@ -27,5 +27,10 @@ module.exports = (fastify, opts, next) => {
       return Posts.searchHashtag(request.params.hashtag)
     })
 
+  fastify.post('/posts', async (request, reply) => {
+    reply.type('application/json').code(200)
+    return Posts.add(request.body)
+  })
+
   next()
 }

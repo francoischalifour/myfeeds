@@ -106,7 +106,7 @@ class Post extends Component {
             <Small>
               {' '}
               <Link to={`/@${username}`}>@{username}</Link>
-              <time>
+              <time dateTime={createdAt} title={createdAt}>
                 {''} • {month} {day}
               </time>
             </Small>

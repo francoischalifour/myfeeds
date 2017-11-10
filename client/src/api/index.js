@@ -7,6 +7,16 @@ const get = (resource, prefix = '', endpoint = ENDPOINT) =>
   fetch(`${endpoint}${prefix}${resource}`).then(res => res.json())
 const getV1 = resource => get(resource, '/v1')
 
+const post = (resource, body, prefix = '', endpoint = ENDPOINT) =>
+  fetch(`${endpoint}${prefix}${resource}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  }).then(res => res.json())
+const postV1 = (resource, body) => post(resource, body, '/v1')
+
 const isServerUp = async () => {
   try {
     await get('/status')
@@ -26,7 +36,10 @@ const getUserById = id => getV1(`/users/${id}`)
 
 const getUserByUsername = username => getV1(`/users/@${username}`)
 
-const getUserByEmail = email => getV1(`/users/email/${email}`)
+const getUserByEmail = email =>
+  postV1('/login', {
+    email,
+  })
 
 const getAllPostsByUsername = username => getV1(`/users/@${username}/posts`)
 
@@ -35,6 +48,8 @@ const getAllPostsMatching = query => getV1(`/search/${query}`)
 const getAllPostsHashtag = hashtag => getV1(`/hashtags/${hashtag}`)
 
 const getPublicProfileById = id => getV1(`/users/${id}/public`)
+
+const addPost = post => postV1('/posts', post)
 
 export default {
   isServerUp,
@@ -48,4 +63,5 @@ export default {
   getAllPostsMatching,
   getAllPostsHashtag,
   getPublicProfileById,
+  addPost,
 }
