@@ -30,6 +30,12 @@ const createIndexes = async db => {
     .collection(COLLECTION_POSTS)
     .createIndex({ text: 'text' })
     .catch(err => console.error(err))
+
+  // Stars
+  await db
+    .collection(COLLECTION_STARS)
+    .createIndex({ post_id: 1 })
+    .catch(err => console.error(err))
 }
 
 const run = async () => {
