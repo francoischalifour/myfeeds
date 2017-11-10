@@ -17,7 +17,7 @@ const Sidebar = glamorous.aside({
 
 const Header = glamorous('header', { propsAreCssOverrides: true })({
   position: 'relative',
-  backgroundColor: '#eceff1',
+  backgroundColor: '#212121',
   height: 114,
 })
 
@@ -82,31 +82,56 @@ class ProfileSidebar extends Component {
 
     const [, month, , year] = String(new Date(createdAt)).split(' ')
 
+    let header
+
+    // Disable CORS errors coming from Amazon and `react-image-palette` avatars for now
+    if (imageUrl && imageUrl.startsWith('https://s3.amazonaws.com')) {
+      header = (
+        <Header>
+          <Link to={`/@${username}`}>
+            <ProfilePicture
+              src={imageUrl}
+              alt={name}
+              width="150"
+              height="150"
+              borderRadius="50%"
+              border="2px solid white"
+              bottom="-85px"
+              left="50%"
+              transform="translateX(-50%)"
+              position="absolute"
+            />
+          </Link>
+        </Header>
+      )
+    } else if (imageUrl) {
+      header = (
+        <ImagePalette image={imageUrl} crossOrigin={true}>
+          {({ backgroundColor, color, alternativeColor }) => (
+            <Header>
+              <Link to={`/@${username}`}>
+                <ProfilePicture
+                  src={imageUrl}
+                  alt={name}
+                  width="150"
+                  height="150"
+                  borderRadius="50%"
+                  border="2px solid white"
+                  bottom="-85px"
+                  left="50%"
+                  transform="translateX(-50%)"
+                  position="absolute"
+                />
+              </Link>
+            </Header>
+          )}
+        </ImagePalette>
+      )
+    }
+
     return (
       <Sidebar>
-        {imageUrl && (
-          <ImagePalette image={imageUrl} crossOrigin={true}>
-            {({ backgroundColor, color, alternativeColor }) => (
-              <Header backgroundColor={backgroundColor}>
-                <Link to={`/@${username}`}>
-                  <ProfilePicture
-                    src={imageUrl}
-                    alt={name}
-                    width="150"
-                    height="150"
-                    borderRadius="50%"
-                    border="2px solid white"
-                    bottom="-85px"
-                    left="50%"
-                    transform="translateX(-50%)"
-                    position="absolute"
-                  />
-                </Link>
-              </Header>
-            )}
-          </ImagePalette>
-        )}
-
+        {imageUrl && header}
         <Content>
           <Name>
             <Link to={`/@${username}`}>{name}</Link>
