@@ -76,7 +76,7 @@ const replies = Array.from({ length: REPLY_COUNT }).map((_v, i) => {
   }
 })
 
-const stars = Array.from({ length: STAR_COUNT }).map((_v, i) => {
+const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
   const userIndex = faker.random.number(USER_COUNT - 1)
   const postIndex = faker.random.number(POST_COUNT - 1)
 
@@ -93,5 +93,5 @@ const stars = Array.from({ length: STAR_COUNT }).map((_v, i) => {
 module.exports = {
   users: users.concat(permanentUsers),
   posts: posts.concat(replies),
-  stars,
+  favorites,
 }

@@ -9,10 +9,14 @@ const connect = require('../../utils/connect')
 const {
   COLLECTION_USERS,
   COLLECTION_POSTS,
-  COLLECTION_STARS,
+  COLLECTION_FAVORITES,
 } = require('../../constants')
 
-const DB_COLLECTIONS = [COLLECTION_USERS, COLLECTION_POSTS, COLLECTION_STARS]
+const DB_COLLECTIONS = [
+  COLLECTION_USERS,
+  COLLECTION_POSTS,
+  COLLECTION_FAVORITES,
+]
 
 const createIndexes = async db => {
   /**
@@ -39,11 +43,11 @@ const createIndexes = async db => {
    * Stars
    */
   await db
-    .collection(COLLECTION_STARS)
+    .collection(COLLECTION_FAVORITES)
     .createIndex({ post_id: 1 })
     .catch(err => console.error(err))
   await db
-    .collection(COLLECTION_STARS)
+    .collection(COLLECTION_FAVORITES)
     .createIndex({ post_id: 1, user_id: 1 })
     .catch(err => console.error(err))
 }

@@ -1,17 +1,17 @@
-const Stars = require('.')
+const Favorites = require('.')
 
 module.exports = (fastify, opts, next) => {
   fastify
-    .post('/stars', async (request, reply) => {
+    .post('/favorites/create', async (request, reply) => {
       reply.type('application/json').code(201)
-      return Stars.add({
+      return Favorites.add({
         post_id: request.body.post_id,
         user_id: request.body.user_id,
       })
     })
-    .put('/stars', async (request, reply) => {
+    .post('/favorites/delete', async (request, reply) => {
       reply.type('application/json').code(201)
-      return Stars.remove({
+      return Favorites.remove({
         post_id: request.body.post_id,
         user_id: request.body.user_id,
       })

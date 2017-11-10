@@ -1,8 +1,8 @@
 const connect = require('../../../utils/connect')
-const { COLLECTION_POSTS, COLLECTION_STARS } = require('../../../constants')
+const { COLLECTION_POSTS, COLLECTION_FAVORITES } = require('../../../constants')
 const { objectifyProps } = require('../../../utils')
 
-const Stars = {
+const FAVORITES = {
   async add(rawStar) {
     const star = objectifyProps({
       ...rawStar,
@@ -11,13 +11,15 @@ const Stars = {
     const db = await connect()
     let result
 
-    const hasAlreadyStarred = await db.collection(COLLECTION_STARS).findOne({
-      user_id: star.user_id,
-      post_id: star.post_id,
-    })
+    const hasAlreadyStarred = await db
+      .collection(COLLECTION_FAVORITES)
+      .findOne({
+        user_id: star.user_id,
+        post_id: star.post_id,
+      })
 
     if (!hasAlreadyStarred) {
-      await db.collection(COLLECTION_STARS).insertOne(star)
+      await db.collection(COLLECTION_FAVORITES).insertOne(star)
       await db.collection(COLLECTION_POSTS).updateOne(
         {
           _id: star.post_id,
@@ -41,13 +43,13 @@ const Stars = {
     const db = await connect()
     let result
 
-    const isStarring = await db.collection(COLLECTION_STARS).findOne({
+    const isStarring = await db.collection(COLLECTION_FAVORITES).findOne({
       user_id: star.user_id,
       post_id: star.post_id,
     })
 
     if (isStarring) {
-      await db.collection(COLLECTION_STARS).deleteOne(star)
+      await db.collection(COLLECTION_FAVORITES).deleteOne(star)
       await db.collection(COLLECTION_POSTS).updateOne(
         {
           _id: star.post_id,
@@ -68,4 +70,4 @@ const Stars = {
   },
 }
 
-module.exports = Stars
+module.exports = FAVORITES
