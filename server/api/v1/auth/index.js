@@ -1,4 +1,3 @@
-const { MongoClient, ObjectID } = require('mongodb')
 const connect = require('../../../utils/connect')
 const { COLLECTION_USERS } = require('../../../constants')
 
