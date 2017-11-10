@@ -83,6 +83,16 @@ class ProfileSidebar extends Component {
     const [, month, , year] = String(new Date(createdAt)).split(' ')
 
     let header
+    const profileImageStyle = {
+      width: 150,
+      height: 150,
+      borderRadius: '50%',
+      border: '2px solid white',
+      bottom: '-85px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      position: 'absolute',
+    }
 
     // Disable CORS errors coming from Amazon and `react-image-palette` avatars for now
     if (imageUrl && imageUrl.startsWith('https://s3.amazonaws.com')) {
@@ -92,14 +102,7 @@ class ProfileSidebar extends Component {
             <ProfilePicture
               src={imageUrl}
               alt={name}
-              width="150"
-              height="150"
-              borderRadius="50%"
-              border="2px solid white"
-              bottom="-85px"
-              left="50%"
-              transform="translateX(-50%)"
-              position="absolute"
+              style={profileImageStyle}
             />
           </Link>
         </Header>
@@ -113,14 +116,7 @@ class ProfileSidebar extends Component {
                 <ProfilePicture
                   src={imageUrl}
                   alt={name}
-                  width="150"
-                  height="150"
-                  borderRadius="50%"
-                  border="2px solid white"
-                  bottom="-85px"
-                  left="50%"
-                  transform="translateX(-50%)"
-                  position="absolute"
+                  style={profileImageStyle}
                 />
               </Link>
             </Header>
