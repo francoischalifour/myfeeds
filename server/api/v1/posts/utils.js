@@ -1,4 +1,5 @@
 const { COLLECTION_USERS } = require('../../../constants')
+
 /**
  * Merges the given posts with their authors' information to send only one response to the client.
  * To improve the efficiency, it looks up in a user reference object if the author is already known
