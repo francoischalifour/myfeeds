@@ -90,7 +90,7 @@ const Posts = {
       })
       .toArray()
     await mergePostsWithAuthors(result, db)
-    await db.close()
+    db.close()
 
     return result
   },
@@ -101,7 +101,7 @@ const Posts = {
       .collection(COLLECTION_USERS)
       .findOne({ _id: result.user_id })
     Object.assign(result, getAuthorData(author))
-    await db.close()
+    db.close()
 
     return result
   },
@@ -115,7 +115,7 @@ const Posts = {
       })
       .toArray()
     await mergePostsWithAuthors(result, db)
-    await db.close()
+    db.close()
 
     return result
   },
@@ -140,7 +140,7 @@ const Posts = {
       await mergePostsWithAuthors(result, db)
     }
 
-    await db.close()
+    db.close()
 
     return result
   },
@@ -156,7 +156,7 @@ const Posts = {
       .toArray()
       .then(posts => highlightTerms(posts, query))
     await mergePostsWithAuthors(result, db)
-    await db.close()
+    db.close()
 
     return result
   },
@@ -171,7 +171,7 @@ const Posts = {
       .toArray()
       .then(posts => highlightTerms(posts, query))
     await mergePostsWithAuthors(result, db)
-    await db.close()
+    db.close()
 
     return result
   },

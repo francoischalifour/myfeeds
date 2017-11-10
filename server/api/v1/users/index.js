@@ -5,28 +5,28 @@ const { COLLECTION_USERS } = require('../../../constants')
 const Users = {
   async getByUsername(username) {
     const db = await connect()
-    const result = db.collection(COLLECTION_USERS).findOne({ username })
+    const result = await db.collection(COLLECTION_USERS).findOne({ username })
     db.close()
 
     return result
   },
   async getById(id) {
     const db = await connect()
-    const result = db.collection(COLLECTION_USERS).findOne({ _id: id })
+    const result = await db.collection(COLLECTION_USERS).findOne({ _id: id })
     db.close()
 
     return result
   },
   async getByEmail(email) {
     const db = await connect()
-    const result = db.collection(COLLECTION_USERS).findOne({ email })
+    const result = await db.collection(COLLECTION_USERS).findOne({ email })
     db.close()
 
     return result
   },
   async getPublicById(id) {
     const db = await connect()
-    const result = db.collection(COLLECTION_USERS).findOne(
+    const result = await db.collection(COLLECTION_USERS).findOne(
       { _id: id },
       {
         _id: 0,
