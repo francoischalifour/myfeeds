@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import glamorous from 'glamorous'
 import Post from 'components/Post'
 
@@ -15,20 +16,59 @@ const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
 }))
 
 class Feed extends Component {
+  state = {
+    loading: true,
+    redirect: false,
+  }
+
   onFavorite = async postId => {}
+
+  componentDidMount() {
+    if (!this.props.renderLoading) {
+      this.setState({
+        loading: false,
+      })
+    }
+  }
+
+  componentWillReceiveProps() {
+    if (this.props.renderLoading) {
+      this.setState({
+        loading: false,
+      })
+    }
+  }
 
   onItemClick = (event, postId) => {
     if (['A', 'IMG'].includes(event.target.tagName)) {
       return
     }
 
-    window.location.href = `/posts/${postId}`
+    if (this.props.onItemClick) {
+      this.props.onItemClick(postId)
+    } else {
+      this.setState({
+        redirect: `/posts/${postId}`,
+      })
+    }
+  }
+
+  renderPosts = posts => {
+    return posts.map(post => (
+      <Li key={post._id} onClick={event => this.onItemClick(event, post._id)}>
+        <Post {...post} onFavorite={this.onFavorite} />
+      </Li>
+    ))
   }
 
   render() {
-    const { posts, renderHeader, renderEmpty } = this.props
+    if (this.state.redirect) {
+      return <Redirect push to={this.state.redirect} />
+    }
 
-    if (posts.length === 0 && renderEmpty) {
+    const { posts, renderHeader, renderEmpty, renderLoading } = this.props
+
+    if (this.state.loading === false && renderEmpty && posts.length === 0) {
       return renderEmpty()
     }
 
@@ -36,14 +76,11 @@ class Feed extends Component {
       <ul>
         {renderHeader && <Li backgroundColor="#eceff1">{renderHeader()}</Li>}
 
-        {posts.map(post => (
-          <Li
-            key={post._id}
-            onClick={event => this.onItemClick(event, post._id)}
-          >
-            <Post {...post} onFavorite={this.onFavorite} />
-          </Li>
-        ))}
+        {this.state.loading && renderLoading ? (
+          <Li>{renderLoading()}</Li>
+        ) : (
+          this.renderPosts(posts)
+        )}
       </ul>
     )
   }

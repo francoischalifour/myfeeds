@@ -24,11 +24,16 @@ class PostScene extends Component {
     error: false,
     hasReplied: false,
     hasFavorited: false,
+    isCommentInputFocused: false,
   }
 
   async componentDidMount() {
     this.activeUser = await api.getUserById(getCurrentUserId())
     const postId = this.props.match.params.postid
+    this.fetchPost(postId)
+  }
+
+  fetchPost = async postId => {
     const post = await api.getPostById(postId)
 
     if (post && post._id) {
@@ -45,12 +50,20 @@ class PostScene extends Component {
         hasReplied: userMetadata.replied,
         hasFavorited: userMetadata.favorited,
       })
+
+      this.props.history.push(`/posts/${postId}`)
     } else {
       this.setState({
         loading: false,
         error: true,
       })
     }
+  }
+
+  onCommentIconClick = () => {
+    this.setState({
+      isCommentInputFocused: true,
+    })
   }
 
   onFavorite = async postId => {
@@ -118,15 +131,20 @@ class PostScene extends Component {
           hasReplied={this.state.hasReplied}
           hasFavorited={this.state.hasFavorited}
           onFavorite={this.onFavorite}
+          onCommentIconClick={this.onCommentIconClick}
         />
 
         <Feed
           posts={this.state.replies}
+          onItemClick={this.fetchPost}
           renderHeader={() => (
             <PostForm
               placeholder={`Reply to @${this.state.post.username || ''}`}
               parentId={this.state.post._id}
               onSubmit={this.onSubmit}
+              isFocused={this.state.isCommentInputFocused}
+              onCommentIconBlur={() =>
+                this.setState({ isCommentInputFocused: false })}
               {...this.activeUser}
             />
           )}

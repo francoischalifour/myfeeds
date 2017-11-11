@@ -10,7 +10,6 @@ import Feed from 'components/Feed'
 class SearchScene extends Component {
   state = {
     loading: true,
-    error: false,
   }
 
   async componentDidMount() {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
+import MdList from 'react-icons/lib/md/list'
 import { getCurrentUserId } from 'utils'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
@@ -10,7 +11,6 @@ import PostForm from 'components/PostForm'
 
 class TimelineScene extends Component {
   state = {
-    loading: true,
     error: false,
   }
 
@@ -20,12 +20,10 @@ class TimelineScene extends Component {
 
     if (posts && posts.length > 0) {
       this.setState({
-        loading: false,
         posts,
       })
     } else {
       this.setState({
-        loading: false,
         error: true,
       })
     }
@@ -47,14 +45,6 @@ class TimelineScene extends Component {
     }
   }
 
-  renderLoading = () => {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <p>Loading...</p>
-      </div>
-    )
-  }
-
   renderError = () => {
     return (
       <div style={{ textAlign: 'center' }}>
@@ -71,6 +61,11 @@ class TimelineScene extends Component {
         renderHeader={() => (
           <PostForm {...this.activeUser} onSubmit={this.onSubmit} />
         )}
+        renderLoading={() => (
+          <div style={{ textAlign: 'center', padding: 48 }}>
+            <MdList size={200} color="#ddd" />
+          </div>
+        )}
       />
     )
   }
@@ -80,9 +75,7 @@ class TimelineScene extends Component {
       <Scaffold grid>
         <ProfileSidebar {...this.activeUser} />
         <Content>
-          {this.state.loading
-            ? this.renderLoading()
-            : this.state.error ? this.renderError() : this.renderTimeline()}
+          {this.state.error ? this.renderError() : this.renderTimeline()}
         </Content>
       </Scaffold>
     )

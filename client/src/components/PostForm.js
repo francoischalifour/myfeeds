@@ -35,6 +35,12 @@ class PostForm extends Component {
     isFocused: false,
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isFocused === true) {
+      this.textarea.focus()
+    }
+  }
+
   onChange = value => {
     this.setState({ value })
 
@@ -72,7 +78,10 @@ class PostForm extends Component {
               value={this.state.value}
               onChange={event => this.onChange(event.target.value)}
               onFocus={() => this.setState({ isFocused: true })}
-              onBlur={() => this.setState({ isFocused: false })}
+              onBlur={() => {
+                this.setState({ isFocused: false })
+                this.props.onCommentIconBlur && this.props.onCommentIconBlur()
+              }}
               innerRef={textarea => (this.textarea = textarea)}
             />
             <button

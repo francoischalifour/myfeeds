@@ -12,7 +12,7 @@ const Sidebar = glamorous.aside({
   gridArea: 'sidebar',
   background: '#fff',
   boxShadow: '0 1px 4px rgba(0,0,0,.1)',
-  borderRadius: '3px',
+  borderRadius: 3,
 })
 
 const Header = glamorous('header', { propsAreCssOverrides: true })({
