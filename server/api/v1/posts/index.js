@@ -1,7 +1,11 @@
 const { ObjectID } = require('mongodb')
 const connect = require('../../../utils/connect')
 const { objectifyProps } = require('../../../utils')
-const { COLLECTION_POSTS, COLLECTION_USERS } = require('../../../constants')
+const {
+  COLLECTION_POSTS,
+  COLLECTION_USERS,
+  COLLECTION_FAVORITES,
+} = require('../../../constants')
 const {
   getAuthorData,
   mergePostsWithAuthors,
@@ -37,6 +41,25 @@ const Posts = {
     db.close()
 
     return result
+  },
+  async getUserData(objectFilter) {
+    const filter = objectifyProps(objectFilter)
+
+    const db = await connect()
+    const hasFavorited = !!await db.collection(COLLECTION_FAVORITES).findOne({
+      user_id: filter.user_id,
+      post_id: filter.post_id,
+    })
+    const hasReplied = !!await db.collection(COLLECTION_POSTS).findOne({
+      user_id: filter.user_id,
+      parent_id: filter.post_id,
+    })
+    db.close()
+
+    return {
+      favorited: hasFavorited,
+      replied: hasReplied,
+    }
   },
   async getReplies(objectFilter) {
     const filter = objectifyProps(objectFilter)
