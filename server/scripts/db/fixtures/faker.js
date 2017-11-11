@@ -29,6 +29,7 @@ const permanentUsers = [
 const USER_COUNT = 40 - permanentUsers.length
 const POST_COUNT = 50
 const REPLY_COUNT = 40
+const STAR_COUNT = 100
 
 const users = Array.from({ length: USER_COUNT }).map((_v, i) => {
   return {
@@ -46,7 +47,7 @@ const users = Array.from({ length: USER_COUNT }).map((_v, i) => {
 })
 
 const posts = Array.from({ length: POST_COUNT }).map((_v, i) => {
-  const userIndex = faker.random.number(USER_COUNT - 2)
+  const userIndex = faker.random.number(USER_COUNT - 1)
 
   return {
     _id: new ObjectID(),
@@ -59,18 +60,32 @@ const posts = Array.from({ length: POST_COUNT }).map((_v, i) => {
 })
 
 const replies = Array.from({ length: REPLY_COUNT }).map((_v, i) => {
-  const userIndex = faker.random.number(USER_COUNT - 2)
-  const parentId = faker.random.number(POST_COUNT - 2)
+  const userIndex = faker.random.number(USER_COUNT - 1)
+  const parentPostIndex = faker.random.number(POST_COUNT - 1)
 
-  posts[parentId].reply_count++
+  posts[parentPostIndex].reply_count++
 
   return {
     _id: new ObjectID(),
     text: faker.random.words(),
     user_id: users[userIndex]._id,
-    parent_id: posts[parentId]._id,
+    parent_id: posts[parentPostIndex]._id,
     reply_count: 0,
     star_count: 0,
+    created_at: faker.date.between(2017, new Date()),
+  }
+})
+
+const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
+  const userIndex = faker.random.number(USER_COUNT - 1)
+  const postIndex = faker.random.number(POST_COUNT - 1)
+
+  posts[postIndex].star_count++
+
+  return {
+    _id: new ObjectID(),
+    user_id: users[userIndex]._id,
+    post_id: posts[postIndex]._id,
     created_at: faker.date.between(2017, new Date()),
   }
 })
@@ -78,4 +93,5 @@ const replies = Array.from({ length: REPLY_COUNT }).map((_v, i) => {
 module.exports = {
   users: users.concat(permanentUsers),
   posts: posts.concat(replies),
+  favorites,
 }

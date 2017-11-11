@@ -16,6 +16,13 @@ module.exports = (fastify, opts, next) => {
         _id: request.params.id,
       })
     })
+    .get('/posts/:id/userdata/:userid', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.getUserData({
+        post_id: request.params.id,
+        user_id: request.params.userid,
+      })
+    })
     .get('/posts/:id/replies', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.getReplies({

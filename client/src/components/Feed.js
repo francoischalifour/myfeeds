@@ -15,6 +15,8 @@ const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
 }))
 
 class Feed extends Component {
+  onFavorite = async postId => {}
+
   onItemClick = (event, postId) => {
     if (['A', 'IMG'].includes(event.target.tagName)) {
       return
@@ -39,7 +41,7 @@ class Feed extends Component {
             key={post._id}
             onClick={event => this.onItemClick(event, post._id)}
           >
-            <Post {...post} />
+            <Post {...post} onFavorite={this.onFavorite} />
           </Li>
         ))}
       </ul>

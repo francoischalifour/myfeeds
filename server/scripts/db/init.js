@@ -9,13 +9,19 @@ const connect = require('../../utils/connect')
 const {
   COLLECTION_USERS,
   COLLECTION_POSTS,
-  COLLECTION_STARS,
+  COLLECTION_FAVORITES,
 } = require('../../constants')
 
-const DB_COLLECTIONS = [COLLECTION_USERS, COLLECTION_POSTS, COLLECTION_STARS]
+const DB_COLLECTIONS = [
+  COLLECTION_USERS,
+  COLLECTION_POSTS,
+  COLLECTION_FAVORITES,
+]
 
 const createIndexes = async db => {
-  // Users
+  /**
+   * Users
+   */
   await db
     .collection(COLLECTION_USERS)
     .createIndex({ username: 1 })
@@ -25,10 +31,29 @@ const createIndexes = async db => {
     .createIndex({ email: 1 })
     .catch(err => console.error(err))
 
-  // Posts
+  /**
+   * Posts
+   */
   await db
     .collection(COLLECTION_POSTS)
     .createIndex({ text: 'text' })
+    .catch(err => console.error(err))
+  // To retrieve post's user metadata
+  await db
+    .collection(COLLECTION_POSTS)
+    .createIndex({ user_id: 1, parent_id: 1 })
+    .catch(err => console.error(err))
+
+  /**
+   * Stars
+   */
+  await db
+    .collection(COLLECTION_FAVORITES)
+    .createIndex({ post_id: 1 })
+    .catch(err => console.error(err))
+  await db
+    .collection(COLLECTION_FAVORITES)
+    .createIndex({ post_id: 1, user_id: 1 })
     .catch(err => console.error(err))
 }
 
