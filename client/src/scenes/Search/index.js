@@ -17,7 +17,10 @@ class SearchScene extends Component {
     this.search = params.get('q')
     this.activeUser = await api.getUserById(getCurrentUserId())
     // `/` redirects to another route, we need to remove it
-    const posts = await api.getAllPostsMatching(this.search.replace('/', ' '))
+    const posts = await api.getAllPostsMatchingAsUserId(
+      this.search.replace('/', ' '),
+      this.activeUser._id
+    )
 
     this.setState({
       loading: false,
@@ -36,13 +39,18 @@ class SearchScene extends Component {
       : await api.unfavorite(fav)
 
     if (hasSucceeded) {
-      const postNewState = await api.getPostById(postId)
+      const postNewState = await api.getPostByIdAsUserId(
+        postId,
+        this.activeUser._id
+      )
       const posts = this.state.posts.map(post => {
         if (post._id === postId) {
           return {
             ...post,
             reply_count: postNewState.reply_count,
             star_count: postNewState.star_count,
+            replied: postNewState.replied,
+            favorited: postNewState.favorited,
           }
         }
         return post

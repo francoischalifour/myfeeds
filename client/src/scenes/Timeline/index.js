@@ -16,7 +16,7 @@ class TimelineScene extends Component {
 
   async componentDidMount() {
     this.activeUser = await api.getUserById(getCurrentUserId())
-    const posts = await api.getAllPosts()
+    const posts = await api.getAllPostsAsUserId(this.activeUser._id)
 
     if (posts && posts.length > 0) {
       this.setState({
@@ -37,7 +37,7 @@ class TimelineScene extends Component {
     const success = !!await api.addPost(post)
 
     if (success) {
-      const posts = await api.getAllPosts()
+      const posts = await api.getAllPostsAsUserId(this.activeUser._id)
 
       this.setState({
         posts,
@@ -56,13 +56,18 @@ class TimelineScene extends Component {
       : await api.unfavorite(fav)
 
     if (hasSucceeded) {
-      const postNewState = await api.getPostById(postId)
+      const postNewState = await api.getPostByIdAsUserId(
+        postId,
+        this.activeUser._id
+      )
       const posts = this.state.posts.map(post => {
         if (post._id === postId) {
           return {
             ...post,
             reply_count: postNewState.reply_count,
             star_count: postNewState.star_count,
+            replied: postNewState.replied,
+            favorited: postNewState.favorited,
           }
         }
         return post

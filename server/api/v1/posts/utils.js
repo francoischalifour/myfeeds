@@ -1,17 +1,21 @@
-const { COLLECTION_USERS } = require('../../../constants')
+const {
+  COLLECTION_USERS,
+  COLLECTION_POSTS,
+  COLLECTION_FAVORITES,
+} = require('../../../constants')
 
 /**
- * Merges the given posts with their authors' information to send only one response to the client.
+ * Returns the given posts with their authors' information to send only one response to the client.
  * To improve the efficiency, it looks up in a user reference object if the author is already known
  * to not request the database when not needed.
  *
- * This function triggers side effects since it merges the results.
- *
  * @param {object[]} posts The posts to populate with the authors
  * @param {object} db The database object
+ * @return {object[]}
  * @private
  */
-const mergePostsWithAuthors = async (posts, db) => {
+const getPostsWithAuthors = async (posts, db) => {
+  const postsWithAuthors = []
   const userLookup = {}
 
   for (let post of posts) {
@@ -25,8 +29,13 @@ const mergePostsWithAuthors = async (posts, db) => {
       userLookup[authorId] = getAuthorData(author)
     }
 
-    Object.assign(post, userLookup[authorId])
+    postsWithAuthors.push({
+      ...post,
+      ...userLookup[authorId],
+    })
   }
+
+  return postsWithAuthors
 }
 
 /**
@@ -41,6 +50,33 @@ const getAuthorData = author => ({
   name: author.name,
   profile_image_url: author.profile_image_url,
 })
+
+const getSinglePostWithMetadata = async (post, userId, db) => {
+  const hasFavorited = !!await db.collection(COLLECTION_FAVORITES).findOne({
+    user_id: userId,
+    post_id: post._id,
+  })
+  const hasReplied = !!await db.collection(COLLECTION_POSTS).findOne({
+    user_id: userId,
+    parent_id: post._id,
+  })
+
+  return {
+    ...post,
+    favorited: hasFavorited,
+    replied: hasReplied,
+  }
+}
+
+const getPostsWithMetadata = async (posts, userId, db) => {
+  const postsWithMetadata = []
+
+  for (let post of posts) {
+    postsWithMetadata.push(await getSinglePostWithMetadata(post, userId, db))
+  }
+
+  return postsWithMetadata
+}
 
 /**
  * Returns posts with highlighted search results.
@@ -78,6 +114,8 @@ const highlightTerms = (posts, terms, tag = 'em') => {
 
 module.exports = {
   getAuthorData,
-  mergePostsWithAuthors,
+  getPostsWithAuthors,
+  getSinglePostWithMetadata,
+  getPostsWithMetadata,
   highlightTerms,
 }

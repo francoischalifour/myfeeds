@@ -23,8 +23,6 @@ class PostScene extends Component {
   initialState = {
     loading: true,
     error: false,
-    hasReplied: false,
-    hasFavorited: false,
     isCommentInputFocused: false,
     replies: [],
   }
@@ -38,7 +36,7 @@ class PostScene extends Component {
   }
 
   fetchPost = async postId => {
-    const post = await api.getPostById(postId)
+    const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
 
     if (post && post._id) {
       this.setState({
@@ -47,20 +45,14 @@ class PostScene extends Component {
       })
 
       if (post.reply_count > 0) {
-        const replies = await api.getPostRepliesById(postId)
+        const replies = await api.getPostRepliesByIdAsUserId(
+          postId,
+          this.activeUser._id
+        )
         this.setState({
           replies,
         })
       }
-
-      const userMetadata = await api.getUserPostData({
-        post_id: postId,
-        user_id: this.activeUser._id,
-      })
-      this.setState({
-        hasReplied: userMetadata.replied,
-        hasFavorited: userMetadata.favorited,
-      })
 
       this.props.history.push(`/posts/${postId}`)
     } else {
@@ -92,14 +84,13 @@ class PostScene extends Component {
       user_id: this.activeUser._id,
     }
 
-    const hasSucceeded = this.state.hasFavorited
+    const hasSucceeded = this.state.post.favorited
       ? await api.unfavorite(fav)
       : await api.favorite(fav)
 
     if (hasSucceeded) {
-      const post = await api.getPostById(postId)
+      const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
       this.setState(state => ({
-        hasFavorited: !state.hasFavorited,
         post,
       }))
     }
@@ -115,8 +106,11 @@ class PostScene extends Component {
     const success = !!await api.addPost(post)
 
     if (success) {
-      const replies = await api.getPostRepliesById(postId)
-      const post = await api.getPostById(postId)
+      const replies = await api.getPostRepliesByIdAsUserId(
+        postId,
+        this.activeUser._id
+      )
+      const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
 
       this.setState({
         replies,
@@ -137,13 +131,18 @@ class PostScene extends Component {
       : await api.unfavorite(fav)
 
     if (hasSucceeded) {
-      const replyNewState = await api.getPostById(postId)
+      const replyNewState = await api.getPostByIdAsUserId(
+        postId,
+        this.activeUser._id
+      )
       const replies = this.state.replies.map(post => {
         if (post._id === postId) {
           return {
             ...post,
             reply_count: replyNewState.reply_count,
             star_count: replyNewState.star_count,
+            replied: replyNewState.replied,
+            favorited: replyNewState.favorited,
           }
         }
         return post
@@ -177,8 +176,6 @@ class PostScene extends Component {
       <Container>
         <Post
           {...this.state.post}
-          hasReplied={this.state.hasReplied}
-          hasFavorited={this.state.hasFavorited}
           onFavorite={this.onFavorite}
           onCommentIconClick={this.onCommentIconClick}
         />
