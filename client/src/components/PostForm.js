@@ -61,6 +61,7 @@ class PostForm extends Component {
     const KEY_ENTER = 13
 
     if (metaKey && event.which === KEY_ENTER) {
+      this.textarea.blur()
       this.onSubmit(event)
     }
   }
