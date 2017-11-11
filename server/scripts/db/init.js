@@ -38,6 +38,11 @@ const createIndexes = async db => {
     .collection(COLLECTION_POSTS)
     .createIndex({ text: 'text' })
     .catch(err => console.error(err))
+  // To retrieve post's user metadata
+  await db
+    .collection(COLLECTION_POSTS)
+    .createIndex({ user_id: 1, parent_id: 1 })
+    .catch(err => console.error(err))
 
   /**
    * Stars
