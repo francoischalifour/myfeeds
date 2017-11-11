@@ -49,6 +49,7 @@ const Posts = {
       .collection(COLLECTION_USERS)
       .findOne({ _id: post.user_id })
     let result = { ...post, ...getAuthorData(author) }
+    delete result.user_id
 
     if (outputFilter.as) {
       result = await getSinglePostWithMetadata(

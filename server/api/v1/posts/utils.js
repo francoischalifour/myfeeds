@@ -29,6 +29,8 @@ const getPostsWithAuthors = async (posts, db) => {
       userLookup[authorId] = getAuthorData(author)
     }
 
+    delete post.user_id
+
     postsWithAuthors.push({
       ...post,
       ...userLookup[authorId],
