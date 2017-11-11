@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
+import MdList from 'react-icons/lib/md/list'
 import { getCurrentUserId } from 'utils'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
@@ -19,13 +20,16 @@ const Container = glamorous.div({
 })
 
 class PostScene extends Component {
-  state = {
+  initialState = {
     loading: true,
     error: false,
     hasReplied: false,
     hasFavorited: false,
     isCommentInputFocused: false,
+    replies: [],
   }
+
+  state = this.initialState
 
   async componentDidMount() {
     this.activeUser = await api.getUserById(getCurrentUserId())
@@ -37,16 +41,23 @@ class PostScene extends Component {
     const post = await api.getPostById(postId)
 
     if (post && post._id) {
-      const replies = await api.getPostRepliesById(postId)
+      this.setState({
+        loading: false,
+        post,
+      })
+
+      if (post.reply_count > 0) {
+        const replies = await api.getPostRepliesById(postId)
+        this.setState({
+          replies,
+        })
+      }
+
       const userMetadata = await api.getUserPostData({
         post_id: postId,
         user_id: this.activeUser._id,
       })
-
       this.setState({
-        loading: false,
-        post,
-        replies,
         hasReplied: userMetadata.replied,
         hasFavorited: userMetadata.favorited,
       })
@@ -58,6 +69,15 @@ class PostScene extends Component {
         error: true,
       })
     }
+  }
+
+  onItemClick = postId => {
+    this.setState({
+      ...this.initialState,
+      loading: false,
+    })
+
+    this.fetchPost(postId)
   }
 
   onCommentIconClick = () => {
@@ -136,7 +156,7 @@ class PostScene extends Component {
 
         <Feed
           posts={this.state.replies}
-          onItemClick={this.fetchPost}
+          onItemClick={this.onItemClick}
           renderHeader={() => (
             <PostForm
               placeholder={`Reply to @${this.state.post.username || ''}`}
@@ -148,6 +168,15 @@ class PostScene extends Component {
               {...this.activeUser}
             />
           )}
+          renderLoading={
+            this.state.post.reply_count > 0
+              ? () => (
+                  <div style={{ textAlign: 'center', padding: 48 }}>
+                    <MdList size={200} color="#ddd" />
+                  </div>
+                )
+              : null
+          }
         />
       </Container>
     )

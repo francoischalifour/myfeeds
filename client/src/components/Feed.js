@@ -66,20 +66,24 @@ class Feed extends Component {
       return <Redirect push to={this.state.redirect} />
     }
 
-    const { posts, renderHeader, renderEmpty, renderLoading } = this.props
-
-    if (this.state.loading === false && renderEmpty && posts.length === 0) {
-      return renderEmpty()
+    if (
+      this.state.loading === false &&
+      this.props.renderEmpty &&
+      this.props.posts.length === 0
+    ) {
+      return this.props.renderEmpty()
     }
 
     return (
       <ul>
-        {renderHeader && <Li backgroundColor="#eceff1">{renderHeader()}</Li>}
+        {this.props.renderHeader && (
+          <Li backgroundColor="#eceff1">{this.props.renderHeader()}</Li>
+        )}
 
-        {this.state.loading && renderLoading ? (
-          <Li>{renderLoading()}</Li>
+        {this.state.loading && this.props.renderLoading ? (
+          <Li>{this.props.renderLoading()}</Li>
         ) : (
-          this.renderPosts(posts)
+          this.renderPosts(this.props.posts)
         )}
       </ul>
     )
