@@ -2,10 +2,6 @@ const Posts = require('.')
 
 module.exports = (fastify, opts, next) => {
   fastify
-    .get('/status', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return true
-    })
     .get('/posts', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.getFeed()
