@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
 import { getCurrentUserId } from 'utils'
-import ProfileSidebar from 'components/ProfileSidebar'
+import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
 import Feed from 'components/Feed'
@@ -55,7 +55,7 @@ class SearchScene extends Component {
   render() {
     return (
       <Scaffold grid>
-        <ProfileSidebar {...this.activeUser} />
+        <Sidebar user={this.activeUser} />
         <Content>
           {this.state.loading ? this.renderLoading() : this.renderSearch()}
         </Content>

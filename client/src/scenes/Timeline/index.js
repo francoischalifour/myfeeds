@@ -5,7 +5,7 @@ import { getCurrentUserId } from 'utils'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
-import ProfileSidebar from 'components/ProfileSidebar'
+import Sidebar from 'components/Sidebar'
 import Feed from 'components/Feed'
 import PostForm from 'components/PostForm'
 
@@ -73,7 +73,7 @@ class TimelineScene extends Component {
   render() {
     return (
       <Scaffold grid>
-        <ProfileSidebar {...this.activeUser} />
+        <Sidebar user={this.activeUser} />
         <Content>
           {this.state.error ? this.renderError() : this.renderTimeline()}
         </Content>

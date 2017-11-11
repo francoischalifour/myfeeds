@@ -67,9 +67,9 @@ class Feed extends Component {
     }
 
     if (
-      this.state.loading === false &&
       this.props.renderEmpty &&
-      this.props.posts.length === 0
+      this.props.posts.length === 0 &&
+      this.state.loading === false
     ) {
       return this.props.renderEmpty()
     }
