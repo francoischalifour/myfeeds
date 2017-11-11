@@ -51,6 +51,16 @@ const getAuthorData = author => ({
   profile_image_url: author.profile_image_url,
 })
 
+/**
+ * Returns the given post with metadata.
+ * This data is specific to the given user.
+ * Example: { ...post, replied: false, favorited: true }
+ *
+ * @param {object} post The post to get the data from
+ * @param {number} userId The ID of the user to get the metadata for
+ * @param {object} db The database object
+ * @return {object}
+ */
 const getSinglePostWithMetadata = async (post, userId, db) => {
   const hasFavorited = !!await db.collection(COLLECTION_FAVORITES).findOne({
     user_id: userId,
@@ -68,6 +78,14 @@ const getSinglePostWithMetadata = async (post, userId, db) => {
   }
 }
 
+/**
+ * Returns the given posts with metadata.
+ *
+ * @param {object[]} posts The array of posts to process
+ * @param {number} userId The ID of the user to get the metadata for
+ * @param {object} db The database object
+ * @see {@link getSinglePostWithMetadata}
+ */
 const getPostsWithMetadata = async (posts, userId, db) => {
   const postsWithMetadata = []
 
