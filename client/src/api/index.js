@@ -52,10 +52,17 @@ const login = (email, password) =>
 
 const addPost = post => postV1('/posts', post)
 
+const favorite = fav => postV1('/favorites/create', fav)
+const unfavorite = fav => postV1('/favorites/delete', fav)
+
+const getUserPostData = tuple =>
+  getV1(`/posts/${tuple.post_id}/userdata/${tuple.user_id}`)
+
 export default {
   isServerUp,
   getAllPosts,
   getPostById,
+  getUserPostData,
   getPostRepliesById,
   getUserById,
   getUserByUsername,
@@ -65,4 +72,6 @@ export default {
   getPublicProfileById,
   login,
   addPost,
+  favorite,
+  unfavorite,
 }

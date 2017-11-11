@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import api from 'api'
 import ProfilePicture from 'components/ProfilePicture'
-import { getCurrentUserId } from 'utils'
 
 const Container = glamorous.div({
   display: 'flex',
@@ -44,23 +42,13 @@ class PostForm extends Component {
     this.textarea.style.height = `${this.textarea.scrollHeight}px`
   }
 
-  onSubmit = event => {
+  onSubmit = async event => {
     event.preventDefault()
 
     const text = this.state.value.trim()
+    if (text.length < 2) return
 
-    if (text.length < 2) {
-      return
-    }
-
-    const post = {
-      text,
-      user_id: getCurrentUserId(),
-    }
-    this.props.parentId && (post.parent_id = this.props.parentId)
-    api.addPost(post)
-
-    window.location.reload()
+    this.props.onSubmit(text)
 
     this.setState({
       value: '',

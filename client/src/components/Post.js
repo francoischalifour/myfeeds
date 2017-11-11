@@ -60,22 +60,11 @@ const FooterItem = glamorous.li({
 })
 
 class Post extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      starred: false,
-      replied: false,
-    }
-  }
-
-  onStarred = (event, isStarred) => {
+  onFavorite = event => {
     event.preventDefault()
     event.stopPropagation()
 
-    this.setState({
-      starred: isStarred,
-    })
+    this.props.onFavorite(this.props._id)
   }
 
   render() {
@@ -87,6 +76,8 @@ class Post extends Component {
       profile_image_url: userImageUrl,
       name,
       username,
+      hasReplied,
+      hasFavorited,
     } = this.props
     const [, month, day] = String(new Date(createdAt)).split(' ')
 
@@ -116,7 +107,7 @@ class Post extends Component {
 
           <FooterList>
             <FooterItem>
-              {this.state.replied ? (
+              {hasReplied ? (
                 <MdChatBubble size="18" />
               ) : (
                 <MdChatBubbleOutline size="18" />
@@ -124,14 +115,11 @@ class Post extends Component {
               {replyCount > 0 && replyCount}
             </FooterItem>
             <FooterItem>
-              {this.state.starred ? (
-                <MdStar
-                  onClick={event => this.onStarred(event, false)}
-                  size="18"
-                />
+              {hasFavorited ? (
+                <MdStar onClick={event => this.onFavorite(event)} size="18" />
               ) : (
                 <MdStarBorder
-                  onClick={event => this.onStarred(event, true)}
+                  onClick={event => this.onFavorite(event)}
                   size="18"
                 />
               )}{' '}

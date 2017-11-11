@@ -18,15 +18,11 @@ const Container = glamorous.div({
   },
 })
 
-const PostFormContainer = glamorous.div({
-  backgroundColor: '#eee',
-  borderTop: '1px solid #ddd',
-  borderBottom: '1px solid #ddd',
-})
-
 class PostScene extends Component {
   state = {
     post: {},
+    hasReplied: false,
+    hasFavorited: false,
     replies: [],
   }
 
@@ -35,11 +31,56 @@ class PostScene extends Component {
     const postId = this.props.match.params.postid
     const post = await api.getPostById(postId)
     const replies = await api.getPostRepliesById(postId)
+    const userMetadata = await api.getUserPostData({
+      post_id: postId,
+      user_id: this.activeUser._id,
+    })
 
     this.setState({
       post,
       replies,
+      hasReplied: userMetadata.replied,
+      hasFavorited: userMetadata.favorited,
     })
+  }
+
+  onFavorite = async postId => {
+    const fav = {
+      post_id: postId,
+      user_id: this.activeUser._id,
+    }
+
+    const hasSucceeded = this.state.hasFavorited
+      ? await api.unfavorite(fav)
+      : await api.favorite(fav)
+
+    if (hasSucceeded) {
+      const post = await api.getPostById(postId)
+      this.setState(state => ({
+        hasFavorited: !state.hasFavorited,
+        post,
+      }))
+    }
+  }
+
+  onSubmit = async text => {
+    const postId = this.state.post._id
+    const post = {
+      text,
+      user_id: this.activeUser._id,
+      parent_id: postId,
+    }
+    const success = !!await api.addPost(post)
+    if (success) {
+      const replies = await api.getPostRepliesById(postId)
+      const post = await api.getPostById(postId)
+
+      this.setState({
+        replies,
+        post,
+        hasReplied: true,
+      })
+    }
   }
 
   render() {
@@ -54,17 +95,24 @@ class PostScene extends Component {
             </div>
           ) : (
             <Container>
-              <Post {...this.state.post} />
+              <Post
+                {...this.state.post}
+                hasReplied={this.state.hasReplied}
+                hasFavorited={this.state.hasFavorited}
+                onFavorite={this.onFavorite}
+              />
 
-              <PostFormContainer>
-                <PostForm
-                  placeholder={`Reply to @${this.state.post.username || ''}`}
-                  parentId={this.state.post._id}
-                  {...this.activeUser}
-                />
-              </PostFormContainer>
-
-              <Feed posts={this.state.replies} />
+              <Feed
+                posts={this.state.replies}
+                renderHeader={() => (
+                  <PostForm
+                    placeholder={`Reply to @${this.state.post.username || ''}`}
+                    parentId={this.state.post._id}
+                    onSubmit={this.onSubmit}
+                    {...this.activeUser}
+                  />
+                )}
+              />
             </Container>
           )}
         </Content>
