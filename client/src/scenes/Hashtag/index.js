@@ -9,38 +9,53 @@ import Feed from 'components/Feed'
 
 class HashtagScene extends Component {
   state = {
-    user: {},
-    posts: [],
+    loading: true,
   }
 
   async componentDidMount() {
-    const user = await api.getUserById(getCurrentUserId())
+    this.activeUser = await api.getUserById(getCurrentUserId())
     const posts = await api.getAllPostsHashtag(this.props.match.params.hashtag)
 
     this.setState({
-      user,
+      loading: false,
       posts,
     })
+  }
+
+  renderLoading = () => {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
+  renderSearch = () => {
+    return (
+      <div>
+        <h2>#{this.props.match.params.hashtag}</h2>
+        <Feed
+          posts={this.state.posts}
+          renderEmpty={() => (
+            <div style={{ textAlign: 'center' }}>
+              <MdFindInPage size={212} color="#ddd" />
+              <p>
+                No results for{' '}
+                <strong>#{this.props.match.params.hashtag}</strong>.
+              </p>
+            </div>
+          )}
+        />
+      </div>
+    )
   }
 
   render() {
     return (
       <Scaffold grid>
-        <ProfileSidebar {...this.state.user} />
+        <ProfileSidebar {...this.activeUser} />
         <Content>
-          <h2>#{this.props.match.params.hashtag}</h2>
-          <Feed
-            posts={this.state.posts}
-            renderEmpty={() => (
-              <div style={{ textAlign: 'center' }}>
-                <MdFindInPage size={212} color="#ddd" />
-                <p>
-                  No results for{' '}
-                  <strong>#{this.props.match.params.hashtag}</strong>.
-                </p>
-              </div>
-            )}
-          />
+          {this.state.loading ? this.renderLoading() : this.renderSearch()}
         </Content>
       </Scaffold>
     )

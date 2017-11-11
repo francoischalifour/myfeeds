@@ -18,7 +18,7 @@ class TimelineScene extends Component {
     this.activeUser = await api.getUserById(getCurrentUserId())
     const posts = await api.getAllPosts()
 
-    if (posts.length > 0) {
+    if (posts && posts.length > 0) {
       this.setState({
         loading: false,
         posts,

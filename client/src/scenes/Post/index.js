@@ -31,7 +31,7 @@ class PostScene extends Component {
     const postId = this.props.match.params.postid
     const post = await api.getPostById(postId)
 
-    if (post._id) {
+    if (post && post._id) {
       const replies = await api.getPostRepliesById(postId)
       const userMetadata = await api.getUserPostData({
         post_id: postId,
