@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdChatBubbleOutline from 'react-icons/lib/md/chat-bubble-outline'
 import MdChatBubble from 'react-icons/lib/md/chat-bubble'
-import MdStarBorder from 'react-icons/lib/md/star-border'
-import MdStar from 'react-icons/lib/md/star'
+import MdFavoriteBorder from 'react-icons/lib/md/favorite-border'
+import MdFavorite from 'react-icons/lib/md/favorite'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import format from 'date-fns/format'
 import { formatText } from 'utils'
@@ -51,18 +51,26 @@ const FooterList = glamorous.ul({
   fontWeight: 500,
   '& > li': {
     paddingRight: 24,
-    '&:hover': {
-      color: '#03a9f4',
-    },
   },
 })
+
+const FooterItem = glamorous.li(props => ({
+  cursor: 'pointer',
+  color: props.replied ? '#03A9F4' : props.favorited ? '#E91E63' : '',
+  '&:hover': {
+    color:
+      props.replied === false
+        ? '#03A9F4'
+        : props.favorited === false ? '#E91E63' : '',
+  },
+}))
 
 class Post extends Component {
   onFavorite = event => {
     event.preventDefault()
     event.stopPropagation()
 
-    this.props.onFavorite(this.props._id, !this.props.hasFavorited)
+    this.props.onFavorite(this.props._id, !this.props.favorited)
   }
 
   onCommentIconClick = () => {
@@ -78,8 +86,8 @@ class Post extends Component {
       profile_image_url: userImageUrl,
       name,
       username,
-      hasReplied,
-      hasFavorited,
+      replied,
+      favorited,
     } = this.props
     return (
       <Container>
@@ -109,38 +117,25 @@ class Post extends Component {
           <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
 
           <FooterList>
-            <li>
-              {hasReplied ? (
-                <MdChatBubble
-                  size="18"
-                  style={{ cursor: 'pointer' }}
-                  onClick={this.onCommentIconClick}
-                />
+            <FooterItem replied={replied} onClick={this.onCommentIconClick}>
+              {replied ? (
+                <MdChatBubble size="18" />
               ) : (
-                <MdChatBubbleOutline
-                  size="18"
-                  style={{ cursor: 'pointer' }}
-                  onClick={this.onCommentIconClick}
-                />
+                <MdChatBubbleOutline size="18" />
               )}{' '}
               {replyCount > 0 && replyCount}
-            </li>
-            <li>
-              {hasFavorited ? (
-                <MdStar
-                  size="18"
-                  style={{ cursor: 'pointer' }}
-                  onClick={event => this.onFavorite(event)}
-                />
+            </FooterItem>
+            <FooterItem
+              favorited={favorited}
+              onClick={event => this.onFavorite(event)}
+            >
+              {favorited ? (
+                <MdFavorite size="18" />
               ) : (
-                <MdStarBorder
-                  size="18"
-                  style={{ cursor: 'pointer' }}
-                  onClick={event => this.onFavorite(event)}
-                />
+                <MdFavoriteBorder size="18" />
               )}{' '}
               {starCount > 0 && starCount}
-            </li>
+            </FooterItem>
           </FooterList>
         </RightContainer>
       </Container>

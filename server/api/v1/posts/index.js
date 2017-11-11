@@ -1,4 +1,4 @@
-const { ObjectID } = require('mongodb')
+const { ObjectId } = require('mongodb')
 const connect = require('../../../utils/connect')
 const { objectifyProps } = require('../../../utils')
 const {
@@ -8,14 +8,16 @@ const {
 } = require('../../../constants')
 const {
   getAuthorData,
-  mergePostsWithAuthors,
+  getPostsWithAuthors,
+  getSinglePostWithMetadata,
+  getPostsWithMetadata,
   highlightTerms,
 } = require('./utils')
 
 const Posts = {
-  async getFeed() {
+  async getFeed(outputFilter = {}) {
     const db = await connect()
-    const result = await db
+    const posts = await db
       .collection(COLLECTION_POSTS)
       .find({
         parent_id: { $exists: false },
@@ -24,61 +26,68 @@ const Posts = {
         created_at: -1,
       })
       .toArray()
-    await mergePostsWithAuthors(result, db)
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (outputFilter.as) {
+      result = await getPostsWithMetadata(
+        result,
+        ObjectId(outputFilter.as.user_id),
+        db
+      )
+    }
+
     db.close()
 
     return result
   },
-  async get(objectFilter) {
-    const filter = objectifyProps(objectFilter)
+  async get(dataFilter, outputFilter = {}) {
+    const filter = objectifyProps(dataFilter)
 
     const db = await connect()
-    const result = await db.collection(COLLECTION_POSTS).findOne(filter)
+    const post = await db.collection(COLLECTION_POSTS).findOne(filter)
     const author = await db
       .collection(COLLECTION_USERS)
-      .findOne({ _id: result.user_id })
-    Object.assign(result, getAuthorData(author))
+      .findOne({ _id: post.user_id })
+    let result = { ...post, ...getAuthorData(author) }
+    delete result.user_id
+
+    if (outputFilter.as) {
+      result = await getSinglePostWithMetadata(
+        result,
+        ObjectId(outputFilter.as.user_id),
+        db
+      )
+    }
     db.close()
 
     return result
   },
-  async getUserData(objectFilter) {
-    const filter = objectifyProps(objectFilter)
+  async getReplies(dataFilter, outputFilter = {}) {
+    const filter = objectifyProps(dataFilter)
 
     const db = await connect()
-    const hasFavorited = !!await db.collection(COLLECTION_FAVORITES).findOne({
-      user_id: filter.user_id,
-      post_id: filter.post_id,
-    })
-    const hasReplied = !!await db.collection(COLLECTION_POSTS).findOne({
-      user_id: filter.user_id,
-      parent_id: filter.post_id,
-    })
-    db.close()
-
-    return {
-      favorited: hasFavorited,
-      replied: hasReplied,
-    }
-  },
-  async getReplies(objectFilter) {
-    const filter = objectifyProps(objectFilter)
-
-    const db = await connect()
-    const result = await db
+    const posts = await db
       .collection(COLLECTION_POSTS)
       .find(filter)
       .sort({
         created_at: 1,
       })
       .toArray()
-    await mergePostsWithAuthors(result, db)
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (outputFilter.as) {
+      result = await getPostsWithMetadata(
+        result,
+        ObjectId(outputFilter.as.user_id),
+        db
+      )
+    }
     db.close()
 
     return result
   },
-  async getUserFeed(objectFilter) {
-    const filter = objectifyProps(objectFilter)
+  async getUserFeed(dataFilter, outputFilter = {}) {
+    const filter = objectifyProps(dataFilter)
 
     const db = await connect()
     const user = await db
@@ -89,24 +98,32 @@ const Posts = {
     if (!user) {
       result = []
     } else {
-      result = await db
+      const posts = await db
         .collection(COLLECTION_POSTS)
-        .find({ user_id: new ObjectID(user._id) })
+        .find({ user_id: ObjectId(user._id) })
         .sort({
           created_at: -1,
         })
         .toArray()
 
-      await mergePostsWithAuthors(result, db)
+      result = await getPostsWithAuthors(posts, db)
+
+      if (outputFilter.as) {
+        result = await getPostsWithMetadata(
+          result,
+          ObjectId(outputFilter.as.user_id),
+          db
+        )
+      }
     }
 
     db.close()
 
     return result
   },
-  async searchQuery(query) {
+  async searchQuery(query, outputFilter = {}) {
     const db = await connect()
-    const result = await db
+    const posts = await db
       .collection(COLLECTION_POSTS)
       .find({ $text: { $search: query } }, { score: { $meta: 'textScore' } })
       .sort({
@@ -115,14 +132,22 @@ const Posts = {
       })
       .toArray()
       .then(posts => highlightTerms(posts, query))
-    await mergePostsWithAuthors(result, db)
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (outputFilter.as) {
+      result = await getPostsWithMetadata(
+        result,
+        ObjectId(outputFilter.as.user_id),
+        db
+      )
+    }
     db.close()
 
     return result
   },
-  async searchHashtag(query) {
+  async searchHashtag(query, outputFilter = {}) {
     const db = await connect()
-    const result = await db
+    const posts = await db
       .collection(COLLECTION_POSTS)
       .find({ hashtags: { $in: [query.toLowerCase()] } })
       .sort({
@@ -130,7 +155,15 @@ const Posts = {
       })
       .toArray()
       .then(posts => highlightTerms(posts, query))
-    await mergePostsWithAuthors(result, db)
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (outputFilter.as) {
+      result = await getPostsWithMetadata(
+        result,
+        ObjectId(outputFilter.as.user_id),
+        db
+      )
+    }
     db.close()
 
     return result

@@ -14,7 +14,10 @@ class HashtagScene extends Component {
 
   async componentDidMount() {
     this.activeUser = await api.getUserById(getCurrentUserId())
-    const posts = await api.getAllPostsHashtag(this.props.match.params.hashtag)
+    const posts = await api.getAllPostsHashtagAsUserId(
+      this.props.match.params.hashtag,
+      this.activeUser._id
+    )
 
     this.setState({
       loading: false,
@@ -33,13 +36,18 @@ class HashtagScene extends Component {
       : await api.unfavorite(fav)
 
     if (hasSucceeded) {
-      const postNewState = await api.getPostById(postId)
+      const postNewState = await api.getPostByIdAsUserId(
+        postId,
+        this.activeUser._id
+      )
       const posts = this.state.posts.map(post => {
         if (post._id === postId) {
           return {
             ...post,
             reply_count: postNewState.reply_count,
             star_count: postNewState.star_count,
+            favorited: postNewState.favorited,
+            replied: postNewState.replied,
           }
         }
         return post

@@ -19,7 +19,10 @@ class ProfileScene extends Component {
     const user = await api.getUserByUsername(username)
 
     if (user && user._id) {
-      const posts = await api.getAllPostsByUsername(username)
+      const posts = await api.getAllPostsByUsernameAsUserId(
+        username,
+        this.activeUser._id
+      )
 
       this.setState({
         loading: false,
@@ -44,13 +47,15 @@ class ProfileScene extends Component {
       : await api.unfavorite(fav)
 
     if (hasSucceeded) {
-      const postNewState = await api.getPostById(postId)
+      const postNewState = await api.getPostByIdAsUserId(
+        postId,
+        this.activeUser._id
+      )
       const posts = this.state.posts.map(post => {
         if (post._id === postId) {
           return {
             ...post,
-            reply_count: postNewState.reply_count,
-            star_count: postNewState.star_count,
+            ...postNewState,
           }
         }
         return post

@@ -21,12 +21,6 @@ module.exports = (fastify, opts, next) => {
         _id: request.params.id,
       })
     })
-    .get('/users/@:username/posts', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getUserFeed({
-        username: request.params.username,
-      })
-    })
 
   next()
 }
