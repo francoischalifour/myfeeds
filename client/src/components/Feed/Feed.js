@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 import glamorous from 'glamorous'
 import Post from 'components/Post'
 
@@ -16,41 +15,12 @@ const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
 }))
 
 class Feed extends Component {
-  state = {
-    loading: true,
-    redirect: false,
-  }
-
-  onFavorite = async postId => {}
-
-  componentDidMount() {
-    if (!this.props.renderLoading) {
-      this.setState({
-        loading: false,
-      })
-    }
-  }
-
-  componentWillReceiveProps() {
-    if (this.props.renderLoading) {
-      this.setState({
-        loading: false,
-      })
-    }
-  }
-
   onItemClick = (event, postId) => {
-    if (['A', 'IMG'].includes(event.target.tagName)) {
-      return
-    }
+    this.props.onItemClick(event, postId)
+  }
 
-    if (this.props.onItemClick) {
-      this.props.onItemClick(postId)
-    } else {
-      this.setState({
-        redirect: `/posts/${postId}`,
-      })
-    }
+  onFavorite = (postId, hasFavorited) => {
+    this.props.onFavorite(postId, hasFavorited)
   }
 
   renderPosts = posts => {
@@ -62,15 +32,7 @@ class Feed extends Component {
   }
 
   render() {
-    if (this.state.redirect) {
-      return <Redirect push to={this.state.redirect} />
-    }
-
-    if (
-      this.props.renderEmpty &&
-      this.props.posts.length === 0 &&
-      this.state.loading === false
-    ) {
+    if (this.props.renderEmpty) {
       return this.props.renderEmpty()
     }
 
@@ -80,7 +42,7 @@ class Feed extends Component {
           <Li backgroundColor="#eceff1">{this.props.renderHeader()}</Li>
         )}
 
-        {this.state.loading && this.props.renderLoading ? (
+        {this.props.renderLoading ? (
           <Li>{this.props.renderLoading()}</Li>
         ) : (
           this.renderPosts(this.props.posts)

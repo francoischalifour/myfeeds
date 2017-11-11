@@ -126,6 +126,35 @@ class PostScene extends Component {
     }
   }
 
+  onReplyFavorite = async (postId, hasFavorited) => {
+    const fav = {
+      post_id: postId,
+      user_id: this.activeUser._id,
+    }
+
+    const hasSucceeded = hasFavorited
+      ? await api.favorite(fav)
+      : await api.unfavorite(fav)
+
+    if (hasSucceeded) {
+      const replyNewState = await api.getPostById(postId)
+      const replies = this.state.replies.map(post => {
+        if (post._id === postId) {
+          return {
+            ...post,
+            reply_count: replyNewState.reply_count,
+            star_count: replyNewState.star_count,
+          }
+        }
+        return post
+      })
+
+      this.setState({
+        replies,
+      })
+    }
+  }
+
   renderLoading = () => {
     return (
       <div style={{ textAlign: 'center' }}>
@@ -177,6 +206,7 @@ class PostScene extends Component {
                 )
               : null
           }
+          onFavorite={this.onReplyFavorite}
         />
       </Container>
     )

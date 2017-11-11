@@ -62,7 +62,7 @@ class Post extends Component {
     event.preventDefault()
     event.stopPropagation()
 
-    this.props.onFavorite(this.props._id)
+    this.props.onFavorite(this.props._id, !this.props.hasFavorited)
   }
 
   onCommentIconClick = () => {

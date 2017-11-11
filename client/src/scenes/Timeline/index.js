@@ -45,6 +45,35 @@ class TimelineScene extends Component {
     }
   }
 
+  onFavorite = async (postId, hasFavorited) => {
+    const fav = {
+      post_id: postId,
+      user_id: this.activeUser._id,
+    }
+
+    const hasSucceeded = hasFavorited
+      ? await api.favorite(fav)
+      : await api.unfavorite(fav)
+
+    if (hasSucceeded) {
+      const postNewState = await api.getPostById(postId)
+      const posts = this.state.posts.map(post => {
+        if (post._id === postId) {
+          return {
+            ...post,
+            reply_count: postNewState.reply_count,
+            star_count: postNewState.star_count,
+          }
+        }
+        return post
+      })
+
+      this.setState({
+        posts,
+      })
+    }
+  }
+
   renderError = () => {
     return (
       <div style={{ textAlign: 'center' }}>
@@ -66,6 +95,7 @@ class TimelineScene extends Component {
             <MdList size={200} color="#ddd" />
           </div>
         )}
+        onFavorite={this.onFavorite}
       />
     )
   }
