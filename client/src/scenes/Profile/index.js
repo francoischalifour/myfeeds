@@ -2,62 +2,112 @@ import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
 import { getCurrentUserId } from 'utils'
-import ProfileSidebar from 'components/ProfileSidebar'
+import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
 import Feed from 'components/Feed'
 
 class ProfileScene extends Component {
   state = {
-    user: {},
-    posts: [],
+    loading: true,
+    error: false,
   }
 
   async componentDidMount() {
     this.activeUser = await api.getUserById(getCurrentUserId())
     const username = this.props.match.params.username
     const user = await api.getUserByUsername(username)
-    const posts = await api.getAllPostsByUsername(username)
 
-    this.setState({
-      user,
-      posts,
-    })
+    if (user && user._id) {
+      const posts = await api.getAllPostsByUsername(username)
+
+      this.setState({
+        loading: false,
+        user,
+        posts,
+      })
+    } else {
+      this.setState({
+        loading: false,
+        error: true,
+      })
+    }
+  }
+  onFavorite = async (postId, hasFavorited) => {
+    const fav = {
+      post_id: postId,
+      user_id: this.activeUser._id,
+    }
+
+    const hasSucceeded = hasFavorited
+      ? await api.favorite(fav)
+      : await api.unfavorite(fav)
+
+    if (hasSucceeded) {
+      const postNewState = await api.getPostById(postId)
+      const posts = this.state.posts.map(post => {
+        if (post._id === postId) {
+          return {
+            ...post,
+            reply_count: postNewState.reply_count,
+            star_count: postNewState.star_count,
+          }
+        }
+        return post
+      })
+
+      this.setState({
+        posts,
+      })
+    }
+  }
+
+  renderLoading = () => {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
+  renderError = () => {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <MdFindInPage size={212} color="#ddd" />
+
+        <p>
+          The user <strong>@{this.props.match.params.username}</strong> doesn't
+          exist.
+        </p>
+      </div>
+    )
+  }
+
+  renderProfile = () => {
+    return (
+      <Feed
+        posts={this.state.posts}
+        renderEmpty={() => (
+          <div style={{ textAlign: 'center' }}>
+            <MdFindInPage size={212} color="#ddd" />
+            <p>
+              <strong>@{this.state.user.username}</strong> hasn't posted yet.
+            </p>
+          </div>
+        )}
+        onFavorite={this.onFavorite}
+      />
+    )
   }
 
   render() {
-    if (!this.state.user) {
-      return (
-        <Scaffold grid>
-          <ProfileSidebar {...this.activeUser} />
-          <Content style={{ textAlign: 'center' }}>
-            <MdFindInPage size={212} color="#ddd" />
-
-            <p>
-              The user <strong>@{this.props.match.params.username}</strong>{' '}
-              doesn't exist.
-            </p>
-          </Content>
-        </Scaffold>
-      )
-    }
-
     return (
       <Scaffold grid>
-        <ProfileSidebar {...this.state.user} />
+        <Sidebar user={this.state.user} />
         <Content>
-          <Feed
-            posts={this.state.posts}
-            renderEmpty={() => (
-              <div style={{ textAlign: 'center' }}>
-                <MdFindInPage size={212} color="#ddd" />
-                <p>
-                  <strong>@{this.state.user.username}</strong> hasn't posted
-                  yet.
-                </p>
-              </div>
-            )}
-          />
+          {this.state.loading
+            ? this.renderLoading()
+            : this.state.error ? this.renderError() : this.renderProfile()}
         </Content>
       </Scaffold>
     )

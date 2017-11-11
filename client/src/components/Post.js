@@ -5,6 +5,8 @@ import MdChatBubbleOutline from 'react-icons/lib/md/chat-bubble-outline'
 import MdChatBubble from 'react-icons/lib/md/chat-bubble'
 import MdStarBorder from 'react-icons/lib/md/star-border'
 import MdStar from 'react-icons/lib/md/star'
+import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import format from 'date-fns/format'
 import { formatText } from 'utils'
 import ProfilePicture from 'components/ProfilePicture'
 
@@ -55,16 +57,16 @@ const FooterList = glamorous.ul({
   },
 })
 
-const FooterItem = glamorous.li({
-  cursor: 'pointer',
-})
-
 class Post extends Component {
   onFavorite = event => {
     event.preventDefault()
     event.stopPropagation()
 
-    this.props.onFavorite(this.props._id)
+    this.props.onFavorite(this.props._id, !this.props.hasFavorited)
+  }
+
+  onCommentIconClick = () => {
+    this.props.onCommentIconClick && this.props.onCommentIconClick()
   }
 
   render() {
@@ -79,8 +81,6 @@ class Post extends Component {
       hasReplied,
       hasFavorited,
     } = this.props
-    const [, month, day] = String(new Date(createdAt)).split(' ')
-
     return (
       <Container>
         <LeftContainer>
@@ -97,8 +97,11 @@ class Post extends Component {
             <Small>
               {' '}
               <Link to={`/@${username}`}>@{username}</Link>
-              <time dateTime={createdAt} title={createdAt}>
-                {''} • {month} {day}
+              <time
+                dateTime={format(createdAt)}
+                title={format(createdAt, 'HH:mm - DD MMM YYYY')}
+              >
+                {''} • {distanceInWordsStrict(createdAt, new Date())}
               </time>
             </Small>
           </Header>
@@ -106,25 +109,38 @@ class Post extends Component {
           <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
 
           <FooterList>
-            <FooterItem>
+            <li>
               {hasReplied ? (
-                <MdChatBubble size="18" />
+                <MdChatBubble
+                  size="18"
+                  style={{ cursor: 'pointer' }}
+                  onClick={this.onCommentIconClick}
+                />
               ) : (
-                <MdChatBubbleOutline size="18" />
+                <MdChatBubbleOutline
+                  size="18"
+                  style={{ cursor: 'pointer' }}
+                  onClick={this.onCommentIconClick}
+                />
               )}{' '}
               {replyCount > 0 && replyCount}
-            </FooterItem>
-            <FooterItem>
+            </li>
+            <li>
               {hasFavorited ? (
-                <MdStar onClick={event => this.onFavorite(event)} size="18" />
+                <MdStar
+                  size="18"
+                  style={{ cursor: 'pointer' }}
+                  onClick={event => this.onFavorite(event)}
+                />
               ) : (
                 <MdStarBorder
-                  onClick={event => this.onFavorite(event)}
                   size="18"
+                  style={{ cursor: 'pointer' }}
+                  onClick={event => this.onFavorite(event)}
                 />
               )}{' '}
               {starCount > 0 && starCount}
-            </FooterItem>
+            </li>
           </FooterList>
         </RightContainer>
       </Container>

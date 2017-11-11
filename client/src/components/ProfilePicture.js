@@ -1,8 +1,10 @@
 import glamorous from 'glamorous'
 
-export default glamorous.img(props => ({
+const ProfilePicture = glamorous.img(props => ({
   width: '100%',
-  maxWidth: props.width || 200,
+  maxWidth: props.width || 'initial',
   borderRadius: 4,
   backgroundColor: '#fff',
 }))
+
+export default ProfilePicture

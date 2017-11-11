@@ -35,11 +35,35 @@ class PostForm extends Component {
     isFocused: false,
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeydown)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeydown)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isFocused === true) {
+      this.textarea.focus()
+    }
+  }
+
   onChange = value => {
     this.setState({ value })
 
     this.textarea.style.height = 'auto'
     this.textarea.style.height = `${this.textarea.scrollHeight}px`
+  }
+
+  onKeydown = event => {
+    const metaKey = event.metaKey || event.ctrlKey
+    const KEY_ENTER = 13
+
+    if (metaKey && event.which === KEY_ENTER) {
+      this.textarea.blur()
+      this.onSubmit(event)
+    }
   }
 
   onSubmit = async event => {
@@ -56,12 +80,14 @@ class PostForm extends Component {
   }
 
   render() {
-    const { profile_image_url: userImageUrl, username } = this.props
-
     return (
       <Container>
         <LeftContainer>
-          <ProfilePicture src={userImageUrl} alt={username} width={36} />
+          <ProfilePicture
+            src={this.props.profile_image_url}
+            alt={this.props.username}
+            width={36}
+          />
         </LeftContainer>
 
         <RightContainer>
@@ -72,7 +98,10 @@ class PostForm extends Component {
               value={this.state.value}
               onChange={event => this.onChange(event.target.value)}
               onFocus={() => this.setState({ isFocused: true })}
-              onBlur={() => this.setState({ isFocused: false })}
+              onBlur={() => {
+                this.setState({ isFocused: false })
+                this.props.onCommentIconBlur && this.props.onCommentIconBlur()
+              }}
               innerRef={textarea => (this.textarea = textarea)}
             />
             <button
