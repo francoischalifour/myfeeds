@@ -99,7 +99,7 @@ module.exports = (fastify, opts, next) => {
     })
 
   fastify.post('/posts', async (request, reply) => {
-    reply.type('application/json').code(200)
+    reply.type('application/json').code(201)
     return Posts.add(request.body)
   })
 
