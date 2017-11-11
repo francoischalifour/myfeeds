@@ -9,20 +9,48 @@ import Feed from 'components/Feed'
 
 class SearchScene extends Component {
   state = {
-    search: '',
-    posts: [],
+    loading: true,
+    error: false,
   }
 
   async componentDidMount() {
-    this.activeUser = await api.getUserById(getCurrentUserId())
     const params = new URLSearchParams(this.props.location.search)
-    const search = params.get('q')
-    const posts = await api.getAllPostsMatching(search.replace('/', ' ')) // '/' leads to another route, remove it
+    this.search = params.get('q')
+    this.activeUser = await api.getUserById(getCurrentUserId())
+    // `/` redirects to another route, we need to remove it
+    const posts = await api.getAllPostsMatching(this.search.replace('/', ' '))
 
     this.setState({
+      loading: false,
       posts,
-      search,
     })
+  }
+
+  renderLoading = () => {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
+  renderSearch = () => {
+    return (
+      <div>
+        <h2>Results for "{this.search}"</h2>
+        <Feed
+          posts={this.state.posts}
+          renderEmpty={() => (
+            <div style={{ textAlign: 'center' }}>
+              <MdFindInPage size={212} color="#ddd" />
+              <p>
+                No results for <strong>{this.search}</strong>.
+              </p>
+            </div>
+          )}
+        />
+      </div>
+    )
   }
 
   render() {
@@ -30,18 +58,7 @@ class SearchScene extends Component {
       <Scaffold grid>
         <ProfileSidebar {...this.activeUser} />
         <Content>
-          <h2>Results for "{this.state.search}"</h2>
-          <Feed
-            posts={this.state.posts}
-            renderEmpty={() => (
-              <div style={{ textAlign: 'center' }}>
-                <MdFindInPage size={212} color="#ddd" />
-                <p>
-                  No results for <strong>{this.state.search}</strong>.
-                </p>
-              </div>
-            )}
-          />
+          {this.state.loading ? this.renderLoading() : this.renderSearch()}
         </Content>
       </Scaffold>
     )

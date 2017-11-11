@@ -59,7 +59,7 @@ class TimelineScene extends Component {
     return (
       <div style={{ textAlign: 'center' }}>
         <MdCloudOff size={200} color="#bbb" />
-        <p>We can't retrieve the timeline for now 😕</p>
+        <p>We can't retrieve the timeline for now.</p>
       </div>
     )
   }
