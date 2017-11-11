@@ -101,10 +101,10 @@ class PostScene extends Component {
     )
   }
 
-  renderNotFound = () => {
+  renderError = () => {
     return (
       <div style={{ textAlign: 'center' }}>
-        <MdFindInPage size={212} color="#ddd" />
+        <MdFindInPage size={200} color="#bbb" />
         <p>This post doesn't exist.</p>
       </div>
     )
@@ -142,7 +142,7 @@ class PostScene extends Component {
         <Content>
           {this.state.loading
             ? this.renderLoading()
-            : this.state.error ? this.renderNotFound() : this.renderPost()}
+            : this.state.error ? this.renderError() : this.renderPost()}
         </Content>
       </Scaffold>
     )
