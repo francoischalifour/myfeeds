@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
 import { getCurrentUserId } from 'utils'
+import { SITE_TITLE } from '../../constants'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
@@ -14,6 +15,7 @@ class HashtagScene extends Component {
 
   async componentDidMount() {
     this.activeUser = await api.getUserById(getCurrentUserId())
+    document.title = `#${this.props.match.params.hashtag} - ${SITE_TITLE}`
     const posts = await api.getAllPostsHashtagAsUserId(
       this.props.match.params.hashtag,
       this.activeUser._id
@@ -92,7 +94,7 @@ class HashtagScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
-        <Content>
+        <Content className="content">
           {this.state.loading ? this.renderLoading() : this.renderSearch()}
         </Content>
       </Scaffold>

@@ -29,9 +29,10 @@ class Feed extends Component {
   }
 
   onScroll = () => {
-    window.localStorage.removeItem(
-      `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`
-    )
+    this.props.posts &&
+      window.localStorage.removeItem(
+        `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`
+      )
   }
 
   onPostRef = () => {

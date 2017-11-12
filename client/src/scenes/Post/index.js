@@ -3,6 +3,7 @@ import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import MdList from 'react-icons/lib/md/list'
 import { getCurrentUserId } from 'utils'
+import { SITE_TITLE } from '../../constants'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
@@ -30,6 +31,7 @@ class PostScene extends Component {
   state = this.initialState
 
   async componentDidMount() {
+    document.title = `Post - ${SITE_TITLE}`
     this.activeUser = await api.getUserById(getCurrentUserId())
     const postId = this.props.match.params.postid
     this.fetchPost(postId)
@@ -212,7 +214,7 @@ class PostScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
-        <Content>
+        <Content className="content">
           {this.state.loading
             ? this.renderLoading()
             : this.state.error ? this.renderError() : this.renderPost()}

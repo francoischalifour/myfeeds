@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
 import MdList from 'react-icons/lib/md/list'
 import { getCurrentUserId } from 'utils'
+import { SITE_TITLE } from '../../constants'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
@@ -15,6 +16,8 @@ class TimelineScene extends Component {
   }
 
   async componentDidMount() {
+    document.title = SITE_TITLE
+
     this.activeUser = await api.getUserById(getCurrentUserId())
     const posts = await api.getAllPostsAsUserId(this.activeUser._id)
 
@@ -109,7 +112,7 @@ class TimelineScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
-        <Content>
+        <Content className="content">
           {this.state.error ? this.renderError() : this.renderTimeline()}
         </Content>
       </Scaffold>

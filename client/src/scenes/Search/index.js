@@ -74,6 +74,11 @@ class SearchScene extends Component {
     return (
       <div>
         <h2>Results for "{this.search}"</h2>
+        {this.state.posts.length > 0 && (
+          <p style={{ color: '#777' }}>
+            Found {this.state.posts.length} result{this.state.posts.length > 1 && 's'}.
+          </p>
+        )}
         <Feed
           posts={this.state.posts}
           renderEmpty={() => (
@@ -94,7 +99,7 @@ class SearchScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
-        <Content>
+        <Content className="content">
           {this.state.loading ? this.renderLoading() : this.renderSearch()}
         </Content>
       </Scaffold>

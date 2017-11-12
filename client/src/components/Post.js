@@ -23,7 +23,7 @@ const Small = glamorous.small({
 })
 
 const LeftContainer = glamorous.div({
-  paddingRight: 16,
+  width: 64,
 })
 
 const RightContainer = glamorous.div({
@@ -41,10 +41,12 @@ const PostText = glamorous.p({
   color: '#333',
   '& em': {
     fontWeight: 'bold',
+    backgroundColor: '#FFF59D',
   },
 })
 
 const FooterList = glamorous.ul({
+  userSelect: 'none',
   display: 'flex',
   maxWidth: 200,
   color: '#999',
