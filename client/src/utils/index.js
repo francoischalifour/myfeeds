@@ -1,11 +1,11 @@
 import Parser from 'simple-text-parser'
-import { STORAGE_TOKEN_USER } from '../constants'
+import { LOCALE_STORAGE_USER } from '../constants'
 
 export const getActiveUser = () =>
-  JSON.parse(window.localStorage.getItem(STORAGE_TOKEN_USER)) // TODO: check validation token
+  JSON.parse(window.localStorage.getItem(LOCALE_STORAGE_USER)) // TODO: check validation token
 
 export const destroyActiveUser = () =>
-  window.localStorage.removeItem(STORAGE_TOKEN_USER)
+  window.localStorage.removeItem(LOCALE_STORAGE_USER)
 
 export const isLoggedIn = () => getActiveUser() && getActiveUser()._id
 
