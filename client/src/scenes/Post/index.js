@@ -53,8 +53,6 @@ class PostScene extends Component {
           replies,
         })
       }
-
-      this.props.history.push(`/posts/${postId}`)
     } else {
       this.setState({
         loading: false,
@@ -70,6 +68,7 @@ class PostScene extends Component {
     })
 
     this.fetchPost(postId)
+    this.props.history.push(`/posts/${postId}`)
   }
 
   onCommentIconClick = () => {
