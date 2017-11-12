@@ -76,7 +76,7 @@ const run = async () => {
   await createIndexes(db)
 
   await db.close().catch(err => console.error(err))
-  console.log('\n👍 All done!')
+  console.log('\n👍 All done initializing the database!')
 }
 
 run()
