@@ -28,8 +28,8 @@ const permanentUsers = [
 
 const USER_COUNT = 40 - permanentUsers.length
 const POST_COUNT = 50
-const REPLY_COUNT = 40
-const STAR_COUNT = 100
+const REPLY_COUNT = 200
+const STAR_COUNT = 200
 
 const users = Array.from({ length: USER_COUNT }).map((_v, i) => {
   return {
@@ -79,8 +79,9 @@ const replies = Array.from({ length: REPLY_COUNT }).map((_v, i) => {
 const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
   const userIndex = faker.random.number(USER_COUNT - 1)
   const postIndex = faker.random.number(POST_COUNT - 1)
+  const postCollection = [posts, replies][faker.random.number(1)]
 
-  posts[postIndex].star_count++
+  postCollection[postIndex].star_count++
 
   return {
     _id: new ObjectID(),
