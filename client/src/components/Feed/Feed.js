@@ -17,7 +17,7 @@ const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
 
 class Feed extends Component {
   componentWillMount() {
-    this.postMounted = 0
+    this.mountedPostCount = 0
   }
 
   componentDidMount() {
@@ -35,9 +35,9 @@ class Feed extends Component {
   }
 
   onPostRef = () => {
-    this.postMounted++
+    this.mountedPostCount++
 
-    if (this.postMounted === this.props.posts.length) {
+    if (this.mountedPostCount === this.props.posts.length) {
       const lastScrollPosition = window.localStorage.getItem(
         `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`
       )
