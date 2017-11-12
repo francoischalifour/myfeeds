@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
 import MdList from 'react-icons/lib/md/list'
-import { getCurrentUserId } from 'utils'
+import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
@@ -11,14 +11,13 @@ import Feed from 'components/Feed'
 import PostForm from 'components/PostForm'
 
 class TimelineScene extends Component {
+  activeUser = getActiveUser()
   state = {
     error: false,
   }
 
   async componentDidMount() {
     document.title = SITE_TITLE
-
-    this.activeUser = await api.getUserById(getCurrentUserId())
     const posts = await api.getAllPostsAsUserId(this.activeUser._id)
 
     if (posts && posts.length > 0) {

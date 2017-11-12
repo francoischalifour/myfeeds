@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
-import { getCurrentUserId } from 'utils'
+import { getActiveUser } from 'utils'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
 import Feed from 'components/Feed'
 
 class SearchScene extends Component {
+  activeUser = getActiveUser()
   state = {
     loading: true,
   }
@@ -15,7 +16,7 @@ class SearchScene extends Component {
   async componentDidMount() {
     const params = new URLSearchParams(this.props.location.search)
     this.search = params.get('q')
-    this.activeUser = await api.getUserById(getCurrentUserId())
+
     // `/` redirects to another route, we need to remove it
     const posts = await api.getAllPostsMatchingAsUserId(
       this.search.replace('/', ' '),

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { STORAGE_TOKEN_USER_ID } from '../../constants'
+import { STORAGE_TOKEN_USER } from '../../constants'
 import api from 'api'
 
 const Container = glamorous.div({
@@ -33,7 +33,7 @@ class LoginScene extends Component {
     const user = await api.login(this.state.email, this.state.password)
 
     if (user && user._id) {
-      window.localStorage.setItem(STORAGE_TOKEN_USER_ID, user._id)
+      window.localStorage.setItem(STORAGE_TOKEN_USER, JSON.stringify(user))
       window.location.href = '/'
     } else {
       this.setState({

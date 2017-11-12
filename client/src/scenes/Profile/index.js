@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
-import { getCurrentUserId } from 'utils'
+import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
@@ -9,13 +9,14 @@ import Content from 'components/Content'
 import Feed from 'components/Feed'
 
 class ProfileScene extends Component {
+  activeUser = getActiveUser()
   state = {
     loading: true,
     error: false,
+    user: {},
   }
 
   async componentDidMount() {
-    this.activeUser = await api.getUserById(getCurrentUserId())
     const username = this.props.match.params.username
     const user = await api.getUserByUsername(username)
 

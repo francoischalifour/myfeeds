@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import MdList from 'react-icons/lib/md/list'
-import { getCurrentUserId } from 'utils'
+import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
@@ -21,18 +21,17 @@ const Container = glamorous.div({
 })
 
 class PostScene extends Component {
+  activeUser = getActiveUser()
   initialState = {
     loading: true,
     error: false,
     isCommentInputFocused: false,
     replies: [],
   }
-
   state = this.initialState
 
   async componentDidMount() {
     document.title = `Post - ${SITE_TITLE}`
-    this.activeUser = await api.getUserById(getCurrentUserId())
     const postId = this.props.match.params.postid
     this.fetchPost(postId)
   }
