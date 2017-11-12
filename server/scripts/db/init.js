@@ -60,11 +60,11 @@ const createIndexes = async db => {
 const run = async () => {
   const db = await connect()
 
-  const collections = (await db
-    .collections()
-    .catch(err => console.error(err))).filter(name => name !== 'system.indexes')
+  const collections = (await db.collections().catch(err => console.error(err)))
+    .map(({ s: { name } }) => name)
+    .filter(name => name !== 'system.indexes')
 
-  for (let { s: { name } } of collections) {
+  for (let name of collections) {
     console.log(`🔥 Dropping collection "${name}"...`)
     await db.dropCollection(name).catch(err => console.error(err))
   }
