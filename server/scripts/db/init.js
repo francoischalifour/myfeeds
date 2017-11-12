@@ -41,7 +41,7 @@ const createIndexes = async db => {
   // To retrieve post's user metadata
   await db
     .collection(COLLECTION_POSTS)
-    .createIndex({ user_id: 1, parent_id: 1 }, { unique: true })
+    .createIndex({ user_id: 1, parent_id: 1 })
     .catch(err => console.error(err))
 
   /**
@@ -53,7 +53,7 @@ const createIndexes = async db => {
     .catch(err => console.error(err))
   await db
     .collection(COLLECTION_FAVORITES)
-    .createIndex({ post_id: 1, user_id: 1 }, { unique: true })
+    .createIndex({ post_id: 1, user_id: 1 })
     .catch(err => console.error(err))
 }
 
