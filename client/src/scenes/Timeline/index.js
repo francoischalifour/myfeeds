@@ -109,7 +109,7 @@ class TimelineScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
-        <Content>
+        <Content className="content">
           {this.state.error ? this.renderError() : this.renderTimeline()}
         </Content>
       </Scaffold>

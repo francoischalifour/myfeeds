@@ -99,7 +99,7 @@ class SearchScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
-        <Content>
+        <Content className="content">
           {this.state.loading ? this.renderLoading() : this.renderSearch()}
         </Content>
       </Scaffold>

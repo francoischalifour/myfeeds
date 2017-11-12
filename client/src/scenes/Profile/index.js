@@ -109,7 +109,7 @@ class ProfileScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.state.user} />
-        <Content>
+        <Content className="content">
           {this.state.loading
             ? this.renderLoading()
             : this.state.error ? this.renderError() : this.renderProfile()}

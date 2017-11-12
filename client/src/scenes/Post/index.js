@@ -212,7 +212,7 @@ class PostScene extends Component {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
-        <Content>
+        <Content className="content">
           {this.state.loading
             ? this.renderLoading()
             : this.state.error ? this.renderError() : this.renderPost()}
