@@ -94,3 +94,20 @@ input[type='search'] {
   font: inherit;
   margin-bottom: 8px;
 }
+
+.search-wrapper {
+  display: none;
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  background: #eee;
+}
+
+.searching .search-wrapper {
+  display: initial;
+}
+
+.searching .content {
+  display: none;
+}
