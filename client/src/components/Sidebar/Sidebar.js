@@ -12,6 +12,11 @@ import Content from './components/Content'
 import Header from './components/Header'
 import ImageContainer from './components/ImageContainer'
 
+const Sidenav = glamorous(Container)({
+  position: 'sticky',
+  top: 84,
+})
+
 const Name = glamorous.h2({
   margin: '1rem 0 0 0',
   '> a': {
@@ -92,7 +97,7 @@ class Sidebar extends Component {
     }
 
     return (
-      <Container>
+      <Sidenav>
         {imageUrl && header}
         <Content>
           <Name>
@@ -144,7 +149,7 @@ class Sidebar extends Component {
             </Footer>
           )}
         </Content>
-      </Container>
+      </Sidenav>
     )
   }
 }

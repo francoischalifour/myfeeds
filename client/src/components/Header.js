@@ -6,6 +6,10 @@ import MdSearch from 'react-icons/lib/md/search'
 import SearchForm from 'components/SearchForm'
 
 const Navbar = glamorous.header({
+  position: 'sticky',
+  top: 0,
+  zIndex: 1,
+  height: 60,
   backgroundColor: '#212121',
   color: '#fff',
   boxShadow: '0 1px 3px rgba(50,50,50,.16)',
@@ -35,21 +39,19 @@ const Searchbar = glamorous.div({
 })
 
 const Header = () => {
-  const params = new URLSearchParams(window.location.search)
-  const search = params.get('q')
-
   return (
     <Navbar>
       <Container>
         <Title>
           <Link to="/">
-            <MdLineWeight size="24" color="#fff" /> myfeeds
+            <MdLineWeight size="24" color="#fff" style={{ marginRight: 12 }} />
+            myfeeds
           </Link>
         </Title>
 
         <Searchbar>
           <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
-          <SearchForm value={search} />
+          <SearchForm placeholder="Search MyFeeds" />
         </Searchbar>
 
         <ul>
