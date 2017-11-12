@@ -1,9 +1,9 @@
 const faker = require('faker')
-const { ObjectID } = require('mongodb')
+const { ObjectId } = require('mongodb')
 
-const permanentUsers = [
+const PERMANENT_USERS = [
   {
-    _id: new ObjectID(),
+    _id: ObjectId(),
     username: 'francoischalifour',
     name: 'François Chalifour',
     description:
@@ -17,7 +17,7 @@ const permanentUsers = [
     created_at: faker.date.recent(),
   },
   {
-    _id: new ObjectID(),
+    _id: ObjectId(),
     username: 'michaelbouffard',
     name: 'Michael Bouffard',
     email: 'michaelbouffard1992@gmail.com',
@@ -33,7 +33,7 @@ const STAR_COUNT = 200
 
 const users = Array.from({ length: USER_COUNT }).map((_v, i) => {
   return {
-    _id: new ObjectID(),
+    _id: ObjectId(),
     username: faker.internet.userName(),
     name: faker.name.findName(),
     description: faker.random.words(),
@@ -50,7 +50,7 @@ const posts = Array.from({ length: POST_COUNT }).map((_v, i) => {
   const userIndex = faker.random.number(USER_COUNT - 1)
 
   return {
-    _id: new ObjectID(),
+    _id: ObjectId(),
     text: faker.random.words(),
     user_id: users[userIndex]._id,
     reply_count: 0,
@@ -66,7 +66,7 @@ const replies = Array.from({ length: REPLY_COUNT }).map((_v, i) => {
   posts[parentPostIndex].reply_count++
 
   return {
-    _id: new ObjectID(),
+    _id: ObjectId(),
     text: faker.random.words(),
     user_id: users[userIndex]._id,
     parent_id: posts[parentPostIndex]._id,
@@ -84,7 +84,7 @@ const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
   postCollection[postIndex].star_count++
 
   return {
-    _id: new ObjectID(),
+    _id: ObjectId(),
     user_id: users[userIndex]._id,
     post_id: posts[postIndex]._id,
     created_at: faker.date.between(2017, new Date()),
@@ -92,7 +92,7 @@ const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
 })
 
 module.exports = {
-  users: users.concat(permanentUsers),
+  users: users.concat(PERMANENT_USERS),
   posts: posts.concat(replies),
   favorites,
 }
