@@ -26,7 +26,7 @@ const PERMANENT_USERS = [
   },
 ]
 
-const USER_COUNT = 40 - permanentUsers.length
+const USER_COUNT = 40 - PERMANENT_USERS.length
 const POST_COUNT = 50
 const REPLY_COUNT = 200
 const STAR_COUNT = 200
