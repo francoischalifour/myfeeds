@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const { REACT_APP_SERVER_HOST, REACT_APP_SERVER_PORT } = process.env
-const ENDPOINT = `http://${REACT_APP_SERVER_HOST}:${REACT_APP_SERVER_PORT}`
+const ENDPOINT = `${REACT_APP_SERVER_HOST}:${REACT_APP_SERVER_PORT}`
 
 const get = (resource, prefix = '', endpoint = ENDPOINT) =>
   fetch(`${endpoint}${prefix}${resource}`).then(res => res.json())

@@ -24,11 +24,11 @@ const createIndexes = async db => {
    */
   await db
     .collection(COLLECTION_USERS)
-    .createIndex({ username: 1 })
+    .createIndex({ username: 1 }, { unique: true })
     .catch(err => console.error(err))
   await db
     .collection(COLLECTION_USERS)
-    .createIndex({ email: 1 })
+    .createIndex({ email: 1 }, { unique: true })
     .catch(err => console.error(err))
 
   /**
@@ -76,7 +76,7 @@ const run = async () => {
   await createIndexes(db)
 
   await db.close().catch(err => console.error(err))
-  console.log('\n👍 All done!')
+  console.log('\n👍 All done initializing the database!')
 }
 
 run()

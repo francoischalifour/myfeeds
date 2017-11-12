@@ -6,11 +6,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "format": "./node_modules/.bin/prettier --write './*.js' '{api,scripts,utils}/**/*.{js,json}'",
     "db:init": "node scripts/db/init",
     "db:populate": "node scripts/db/populate",
+    "db:reinit": "node scripts/db/init && node scripts/db/populate",
     "start": "node index",
-    "dev": "nodemon index",
-    "format": "./node_modules/.bin/prettier --write './*.js' '{api,scripts,utils}/**/*.{js,json}'"
+    "dev": "nodemon index"
   },
   "dependencies": {
     "cors": "^2.8.4",
