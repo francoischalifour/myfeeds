@@ -4,7 +4,7 @@ import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import MdClose from 'react-icons/lib/md/close'
 import glamorous from 'glamorous'
 import api from 'api'
-import { getCurrentUserId } from 'utils'
+import { getActiveUser } from 'utils'
 import Feed from 'components/Feed'
 import LinkButton from 'components/LinkButton'
 import Button from 'components/Button'
@@ -75,6 +75,8 @@ const SearchPanel = ({
   )
 
 class SearchForm extends Component {
+  activeUser = getActiveUser()
+
   constructor(props) {
     super(props)
     const params = new URLSearchParams(window.location.search)
@@ -91,7 +93,6 @@ class SearchForm extends Component {
   async componentDidMount() {
     this.resultContainer = document.getElementById('search-results')
     document.body.appendChild(this.el)
-    this.activeUser = await api.getUserById(getCurrentUserId())
   }
 
   componentWillUnmount() {

@@ -5,7 +5,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
-import { getCurrentUserId } from 'utils'
+import { isLoggedIn } from 'utils'
 import Timeline from 'scenes/Timeline'
 import Profile from 'scenes/Profile'
 import Post from 'scenes/Post'
@@ -16,8 +16,6 @@ import Settings from 'scenes/Settings'
 import Header from 'components/Header'
 import Logout from 'components/Logout'
 
-const isLoggedIn = !!getCurrentUserId()
-
 const App = () => (
   <Router>
     <div>
@@ -27,13 +25,13 @@ const App = () => (
         <Route
           exact
           path="/"
-          render={() => (isLoggedIn ? <Timeline /> : <Login />)}
+          render={() => (isLoggedIn() ? <Timeline /> : <Login />)}
         />
         <Route exact path="/settings" component={Settings} />
         <Route
           exact
           path="/logout"
-          render={() => (isLoggedIn ? <Logout /> : <Redirect to="/" />)}
+          render={() => (isLoggedIn() ? <Logout /> : <Redirect to="/" />)}
         />
         <Route path="/@:username" component={Profile} />
         <Route path="/posts/:postid" component={Post} />

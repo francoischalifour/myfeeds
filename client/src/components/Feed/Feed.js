@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { STORAGE_TOKEN_FEED_SCROLL } from '../../constants'
+import { LOCALE_STORAGE_FEED_SCROLL } from '../../constants'
 import Post from 'components/Post'
 
 const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
@@ -31,7 +31,7 @@ class Feed extends Component {
   onScroll = () => {
     this.props.posts &&
       window.localStorage.removeItem(
-        `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`
+        `${LOCALE_STORAGE_FEED_SCROLL}_${this.props.posts.length}`
       )
   }
 
@@ -40,7 +40,7 @@ class Feed extends Component {
 
     if (this.mountedPostCount === this.props.posts.length) {
       const lastScrollPosition = window.localStorage.getItem(
-        `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`
+        `${LOCALE_STORAGE_FEED_SCROLL}_${this.props.posts.length}`
       )
 
       if (lastScrollPosition) {
@@ -56,7 +56,7 @@ class Feed extends Component {
 
     if (scrollTop > 0) {
       window.localStorage.setItem(
-        `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`,
+        `${LOCALE_STORAGE_FEED_SCROLL}_${this.props.posts.length}`,
         scrollTop
       )
     }

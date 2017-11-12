@@ -1,11 +1,13 @@
 import Parser from 'simple-text-parser'
-import { STORAGE_TOKEN_USER_ID } from '../constants'
+import { LOCALE_STORAGE_USER } from '../constants'
 
-export const getCurrentUserId = () =>
-  window.localStorage.getItem(STORAGE_TOKEN_USER_ID) // TODO: check validation token
+export const getActiveUser = () =>
+  JSON.parse(window.localStorage.getItem(LOCALE_STORAGE_USER)) // TODO: check validation token
 
-export const deleteCurrentUserId = () =>
-  window.localStorage.removeItem(STORAGE_TOKEN_USER_ID)
+export const destroyActiveUser = () =>
+  window.localStorage.removeItem(LOCALE_STORAGE_USER)
+
+export const isLoggedIn = () => getActiveUser() && getActiveUser()._id
 
 export const getLocationLink = location =>
   `https://www.google.com/maps/place/${location.replace(' ', '+')}`

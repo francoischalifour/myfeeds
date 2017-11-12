@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdLineWeight from 'react-icons/lib/md/line-weight'
 import MdSearch from 'react-icons/lib/md/search'
+import { isLoggedIn } from 'utils'
 import { SITE_TITLE } from '../constants'
 import SearchForm from 'components/SearchForm'
 
 const Navbar = glamorous.header({
+  display: 'flex',
   position: 'sticky',
   top: 0,
   zIndex: 1,
@@ -21,11 +23,12 @@ const Navbar = glamorous.header({
 
 const Container = glamorous.div({
   display: 'flex',
+  width: '100%',
+  maxWidth: 1200,
   alignItems: 'center',
   justifyContent: 'space-between',
   margin: '0 auto',
-  padding: '12px 24px',
-  maxWidth: 1200,
+  padding: '0 24px',
 })
 
 const Title = glamorous.h1({
@@ -50,16 +53,18 @@ const Header = () => {
           </Link>
         </Title>
 
-        <Searchbar>
-          <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
-          <SearchForm placeholder="Search MyFeeds" />
-        </Searchbar>
+        {isLoggedIn() && [
+          <Searchbar key="searchbar">
+            <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
+            <SearchForm placeholder="Search MyFeeds" />
+          </Searchbar>,
 
-        <ul>
-          <li>
-            <Link to="/logout">Logout</Link>
-          </li>
-        </ul>
+          <ul key="more">
+            <li>
+              <Link to="/logout">Logout</Link>
+            </li>
+          </ul>,
+        ]}
       </Container>
     </Navbar>
   )

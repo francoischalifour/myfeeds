@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { getCurrentUserId } from 'utils'
-import api from 'api'
+import { getActiveUser } from 'utils'
 import Sidebar from './Sidebar'
 import Loading from './Loading'
 
 class SidebarContainer extends Component {
+  activeUser = getActiveUser()
   state = {
     loading: true,
     isFollowing: false,
@@ -12,7 +12,6 @@ class SidebarContainer extends Component {
   }
 
   async componentWillReceiveProps() {
-    this.activeUser = await api.getUserById(getCurrentUserId())
     const showFollowButton = this.props.user._id !== this.activeUser._id
 
     this.setState({

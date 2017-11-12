@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
-import { getCurrentUserId } from 'utils'
+import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
@@ -9,12 +9,12 @@ import Content from 'components/Content'
 import Feed from 'components/Feed'
 
 class HashtagScene extends Component {
+  activeUser = getActiveUser()
   state = {
     loading: true,
   }
 
   async componentDidMount() {
-    this.activeUser = await api.getUserById(getCurrentUserId())
     document.title = `#${this.props.match.params.hashtag} - ${SITE_TITLE}`
     const posts = await api.getAllPostsHashtagAsUserId(
       this.props.match.params.hashtag,

@@ -1,7 +1,7 @@
-import { deleteCurrentUserId } from 'utils'
+import { destroyActiveUser } from 'utils'
 
 const Logout = () => {
-  deleteCurrentUserId()
+  destroyActiveUser()
   window.location.reload()
 
   return null
