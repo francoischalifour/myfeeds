@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
+import { STORAGE_TOKEN_FEED_SCROLL } from '../../constants'
 import Post from 'components/Post'
 
 const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
@@ -15,8 +16,49 @@ const Li = glamorous('li', { propsAreCssOverrides: true })(props => ({
 }))
 
 class Feed extends Component {
+  componentWillMount() {
+    this.postMounted = 0
+  }
+
+  componentDidMount() {
+    document.addEventListener('scroll', this.onScroll)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('scroll', this.onScroll)
+  }
+
+  onScroll = () => {
+    window.localStorage.removeItem(
+      `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`
+    )
+  }
+
+  onPostRef = () => {
+    this.postMounted++
+
+    if (this.postMounted === this.props.posts.length) {
+      const lastScrollPosition = window.localStorage.getItem(
+        `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`
+      )
+
+      if (lastScrollPosition) {
+        document.documentElement.scrollTop = lastScrollPosition
+      }
+    }
+  }
+
   onItemClick = (event, postId) => {
     this.props.onItemClick(event, postId)
+
+    const scrollTop = document.documentElement.scrollTop
+
+    if (scrollTop > 0) {
+      window.localStorage.setItem(
+        `${STORAGE_TOKEN_FEED_SCROLL}_${this.props.posts.length}`,
+        scrollTop
+      )
+    }
   }
 
   onFavorite = (postId, hasFavorited) => {
@@ -26,7 +68,7 @@ class Feed extends Component {
   renderPosts = posts => {
     return posts.map(post => (
       <Li key={post._id} onClick={event => this.onItemClick(event, post._id)}>
-        <Post {...post} onFavorite={this.onFavorite} />
+        <Post {...post} onFavorite={this.onFavorite} ref={this.onPostRef} />
       </Li>
     ))
   }
