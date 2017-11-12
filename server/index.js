@@ -25,7 +25,7 @@ fastify.listen(SERVER_PORT, SERVER_HOST, err => {
   }
 
   console.log(
-    `🖥 Server listening on http://${fastify.server.address().address}:${
+    `🖥 Server listening on ${fastify.server.address().address}:${
       fastify.server.address().port
     }...`
   )
