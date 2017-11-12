@@ -1,6 +1,7 @@
 import React from 'react'
 import glamorous from 'glamorous'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
+import { SITE_TITLE } from '../../constants'
 
 const Heading = glamorous.h1({
   fontSize: '3.4rem',
@@ -25,7 +26,7 @@ const Maintenance = () => (
     <MdCloudOff size={150} color="#777" />
     <Heading>Server unreachable</Heading>
     <Description>
-      The MyFeeds server is down for now, please come back later.{' '}
+      {SITE_TITLE}' server is down for now, please come back later.{' '}
       <span role="img" aria-label="Bye">
         👋
       </span>

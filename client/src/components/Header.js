@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdLineWeight from 'react-icons/lib/md/line-weight'
 import MdSearch from 'react-icons/lib/md/search'
+import { SITE_TITLE } from '../constants'
 import SearchForm from 'components/SearchForm'
 
 const Navbar = glamorous.header({
@@ -45,7 +46,7 @@ const Header = () => {
         <Title>
           <Link to="/">
             <MdLineWeight size="24" color="#fff" style={{ marginRight: 12 }} />
-            myfeeds
+            {SITE_TITLE.toLowerCase()}
           </Link>
         </Title>
 

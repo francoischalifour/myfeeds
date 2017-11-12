@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
 import { getCurrentUserId } from 'utils'
+import { SITE_TITLE } from '../../constants'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
@@ -17,6 +18,8 @@ class ProfileScene extends Component {
     this.activeUser = await api.getUserById(getCurrentUserId())
     const username = this.props.match.params.username
     const user = await api.getUserByUsername(username)
+
+    document.title = `${user.name} - ${SITE_TITLE}`
 
     if (user && user._id) {
       const posts = await api.getAllPostsByUsernameAsUserId(
@@ -36,6 +39,7 @@ class ProfileScene extends Component {
       })
     }
   }
+
   onFavorite = async (postId, hasFavorited) => {
     const fav = {
       post_id: postId,
