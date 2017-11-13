@@ -34,9 +34,14 @@ class PostScene extends Component {
     ...this.initialState,
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     document.title = `Post - ${SITE_TITLE}`
     const postId = this.props.match.params.postid
+    this.fetchPost({ postId })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const postId = nextProps.match.params.postid
     this.fetchPost({ postId })
   }
 
@@ -55,7 +60,7 @@ class PostScene extends Component {
           this.activeUser._id
         )
 
-        if (replies && replies.length > 0) {
+        if (Array.isArray(replies)) {
           this.setState({
             replies,
           })
@@ -64,6 +69,10 @@ class PostScene extends Component {
             error: "We can't retrieve the replies.",
           })
         }
+      } else {
+        this.setState({
+          replies: [],
+        })
       }
     } else {
       this.setState({
