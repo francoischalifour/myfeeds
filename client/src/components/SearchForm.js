@@ -57,22 +57,24 @@ class SearchForm extends Component {
     document.body.classList.toggle('searching', search.length > 0)
 
     this.setState({ search }, async () => {
-      // `/` redirects to another route, we need to remove it
-      const posts = await api.getAllPostsMatchingAsUserId(
-        this.state.search.replace('/', ' '),
-        this.activeUser._id
-      )
+      if (search.length > 0) {
+        // `/` redirects to another route, we need to remove it
+        const posts = await api.getAllPostsMatchingAsUserId(
+          this.state.search.replace('/', ' '),
+          this.activeUser._id
+        )
 
-      this.setState({
-        posts,
-      })
+        this.setState({
+          posts,
+        })
 
-      if (search.length > 0 && posts.length > 0) {
-        const searchPath = `/search?q=${this.state.search}`
-        const pageTitle = `${search} - MyFeeds`
-        document.title = pageTitle
-        window.history.pushState({ search }, pageTitle, searchPath)
-      } else if (search.length === 0) {
+        if (posts.length > 0) {
+          const searchPath = `/search?q=${this.state.search}`
+          const pageTitle = `${search} - MyFeeds`
+          document.title = pageTitle
+          window.history.pushState({ search }, pageTitle, searchPath)
+        }
+      } else {
         this.onClose()
       }
     })

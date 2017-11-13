@@ -24,16 +24,14 @@ const Container = glamorous.div({
 class PostScene extends Component {
   activeUser = getActiveUser()
   initialState = {
+    loading: true,
     error: '',
     isCommentInputFocused: false,
     post: {},
     replies: [],
     favorites: [],
   }
-  state = {
-    loading: true,
-    ...this.initialState,
-  }
+  state = this.initialState
 
   componentDidMount() {
     document.title = `Post - ${SITE_TITLE}`
@@ -198,7 +196,7 @@ class PostScene extends Component {
             this.state.post.reply_count > 0
               ? () => (
                   <div style={{ textAlign: 'center' }}>
-                    <MdList size={200} color="#ddd" />
+                    <MdList size={110} color="#ddd" />
                   </div>
                 )
               : null
