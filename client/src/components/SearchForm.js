@@ -81,6 +81,9 @@ class SearchForm extends Component {
   onClose = event => {
     event && event.preventDefault()
     document.body.classList.remove('searching')
+    this.setState({
+      posts: [],
+    })
 
     if (!this.originLocation.pathname.startsWith('/search')) {
       document.title = this.originLocation.title
