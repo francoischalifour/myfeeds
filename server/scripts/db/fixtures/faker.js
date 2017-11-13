@@ -86,7 +86,7 @@ const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
   return {
     _id: ObjectId(),
     user_id: users[userIndex]._id,
-    post_id: posts[postIndex]._id,
+    post_id: postCollection[postIndex]._id,
     created_at: faker.date.between(2017, new Date()),
   }
 })
