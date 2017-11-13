@@ -125,7 +125,9 @@ const highlightTerms = (posts, terms, tag = 'em') => {
   return posts.map(post => {
     words.forEach(word => {
       const regex = new RegExp(word, 'gi')
-      const wordCased = post.text.match(regex)[0] || word
+      const wordCased = post.text.match(regex)
+        ? post.text.match(regex)[0]
+        : word
       post.text = post.text.replace(regex, `<${tag}>${wordCased}</${tag}>`)
     })
     return post
