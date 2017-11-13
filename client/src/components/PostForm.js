@@ -5,15 +5,18 @@ import ProfilePicture from 'components/ProfilePicture'
 const Container = glamorous.div({
   display: 'flex',
   padding: 16,
+  boxShadow: '0 1px 4px rgba(0, 0, 0, .1)',
+  borderBottom: '1px solid #e6ecf0',
+  backgroundColor: '#eceff1',
 })
 
-const LeftContainer = glamorous.div({
+const PictureContainer = glamorous.div({
   width: 64,
   paddingRight: 16,
   textAlign: 'right',
 })
 
-const RightContainer = glamorous.div({
+const TextContainer = glamorous.div({
   flex: 1,
   flexDirection: 'row',
   textAlign: 'right',
@@ -30,6 +33,10 @@ const Textarea = glamorous.textarea({
 })
 
 class PostForm extends Component {
+  static defaultProps = {
+    placeholder: "What's happening?",
+  }
+
   state = {
     value: '',
     isFocused: false,
@@ -49,11 +56,11 @@ class PostForm extends Component {
     }
   }
 
-  onChange = value => {
-    this.setState({ value })
+  onFocus = () => this.setState({ isFocused: true })
 
-    this.textarea.style.height = 'auto'
-    this.textarea.style.height = `${this.textarea.scrollHeight}px`
+  onBlur = () => {
+    this.setState({ isFocused: false })
+    this.props.onCommentIconBlur && this.props.onCommentIconBlur()
   }
 
   onKeydown = event => {
@@ -66,13 +73,20 @@ class PostForm extends Component {
     }
   }
 
-  onSubmit = async event => {
+  onChange = event => {
+    this.setState({ value: event.target.value })
+
+    this.textarea.style.height = 'auto'
+    this.textarea.style.height = `${this.textarea.scrollHeight}px`
+  }
+
+  onSubmit = event => {
     event.preventDefault()
 
     const text = this.state.value.trim()
     if (text.length < 2) return
 
-    this.props.onSubmit(text)
+    this.props.onSubmit({ text })
 
     this.setState({
       value: '',
@@ -82,26 +96,23 @@ class PostForm extends Component {
   render() {
     return (
       <Container>
-        <LeftContainer>
+        <PictureContainer>
           <ProfilePicture
             src={this.props.profile_image_url}
             alt={this.props.username}
             width={36}
           />
-        </LeftContainer>
+        </PictureContainer>
 
-        <RightContainer>
+        <TextContainer>
           <form onSubmit={this.onSubmit}>
             <Textarea
               rows="1"
-              placeholder={this.props.placeholder || "What's happening?"}
+              placeholder={this.props.placeholder}
               value={this.state.value}
-              onChange={event => this.onChange(event.target.value)}
-              onFocus={() => this.setState({ isFocused: true })}
-              onBlur={() => {
-                this.setState({ isFocused: false })
-                this.props.onCommentIconBlur && this.props.onCommentIconBlur()
-              }}
+              onChange={this.onChange}
+              onFocus={this.onFocus}
+              onBlur={this.onBlur}
               innerRef={textarea => (this.textarea = textarea)}
             />
             <button
@@ -113,7 +124,7 @@ class PostForm extends Component {
               Post
             </button>
           </form>
-        </RightContainer>
+        </TextContainer>
       </Container>
     )
   }

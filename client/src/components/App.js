@@ -16,27 +16,29 @@ import Settings from 'scenes/Settings'
 import Header from 'components/Header'
 import Logout from 'components/Logout'
 
+const isConnected = isLoggedIn()
+
 const App = () => (
   <Router>
     <div>
-      <Header />
+      <Header isLoggedIn={isConnected} />
 
       <Switch>
         <Route
           exact
           path="/"
-          render={() => (isLoggedIn() ? <Timeline /> : <Login />)}
+          render={() => (isConnected ? <Timeline /> : <Login />)}
         />
         <Route exact path="/settings" component={Settings} />
-        <Route
-          exact
-          path="/logout"
-          render={() => (isLoggedIn() ? <Logout /> : <Redirect to="/" />)}
-        />
-        <Route path="/@:username" component={Profile} />
-        <Route path="/posts/:postid" component={Post} />
-        <Route path="/hashtag/:hashtag" component={Hashtag} />
-        <Route path="/search" component={Search} />
+
+        {isConnected && [
+          <Route path="/@:username" component={Profile} key="Profile" />,
+          <Route path="/posts/:postid" component={Post} key="Post" />,
+          <Route path="/hashtag/:hashtag" component={Hashtag} key="Hashtag" />,
+          <Route path="/search" component={Search} key="Search" />,
+          <Route exact path="/logout" component={Logout} key="Logout" />,
+        ]}
+
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     </div>

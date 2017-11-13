@@ -1,7 +1,7 @@
 import glamorous from 'glamorous'
 
-const Main = glamorous.main({
+const Content = glamorous.main({
   gridArea: 'content',
 })
 
-export default Main
+export default Content

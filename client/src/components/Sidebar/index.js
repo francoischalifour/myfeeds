@@ -8,18 +8,16 @@ class SidebarContainer extends Component {
   state = {
     loading: true,
     isFollowing: false,
-    showFollowButton: false,
   }
 
-  async componentWillReceiveProps() {
-    const showFollowButton = this.props.user._id !== this.activeUser._id
+  async componentWillReceiveProps(nextProps) {
+    this.showFollowButton = nextProps.user._id !== this.activeUser._id
 
     this.setState({
       loading: false,
-      showFollowButton,
     })
 
-    if (showFollowButton) {
+    if (this.showFollowButton) {
       const isFollowing = false // TODO: fetch from DB
 
       this.setState({
@@ -44,7 +42,7 @@ class SidebarContainer extends Component {
     return (
       <Sidebar
         user={this.props.user}
-        showFollowButton={this.state.showFollowButton}
+        showFollowButton={this.showFollowButton}
         isFollowing={this.state.isFollowing}
         onFollow={this.onFollow}
       />

@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import MdClose from 'react-icons/lib/md/close'
 import glamorous from 'glamorous'
 import api from 'api'
 import { getActiveUser } from 'utils'
-import Feed from 'components/Feed'
-import LinkButton from 'components/LinkButton'
-import Button from 'components/Button'
+import SearchPanel from 'components/SearchPanel'
 
 const Input = glamorous.input({
   background: 'none',
@@ -18,71 +14,19 @@ const Input = glamorous.input({
   paddingLeft: '6px !important',
 })
 
-const OverlayPanel = glamorous.div({
-  margin: 'auto',
-  maxWidth: 640,
-  padding: 24,
-})
-
-const OverlayHeader = glamorous.p({
-  color: '#777',
-})
-
-const OverlayFooter = glamorous.footer({
-  padding: 48,
-  textAlign: 'center',
-})
-
-const SearchPanel = ({
-  posts,
-  search,
-  onFavorite,
-  onItemClick,
-  onClose,
-  container,
-}) =>
-  ReactDOM.createPortal(
-    <OverlayPanel>
-      {posts.length > 0 && (
-        <OverlayHeader>
-          Found {posts.length} result{posts.length > 1 && 's'}.
-        </OverlayHeader>
-      )}
-      <Feed
-        posts={posts}
-        renderEmpty={() => (
-          <div style={{ textAlign: 'center' }}>
-            <MdFindInPage size={212} color="#ddd" />
-            <p>
-              No results for <strong>{search}</strong>.
-            </p>
-          </div>
-        )}
-        onFavorite={onFavorite}
-        onItemClick={onItemClick}
-      />
-
-      <OverlayFooter>
-        <LinkButton href={`/search?q=${search}`}>More results</LinkButton>
-        <div style={{ marginTop: 40 }}>
-          <Button title="Close the search panel" onClick={onClose}>
-            <MdClose size="24" />
-          </Button>
-        </div>
-      </OverlayFooter>
-    </OverlayPanel>,
-    container
-  )
-
 class SearchForm extends Component {
+  static defaultProps = {
+    placeholder: '',
+  }
+
   activeUser = getActiveUser()
 
   constructor(props) {
     super(props)
     const params = new URLSearchParams(window.location.search)
     const search = params.get('q') || ''
-    this.el = document.createElement('div')
-    this.el.classList.add('search-wrapper')
+    this.panelContainer = document.createElement('div')
+    this.panelContainer.classList.add('search-wrapper')
 
     this.state = {
       search,
@@ -90,13 +34,13 @@ class SearchForm extends Component {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.resultContainer = document.getElementById('search-results')
-    document.body.appendChild(this.el)
+    document.body.appendChild(this.panelContainer)
   }
 
   componentWillUnmount() {
-    document.body.removeChild(this.el)
+    document.body.removeChild(this.panelContainer)
   }
 
   onFocus = event => {
@@ -137,6 +81,9 @@ class SearchForm extends Component {
   onClose = event => {
     event && event.preventDefault()
     document.body.classList.remove('searching')
+    this.setState({
+      posts: [],
+    })
 
     if (!this.originLocation.pathname.startsWith('/search')) {
       document.title = this.originLocation.title
@@ -148,41 +95,7 @@ class SearchForm extends Component {
     }
   }
 
-  onFavorite = async (postId, hasFavorited) => {
-    const fav = {
-      post_id: postId,
-      user_id: this.activeUser._id,
-    }
-
-    const hasSucceeded = hasFavorited
-      ? await api.favorite(fav)
-      : await api.unfavorite(fav)
-
-    if (hasSucceeded) {
-      const postNewState = await api.getPostByIdAsUserId(
-        postId,
-        this.activeUser._id
-      )
-      const posts = this.state.posts.map(post => {
-        if (post._id === postId) {
-          return {
-            ...post,
-            reply_count: postNewState.reply_count,
-            star_count: postNewState.star_count,
-            replied: postNewState.replied,
-            favorited: postNewState.favorited,
-          }
-        }
-        return post
-      })
-
-      this.setState({
-        posts,
-      })
-    }
-  }
-
-  onItemClick = postId => {
+  onItemClick = ({ postId }) => {
     window.location.href = `/posts/${postId}`
   }
 
@@ -201,14 +114,15 @@ class SearchForm extends Component {
           />
         </form>
 
-        <SearchPanel
-          search={this.state.search}
-          posts={this.state.posts}
-          container={this.el}
-          onFavorite={this.onFavorite}
-          onItemClick={this.onItemClick}
-          onClose={this.onClose}
-        />
+        {ReactDOM.createPortal(
+          <SearchPanel
+            search={this.state.search}
+            posts={this.state.posts}
+            onItemClick={this.onItemClick}
+            onClose={this.onClose}
+          />,
+          this.panelContainer
+        )}
       </div>
     )
   }

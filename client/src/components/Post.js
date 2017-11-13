@@ -18,15 +18,15 @@ const Container = glamorous.div({
 const Small = glamorous.small({
   color: '#999',
   '& a': {
-    color: '#999',
+    color: 'inherit',
   },
 })
 
-const LeftContainer = glamorous.div({
+const ImageContainer = glamorous.div({
   width: 64,
 })
 
-const RightContainer = glamorous.div({
+const TextContainer = glamorous.div({
   flex: 1,
 })
 
@@ -52,35 +52,58 @@ const FooterList = glamorous.ul({
   color: '#999',
   fontWeight: 500,
   '& > li': {
+    cursor: 'pointer',
     paddingRight: 24,
   },
 })
 
-const FooterItem = glamorous.li(props => ({
-  cursor: 'pointer',
-  color: props.replied ? '#03A9F4' : props.favorited ? '#E91E63' : '',
+const ReplyItem = glamorous.li(props => ({
+  color: props.fill ? '#03A9F4' : '',
   '&:hover': {
-    color:
-      props.replied === false
-        ? '#03A9F4'
-        : props.favorited === false ? '#E91E63' : '',
+    color: '#03A9F4',
+  },
+}))
+
+const FavoriteItem = glamorous.li(props => ({
+  color: props.fill ? '#E91E63' : '',
+  '&:hover': {
+    color: '#E91E63',
   },
 }))
 
 class Post extends Component {
+  static defaultProps = {
+    onFavorite: () => {},
+    onItemClick: () => {},
+    onCommentIconClick: () => {},
+  }
+
   onFavorite = event => {
     event.preventDefault()
     event.stopPropagation()
 
-    this.props.onFavorite(this.props._id, !this.props.favorited)
+    this.props.onFavorite({
+      postId: this.props._id,
+      favorited: !this.props.favorited,
+    })
+  }
+
+  onItemClick = event => {
+    if (['A', 'IMG'].includes(event.target.tagName)) {
+      return
+    }
+
+    event.preventDefault()
+    this.props.onItemClick({ postId: this.props._id })
   }
 
   onCommentIconClick = () => {
-    this.props.onCommentIconClick && this.props.onCommentIconClick()
+    this.props.onCommentIconClick()
   }
 
   render() {
     const {
+      _id: postId,
       text,
       created_at: createdAt,
       reply_count: replyCount = 0,
@@ -91,15 +114,16 @@ class Post extends Component {
       replied,
       favorited,
     } = this.props
+
     return (
-      <Container>
-        <LeftContainer>
+      <Container onClick={this.onItemClick}>
+        <ImageContainer>
           <Link to={`/@${username}`}>
             <ProfilePicture src={userImageUrl} alt={username} width={48} />
           </Link>
-        </LeftContainer>
+        </ImageContainer>
 
-        <RightContainer>
+        <TextContainer>
           <Header>
             <Link to={`/@${username}`}>
               <strong>{name}</strong>
@@ -111,7 +135,10 @@ class Post extends Component {
                 dateTime={format(createdAt)}
                 title={format(createdAt, 'HH:mm - DD MMM YYYY')}
               >
-                {''} • {distanceInWordsStrict(createdAt, new Date())}
+                {''} • {''}
+                <Link to={`/posts/${postId}`} onClick={this.onItemClick}>
+                  {distanceInWordsStrict(createdAt, new Date())}
+                </Link>
               </time>
             </Small>
           </Header>
@@ -119,27 +146,24 @@ class Post extends Component {
           <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
 
           <FooterList>
-            <FooterItem replied={replied} onClick={this.onCommentIconClick}>
+            <ReplyItem fill={replied} onClick={this.onCommentIconClick}>
               {replied ? (
                 <MdChatBubble size="18" />
               ) : (
                 <MdChatBubbleOutline size="18" />
               )}{' '}
               {replyCount > 0 && replyCount}
-            </FooterItem>
-            <FooterItem
-              favorited={favorited}
-              onClick={event => this.onFavorite(event)}
-            >
+            </ReplyItem>
+            <FavoriteItem fill={favorited} onClick={this.onFavorite}>
               {favorited ? (
                 <MdFavorite size="18" />
               ) : (
                 <MdFavoriteBorder size="18" />
               )}{' '}
               {starCount > 0 && starCount}
-            </FooterItem>
+            </FavoriteItem>
           </FooterList>
-        </RightContainer>
+        </TextContainer>
       </Container>
     )
   }
