@@ -72,6 +72,7 @@ const FavoriteItem = glamorous.li(props => ({
 
 const FavoriteItemList = glamorous.ul({
   display: 'flex',
+  paddingTop: 2,
   '& li': { paddingRight: 4 },
 })
 
@@ -173,7 +174,7 @@ class Post extends Component {
                   {favorites.map(fav => (
                     <li key={fav.username}>
                       <Link
-                        to={`/users/@${fav.username}}`}
+                        to={`/@${fav.username}`}
                         title={`Go to @${fav.name}'s profile`}
                       >
                         <ProfilePicture
