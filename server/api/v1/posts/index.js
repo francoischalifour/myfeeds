@@ -86,6 +86,22 @@ const Posts = {
 
     return result
   },
+  async getFavorites(dataFilter) {
+    const filter = objectifyProps(dataFilter)
+
+    const db = await connect()
+    const favorites = await db
+      .collection(COLLECTION_FAVORITES)
+      .find(filter, { _id: 0, post_id: 0 })
+      .sort({
+        created_at: -1,
+      })
+      .toArray()
+    let result = await getPostsWithAuthors(favorites, db)
+    db.close()
+
+    return result
+  },
   async getUserFeed(dataFilter, outputFilter = {}) {
     const filter = objectifyProps(dataFilter)
 

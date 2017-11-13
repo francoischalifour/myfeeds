@@ -52,6 +52,12 @@ module.exports = (fastify, opts, next) => {
         }
       )
     })
+    .get('/posts/:id/favorites', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.getFavorites({
+        post_id: request.params.id,
+      })
+    })
     .get('/search/:query', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.searchQuery(request.params.query)
