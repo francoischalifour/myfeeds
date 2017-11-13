@@ -93,6 +93,7 @@ class Post extends Component {
       return
     }
 
+    event.preventDefault()
     this.props.onItemClick({ postId: this.props._id })
   }
 
@@ -102,6 +103,7 @@ class Post extends Component {
 
   render() {
     const {
+      _id: postId,
       text,
       created_at: createdAt,
       reply_count: replyCount = 0,
@@ -133,7 +135,10 @@ class Post extends Component {
                 dateTime={format(createdAt)}
                 title={format(createdAt, 'HH:mm - DD MMM YYYY')}
               >
-                {''} • {distanceInWordsStrict(createdAt, new Date())}
+                {''} • {''}
+                <Link to={`/posts/${postId}`} onClick={this.onItemClick}>
+                  {distanceInWordsStrict(createdAt, new Date())}
+                </Link>
               </time>
             </Small>
           </Header>
