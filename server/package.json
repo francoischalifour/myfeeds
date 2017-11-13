@@ -2,7 +2,7 @@
   "name": "@myfeeds/server",
   "version": "0.1.0",
   "main": "index.js",
-  "repository": "https://github.com/francoischalifour/myfeeds",
+  "repository": "https://github.com/francoischalifour/myfeeds/server",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -12,6 +12,9 @@
     "db:reinit": "node scripts/db/init && node scripts/db/populate",
     "start": "node index",
     "dev": "nodemon index"
+  },
+  "engines": {
+    "node": ">= 8"
   },
   "dependencies": {
     "cors": "^2.8.4",

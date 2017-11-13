@@ -1,0 +1,1 @@
+now --dotenv=.env.production

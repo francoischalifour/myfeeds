@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
-  "repository": "https://github.com/francoischalifour/myfeeds",
+  "repository": "https://github.com/francoischalifour/myfeeds/client",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
