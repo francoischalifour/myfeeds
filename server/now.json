@@ -1,0 +1,4 @@
+{
+  "name": "myfeeds-server",
+  "dotenv": ".env.production"
+}

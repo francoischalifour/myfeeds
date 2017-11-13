@@ -6,6 +6,7 @@
   "repository": "https://github.com/francoischalifour/myfeeds/client",
   "scripts": {
     "start": "react-scripts start",
+    "now-start": "serve --single ./build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
@@ -22,6 +23,7 @@
     "react-image-palette": "^0.1.2",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.14",
+    "serve": "^6.4.1",
     "simple-text-parser": "^1.0.0"
   },
   "devDependencies": {
