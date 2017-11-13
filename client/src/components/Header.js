@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdLineWeight from 'react-icons/lib/md/line-weight'
 import MdSearch from 'react-icons/lib/md/search'
-import { isLoggedIn } from 'utils'
 import { SITE_TITLE } from '../constants'
 import SearchForm from 'components/SearchForm'
 
@@ -42,32 +41,30 @@ const Searchbar = glamorous.div({
   flex: 1,
 })
 
-const Header = () => {
-  return (
-    <Navbar>
-      <Container>
-        <Title>
-          <Link to="/">
-            <MdLineWeight size="24" color="#fff" style={{ marginRight: 12 }} />
-            {SITE_TITLE.toLowerCase()}
-          </Link>
-        </Title>
+const Header = ({ isLoggedIn }) => (
+  <Navbar>
+    <Container>
+      <Title>
+        <Link to="/">
+          <MdLineWeight size="24" color="#fff" style={{ marginRight: 12 }} />
+          {SITE_TITLE.toLowerCase()}
+        </Link>
+      </Title>
 
-        {isLoggedIn() && [
-          <Searchbar key="searchbar">
-            <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
-            <SearchForm placeholder="Search MyFeeds" />
-          </Searchbar>,
+      {isLoggedIn && [
+        <Searchbar key="searchbar">
+          <MdSearch size="24" color="#eee" style={{ marginTop: 6 }} />
+          <SearchForm placeholder="Search MyFeeds" />
+        </Searchbar>,
 
-          <ul key="more">
-            <li>
-              <Link to="/logout">Logout</Link>
-            </li>
-          </ul>,
-        ]}
-      </Container>
-    </Navbar>
-  )
-}
+        <ul key="more">
+          <li>
+            <Link to="/logout">Logout</Link>
+          </li>
+        </ul>,
+      ]}
+    </Container>
+  </Navbar>
+)
 
 export default Header

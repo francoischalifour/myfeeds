@@ -50,8 +50,8 @@ const Ul = glamorous.ul({
 })
 
 class Sidebar extends Component {
-  onFollow = () => {
-    this.props.onFollow()
+  onFollow = ({ following }) => {
+    this.props.onFollow({ following })
   }
 
   render() {
@@ -135,13 +135,16 @@ class Sidebar extends Component {
           {this.props.showFollowButton && (
             <Footer>
               {!this.props.isFollowing ? (
-                <button className="button" onClick={() => this.onFollow()}>
+                <button
+                  className="button"
+                  onClick={() => this.onFollow({ following: true })}
+                >
                   Follow
                 </button>
               ) : (
                 <button
                   className="button outline"
-                  onClick={() => this.onFollow()}
+                  onClick={() => this.onFollow({ following: false })}
                 >
                   Unfollow
                 </button>

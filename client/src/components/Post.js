@@ -52,18 +52,22 @@ const FooterList = glamorous.ul({
   color: '#999',
   fontWeight: 500,
   '& > li': {
+    cursor: 'pointer',
     paddingRight: 24,
   },
 })
 
-const FooterItem = glamorous.li(props => ({
-  cursor: 'pointer',
-  color: props.replied ? '#03A9F4' : props.favorited ? '#E91E63' : '',
+const ReplyItem = glamorous.li(props => ({
+  color: props.fill ? '#03A9F4' : '',
   '&:hover': {
-    color:
-      props.replied === false
-        ? '#03A9F4'
-        : props.favorited === false ? '#E91E63' : '',
+    color: '#03A9F4',
+  },
+}))
+
+const FavoriteItem = glamorous.li(props => ({
+  color: props.fill ? '#E91E63' : '',
+  '&:hover': {
+    color: '#E91E63',
   },
 }))
 
@@ -72,7 +76,14 @@ class Post extends Component {
     event.preventDefault()
     event.stopPropagation()
 
-    this.props.onFavorite(this.props._id, !this.props.favorited)
+    this.props.onFavorite({
+      postId: this.props._id,
+      favorited: !this.props.favorited,
+    })
+  }
+
+  onItemClick = event => {
+    this.props.onItemClick && this.props.onItemClick({ postId: this.props._id })
   }
 
   onCommentIconClick = () => {
@@ -92,7 +103,7 @@ class Post extends Component {
       favorited,
     } = this.props
     return (
-      <Container>
+      <Container onClick={this.onItemClick}>
         <LeftContainer>
           <Link to={`/@${username}`}>
             <ProfilePicture src={userImageUrl} alt={username} width={48} />
@@ -119,25 +130,22 @@ class Post extends Component {
           <PostText dangerouslySetInnerHTML={{ __html: formatText(text) }} />
 
           <FooterList>
-            <FooterItem replied={replied} onClick={this.onCommentIconClick}>
+            <ReplyItem fill={replied} onClick={this.onCommentIconClick}>
               {replied ? (
                 <MdChatBubble size="18" />
               ) : (
                 <MdChatBubbleOutline size="18" />
               )}{' '}
               {replyCount > 0 && replyCount}
-            </FooterItem>
-            <FooterItem
-              favorited={favorited}
-              onClick={event => this.onFavorite(event)}
-            >
+            </ReplyItem>
+            <FavoriteItem fill={favorited} onClick={this.onFavorite}>
               {favorited ? (
                 <MdFavorite size="18" />
               ) : (
                 <MdFavoriteBorder size="18" />
               )}{' '}
               {starCount > 0 && starCount}
-            </FooterItem>
+            </FavoriteItem>
           </FooterList>
         </RightContainer>
       </Container>

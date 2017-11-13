@@ -16,22 +16,24 @@ import Settings from 'scenes/Settings'
 import Header from 'components/Header'
 import Logout from 'components/Logout'
 
+const isConnected = isLoggedIn()
+
 const App = () => (
   <Router>
     <div>
-      <Header />
+      <Header isLoggedIn={isConnected} />
 
       <Switch>
         <Route
           exact
           path="/"
-          render={() => (isLoggedIn() ? <Timeline /> : <Login />)}
+          render={() => (isConnected ? <Timeline /> : <Login />)}
         />
         <Route exact path="/settings" component={Settings} />
         <Route
           exact
           path="/logout"
-          render={() => (isLoggedIn() ? <Logout /> : <Redirect to="/" />)}
+          render={() => (isConnected ? <Logout /> : <Redirect to="/" />)}
         />
         <Route path="/@:username" component={Profile} />
         <Route path="/posts/:postid" component={Post} />

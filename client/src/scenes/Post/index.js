@@ -9,6 +9,7 @@ import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
 import Sidebar from 'components/Sidebar'
 import Feed from 'components/Feed'
+import PostList from 'components/PostList'
 import Post from 'components/Post'
 import PostForm from 'components/PostForm'
 
@@ -23,20 +24,23 @@ const Container = glamorous.div({
 class PostScene extends Component {
   activeUser = getActiveUser()
   initialState = {
-    loading: true,
-    error: false,
+    error: '',
     isCommentInputFocused: false,
+    post: {},
     replies: [],
   }
-  state = this.initialState
+  state = {
+    loading: true,
+    ...this.initialState,
+  }
 
   async componentDidMount() {
     document.title = `Post - ${SITE_TITLE}`
     const postId = this.props.match.params.postid
-    this.fetchPost(postId)
+    this.fetchPost({ postId })
   }
 
-  fetchPost = async postId => {
+  fetchPost = async ({ postId }) => {
     const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
 
     if (post && post._id) {
@@ -50,26 +54,32 @@ class PostScene extends Component {
           postId,
           this.activeUser._id
         )
-        this.setState({
-          replies,
-        })
+
+        if (replies && replies.length > 0) {
+          this.setState({
+            replies,
+          })
+        } else {
+          this.setState({
+            error: "We can't retrieve the replies.",
+          })
+        }
       }
     } else {
       this.setState({
         loading: false,
-        error: true,
+        error: "This post doesn't exist",
       })
     }
   }
 
-  onItemClick = postId => {
+  onItemClick = ({ postId }) => {
     this.setState({
       ...this.initialState,
-      loading: false,
     })
 
-    this.fetchPost(postId)
     this.props.history.push(`/posts/${postId}`)
+    this.fetchPost({ postId })
   }
 
   onCommentIconClick = () => {
@@ -78,25 +88,25 @@ class PostScene extends Component {
     })
   }
 
-  onFavorite = async postId => {
+  onPostFavorite = async ({ postId }) => {
     const fav = {
       post_id: postId,
       user_id: this.activeUser._id,
     }
 
-    const hasSucceeded = this.state.post.favorited
+    const success = this.state.post.favorited
       ? await api.unfavorite(fav)
       : await api.favorite(fav)
 
-    if (hasSucceeded) {
+    if (success) {
       const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
-      this.setState(state => ({
+      this.setState({
         post,
-      }))
+      })
     }
   }
 
-  onSubmit = async text => {
+  onSubmit = async ({ text }) => {
     const postId = this.state.post._id
     const post = {
       text,
@@ -115,41 +125,10 @@ class PostScene extends Component {
       this.setState({
         replies,
         post,
-        hasReplied: true,
       })
-    }
-  }
-
-  onReplyFavorite = async (postId, hasFavorited) => {
-    const fav = {
-      post_id: postId,
-      user_id: this.activeUser._id,
-    }
-
-    const hasSucceeded = hasFavorited
-      ? await api.favorite(fav)
-      : await api.unfavorite(fav)
-
-    if (hasSucceeded) {
-      const replyNewState = await api.getPostByIdAsUserId(
-        postId,
-        this.activeUser._id
-      )
-      const replies = this.state.replies.map(post => {
-        if (post._id === postId) {
-          return {
-            ...post,
-            reply_count: replyNewState.reply_count,
-            star_count: replyNewState.star_count,
-            replied: replyNewState.replied,
-            favorited: replyNewState.favorited,
-          }
-        }
-        return post
-      })
-
+    } else {
       this.setState({
-        replies,
+        error: "We can't save your reply.",
       })
     }
   }
@@ -162,11 +141,11 @@ class PostScene extends Component {
     )
   }
 
-  renderError = () => {
+  renderError = error => {
     return (
       <div style={{ textAlign: 'center' }}>
         <MdFindInPage size={200} color="#bbb" />
-        <p>This post doesn't exist.</p>
+        <p>{error}</p>
       </div>
     )
   }
@@ -176,34 +155,44 @@ class PostScene extends Component {
       <Container>
         <Post
           {...this.state.post}
-          onFavorite={this.onFavorite}
+          onFavorite={this.onPostFavorite}
           onCommentIconClick={this.onCommentIconClick}
+        />
+
+        <PostForm
+          {...this.activeUser}
+          placeholder={`Reply to @${this.state.post.username || ''}`}
+          parentId={this.state.post._id}
+          isFocused={this.state.isCommentInputFocused}
+          onCommentIconBlur={() =>
+            this.setState({ isCommentInputFocused: false })}
+          onSubmit={this.onSubmit}
         />
 
         <Feed
           posts={this.state.replies}
-          onItemClick={this.onItemClick}
-          renderHeader={() => (
-            <PostForm
-              placeholder={`Reply to @${this.state.post.username || ''}`}
-              parentId={this.state.post._id}
-              onSubmit={this.onSubmit}
-              isFocused={this.state.isCommentInputFocused}
-              onCommentIconBlur={() =>
-                this.setState({ isCommentInputFocused: false })}
-              {...this.activeUser}
-            />
+          render={({ posts: replies, onFavorite }) => (
+            <PostList>
+              {replies.map(reply => (
+                <li key={reply._id}>
+                  <Post
+                    {...reply}
+                    onFavorite={onFavorite}
+                    onItemClick={this.onItemClick}
+                  />
+                </li>
+              ))}
+            </PostList>
           )}
           renderLoading={
             this.state.post.reply_count > 0
               ? () => (
-                  <div style={{ textAlign: 'center', padding: 48 }}>
+                  <div style={{ textAlign: 'center' }}>
                     <MdList size={200} color="#ddd" />
                   </div>
                 )
               : null
           }
-          onFavorite={this.onReplyFavorite}
         />
       </Container>
     )
@@ -216,7 +205,9 @@ class PostScene extends Component {
         <Content className="content">
           {this.state.loading
             ? this.renderLoading()
-            : this.state.error ? this.renderError() : this.renderPost()}
+            : this.state.error
+              ? this.renderError(this.state.error)
+              : this.renderPost()}
         </Content>
       </Scaffold>
     )

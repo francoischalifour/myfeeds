@@ -5,6 +5,9 @@ import ProfilePicture from 'components/ProfilePicture'
 const Container = glamorous.div({
   display: 'flex',
   padding: 16,
+  boxShadow: '0 1px 4px rgba(0, 0, 0, .1)',
+  borderBottom: '1px solid #e6ecf0',
+  backgroundColor: '#eceff1',
 })
 
 const LeftContainer = glamorous.div({
@@ -49,11 +52,11 @@ class PostForm extends Component {
     }
   }
 
-  onChange = value => {
-    this.setState({ value })
+  onFocus = () => this.setState({ isFocused: true })
 
-    this.textarea.style.height = 'auto'
-    this.textarea.style.height = `${this.textarea.scrollHeight}px`
+  onBlur = () => {
+    this.setState({ isFocused: false })
+    this.props.onCommentIconBlur && this.props.onCommentIconBlur()
   }
 
   onKeydown = event => {
@@ -66,13 +69,20 @@ class PostForm extends Component {
     }
   }
 
+  onChange = event => {
+    this.setState({ value: event.target.value })
+
+    this.textarea.style.height = 'auto'
+    this.textarea.style.height = `${this.textarea.scrollHeight}px`
+  }
+
   onSubmit = async event => {
     event.preventDefault()
 
     const text = this.state.value.trim()
     if (text.length < 2) return
 
-    this.props.onSubmit(text)
+    this.props.onSubmit({ text })
 
     this.setState({
       value: '',
@@ -96,12 +106,9 @@ class PostForm extends Component {
               rows="1"
               placeholder={this.props.placeholder || "What's happening?"}
               value={this.state.value}
-              onChange={event => this.onChange(event.target.value)}
-              onFocus={() => this.setState({ isFocused: true })}
-              onBlur={() => {
-                this.setState({ isFocused: false })
-                this.props.onCommentIconBlur && this.props.onCommentIconBlur()
-              }}
+              onChange={this.onChange}
+              onFocus={this.onFocus}
+              onBlur={this.onBlur}
               innerRef={textarea => (this.textarea = textarea)}
             />
             <button

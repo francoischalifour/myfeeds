@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
 import MdList from 'react-icons/lib/md/list'
+import MdCreate from 'react-icons/lib/md/create'
 import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import api from 'api'
@@ -9,29 +10,32 @@ import Content from 'components/Content'
 import Sidebar from 'components/Sidebar'
 import Feed from 'components/Feed'
 import PostForm from 'components/PostForm'
+import PostList from 'components/PostList'
+import Post from 'components/Post'
 
 class TimelineScene extends Component {
   activeUser = getActiveUser()
   state = {
-    error: false,
+    error: '',
+    posts: [],
   }
 
   async componentDidMount() {
     document.title = SITE_TITLE
     const posts = await api.getAllPostsAsUserId(this.activeUser._id)
 
-    if (posts && posts.length > 0) {
+    if (Array.isArray(posts)) {
       this.setState({
         posts,
       })
     } else {
       this.setState({
-        error: true,
+        error: "We can't retrieve the timeline for now.",
       })
     }
   }
 
-  onSubmit = async text => {
+  onSubmit = async ({ text }) => {
     const post = {
       text,
       user_id: this.activeUser._id,
@@ -44,75 +48,65 @@ class TimelineScene extends Component {
       this.setState({
         posts,
       })
-    }
-  }
-
-  onFavorite = async (postId, hasFavorited) => {
-    const fav = {
-      post_id: postId,
-      user_id: this.activeUser._id,
-    }
-
-    const hasSucceeded = hasFavorited
-      ? await api.favorite(fav)
-      : await api.unfavorite(fav)
-
-    if (hasSucceeded) {
-      const postNewState = await api.getPostByIdAsUserId(
-        postId,
-        this.activeUser._id
-      )
-      const posts = this.state.posts.map(post => {
-        if (post._id === postId) {
-          return {
-            ...post,
-            reply_count: postNewState.reply_count,
-            star_count: postNewState.star_count,
-            replied: postNewState.replied,
-            favorited: postNewState.favorited,
-          }
-        }
-        return post
-      })
-
+    } else {
       this.setState({
-        posts,
+        error: "We can't save your post.",
       })
     }
   }
 
-  renderError = () => {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <MdCloudOff size={200} color="#bbb" />
-        <p>We can't retrieve the timeline for now.</p>
-      </div>
-    )
-  }
+  renderError = error => (
+    <div style={{ textAlign: 'center' }}>
+      <MdCloudOff size={200} color="#bbb" />
+      <p>{error}</p>
+    </div>
+  )
 
-  renderTimeline = () => {
-    return (
+  renderTimeline = () => (
+    <div style={{ backgroundColor: 'white' }}>
+      <PostForm {...this.activeUser} onSubmit={this.onSubmit} />
+
       <Feed
+        name="Timeline"
         posts={this.state.posts}
-        renderHeader={() => (
-          <PostForm {...this.activeUser} onSubmit={this.onSubmit} />
+        render={({ posts, onFavorite, onItemClick, onPostRef }) => (
+          <PostList>
+            {posts.map(post => (
+              <li key={post._id}>
+                <Post
+                  {...post}
+                  onFavorite={onFavorite}
+                  onItemClick={onItemClick}
+                  ref={onPostRef}
+                />
+              </li>
+            ))}
+          </PostList>
         )}
         renderLoading={() => (
-          <div style={{ textAlign: 'center', padding: 48 }}>
+          <div style={{ textAlign: 'center' }}>
             <MdList size={200} color="#ddd" />
           </div>
         )}
-        onFavorite={this.onFavorite}
+        renderEmpty={() => (
+          <div style={{ textAlign: 'center', padding: 24 }}>
+            <MdCreate size={200} color="#ddd" />
+
+            <p>Nobody has posted yet. Be the first!</p>
+          </div>
+        )}
       />
-    )
-  }
+    </div>
+  )
 
   render() {
     return (
       <Scaffold grid>
         <Sidebar user={this.activeUser} />
         <Content className="content">
-          {this.state.error ? this.renderError() : this.renderTimeline()}
+          {this.state.error
+            ? this.renderError(this.state.error)
+            : this.renderTimeline()}
         </Content>
       </Scaffold>
     )
