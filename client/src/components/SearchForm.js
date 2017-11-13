@@ -15,6 +15,10 @@ const Input = glamorous.input({
 })
 
 class SearchForm extends Component {
+  static defaultProps = {
+    placeholder: '',
+  }
+
   activeUser = getActiveUser()
 
   constructor(props) {
