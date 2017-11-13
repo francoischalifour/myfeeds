@@ -20,7 +20,7 @@ class Feed extends Component {
     })
 
     // We keep track of the number of mounted elements if the feed has a name.
-    // Giving a name to a feed is a way to remember its scroll position  in the
+    // Giving a name to a feed is a way to remember its scroll position in the
     // `localeStorage` when the user comes back to the page.
     nextProps.name && (this.mountedPostCount = 0)
   }
@@ -42,7 +42,7 @@ class Feed extends Component {
 
     this.mountedPostCount++
 
-    // The DOM has been completely mounted, let's scroll to the last stored position
+    // The DOM has completely mounted, let's scroll to the last stored position
     if (this.mountedPostCount === this.state.posts.length) {
       const lastScrollPosition = window.localStorage.getItem(
         `${LOCALE_STORAGE_FEED_SCROLL}_${this.props.name.toUpperCase()}`
@@ -91,7 +91,7 @@ class Feed extends Component {
     }
   }
 
-  onItemClick = async ({ postId }) => {
+  onItemClick = ({ postId }) => {
     // Store the current scroll position for when the user comes back to this feed
     if (this.props.name) {
       const scrollTop = document.documentElement.scrollTop

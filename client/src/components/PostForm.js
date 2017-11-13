@@ -10,13 +10,13 @@ const Container = glamorous.div({
   backgroundColor: '#eceff1',
 })
 
-const LeftContainer = glamorous.div({
+const PictureContainer = glamorous.div({
   width: 64,
   paddingRight: 16,
   textAlign: 'right',
 })
 
-const RightContainer = glamorous.div({
+const TextContainer = glamorous.div({
   flex: 1,
   flexDirection: 'row',
   textAlign: 'right',
@@ -76,7 +76,7 @@ class PostForm extends Component {
     this.textarea.style.height = `${this.textarea.scrollHeight}px`
   }
 
-  onSubmit = async event => {
+  onSubmit = event => {
     event.preventDefault()
 
     const text = this.state.value.trim()
@@ -92,15 +92,15 @@ class PostForm extends Component {
   render() {
     return (
       <Container>
-        <LeftContainer>
+        <PictureContainer>
           <ProfilePicture
             src={this.props.profile_image_url}
             alt={this.props.username}
             width={36}
           />
-        </LeftContainer>
+        </PictureContainer>
 
-        <RightContainer>
+        <TextContainer>
           <form onSubmit={this.onSubmit}>
             <Textarea
               rows="1"
@@ -120,7 +120,7 @@ class PostForm extends Component {
               Post
             </button>
           </form>
-        </RightContainer>
+        </TextContainer>
       </Container>
     )
   }
