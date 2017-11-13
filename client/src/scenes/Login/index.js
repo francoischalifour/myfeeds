@@ -49,7 +49,7 @@ class LoginScene extends Component {
           {this.state.error && <Error>{this.state.error}</Error>}
 
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             value={this.state.email}
             onChange={e => this.setState({ email: e.target.value })}

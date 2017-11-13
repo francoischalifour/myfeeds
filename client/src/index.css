@@ -85,6 +85,7 @@ button.button[disabled] {
 
 input[type='text'],
 input[type='password'],
+input[type='email'],
 input[type='search'] {
   width: 100%;
   border: none;
@@ -93,6 +94,10 @@ input[type='search'] {
   border-radius: 3px;
   font: inherit;
   margin-bottom: 8px;
+}
+
+input[type='search'] {
+  -webkit-appearance: textfield;
 }
 
 .search-wrapper {
