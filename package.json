@@ -10,8 +10,7 @@
     "start:server": "npm start --prefix ./server",
     "start:client": "npm start --prefix ./client",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
-    "build": "npm run build --prefix ./client",
-    "deploy": "npm run build && npm run db:reinit --prefix ./server"
+    "preview": "npm run build --prefix ./client"
   },
   "dependencies": {
     "concurrently": "^3.5.0"
