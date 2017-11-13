@@ -4,6 +4,7 @@
   "license": "MIT",
   "private": true,
   "repository": "https://github.com/francoischalifour/myfeeds/client",
+  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "now-start": "serve --single ./build",
