@@ -64,19 +64,19 @@ const getAuthorData = author => ({
  * @return {object}
  */
 const getSinglePostWithMetadata = async (post, userId, db) => {
-  const hasFavorited = !!await db.collection(COLLECTION_FAVORITES).findOne({
+  const favorited = !!await db.collection(COLLECTION_FAVORITES).findOne({
     user_id: userId,
     post_id: post._id,
   })
-  const hasReplied = !!await db.collection(COLLECTION_POSTS).findOne({
+  const replied = !!await db.collection(COLLECTION_POSTS).findOne({
     user_id: userId,
     parent_id: post._id,
   })
 
   return {
     ...post,
-    favorited: hasFavorited,
-    replied: hasReplied,
+    favorited,
+    replied,
   }
 }
 
