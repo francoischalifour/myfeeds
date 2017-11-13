@@ -5,6 +5,6 @@
 # “base” is directory to change to before starting build
 
 [build]
-  base    = "./client"
-  publish = "./build"
+  base    = "client"
+  publish = "build"
   command = "npm run build"
