@@ -40,6 +40,8 @@ const getPostRepliesById = id => getV1(`/posts/${id}/replies`)
 const getPostRepliesByIdAsUserId = (postId, userId) =>
   getV1(`/posts/${postId}/replies/as/${userId}`)
 
+const getPostFavoritesById = id => getV1(`/posts/${id}/favorites`)
+
 const getUserById = id => getV1(`/users/${id}`)
 
 const getUserByUsername = username => getV1(`/users/@${username}`)
@@ -81,6 +83,7 @@ export default {
   getPostByIdAsUserId,
   getPostRepliesById,
   getPostRepliesByIdAsUserId,
+  getPostFavoritesById,
   getUserById,
   getUserByUsername,
   getAllPostsByUsername,

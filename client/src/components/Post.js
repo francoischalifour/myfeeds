@@ -48,7 +48,6 @@ const PostText = glamorous.p({
 const FooterList = glamorous.ul({
   userSelect: 'none',
   display: 'flex',
-  maxWidth: 200,
   color: '#999',
   fontWeight: 500,
   '& > li': {
@@ -70,6 +69,11 @@ const FavoriteItem = glamorous.li(props => ({
     color: '#E91E63',
   },
 }))
+
+const FavoriteItemList = glamorous.ul({
+  display: 'flex',
+  '& li': { paddingRight: 4 },
+})
 
 class Post extends Component {
   static defaultProps = {
@@ -113,6 +117,7 @@ class Post extends Component {
       username,
       replied,
       favorited,
+      favorites,
     } = this.props
 
     return (
@@ -162,6 +167,26 @@ class Post extends Component {
               )}{' '}
               {starCount > 0 && starCount}
             </FavoriteItem>
+            {favorites && (
+              <li>
+                <FavoriteItemList>
+                  {favorites.map(fav => (
+                    <li key={fav.username}>
+                      <Link
+                        to={`/users/@${fav.username}}`}
+                        title={`Go to @${fav.name}'s profile`}
+                      >
+                        <ProfilePicture
+                          src={fav.profile_image_url}
+                          alt={fav.username}
+                          width={20}
+                        />
+                      </Link>
+                    </li>
+                  ))}
+                </FavoriteItemList>
+              </li>
+            )}
           </FooterList>
         </TextContainer>
       </Container>

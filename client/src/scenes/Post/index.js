@@ -28,6 +28,7 @@ class PostScene extends Component {
     isCommentInputFocused: false,
     post: {},
     replies: [],
+    favorites: [],
   }
   state = {
     loading: true,
@@ -54,24 +55,21 @@ class PostScene extends Component {
         post,
       })
 
-      if (post.reply_count > 0) {
+      if (!post.error) {
         const replies = await api.getPostRepliesByIdAsUserId(
           postId,
           this.activeUser._id
         )
+        const favorites = await api.getPostFavoritesById(postId)
 
-        if (Array.isArray(replies)) {
-          this.setState({
-            replies,
-          })
-        } else {
-          this.setState({
-            error: "We can't retrieve the replies.",
-          })
-        }
+        this.setState({
+          replies,
+          favorites: favorites.slice(0, 10),
+        })
       } else {
         this.setState({
           replies: [],
+          favorites: [],
         })
       }
     } else {
@@ -109,8 +107,10 @@ class PostScene extends Component {
 
     if (success) {
       const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
+      const favorites = await api.getPostFavoritesById(postId)
       this.setState({
         post,
+        favorites,
       })
     }
   }
@@ -164,6 +164,7 @@ class PostScene extends Component {
       <Container>
         <Post
           {...this.state.post}
+          favorites={this.state.favorites}
           onFavorite={this.onPostFavorite}
           onCommentIconClick={this.onCommentIconClick}
         />
