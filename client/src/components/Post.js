@@ -173,10 +173,7 @@ class Post extends Component {
                 <FavoriteItemList>
                   {favorites.map(fav => (
                     <li key={fav.username}>
-                      <Link
-                        to={`/@${fav.username}`}
-                        title={`Go to @${fav.name}'s profile`}
-                      >
+                      <Link to={`/@${fav.username}`} title={`@${fav.name}`}>
                         <ProfilePicture
                           src={fav.profile_image_url}
                           alt={fav.username}
