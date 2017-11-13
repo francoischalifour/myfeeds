@@ -18,15 +18,15 @@ const Container = glamorous.div({
 const Small = glamorous.small({
   color: '#999',
   '& a': {
-    color: '#999',
+    color: 'inherit',
   },
 })
 
-const LeftContainer = glamorous.div({
+const ImageContainer = glamorous.div({
   width: 64,
 })
 
-const RightContainer = glamorous.div({
+const TextContainer = glamorous.div({
   flex: 1,
 })
 
@@ -72,6 +72,12 @@ const FavoriteItem = glamorous.li(props => ({
 }))
 
 class Post extends Component {
+  static defaultProps = {
+    onFavorite: () => {},
+    onItemClick: () => {},
+    onCommentIconClick: () => {},
+  }
+
   onFavorite = event => {
     event.preventDefault()
     event.stopPropagation()
@@ -83,11 +89,15 @@ class Post extends Component {
   }
 
   onItemClick = event => {
-    this.props.onItemClick && this.props.onItemClick({ postId: this.props._id })
+    if (['A', 'IMG'].includes(event.target.tagName)) {
+      return
+    }
+
+    this.props.onItemClick({ postId: this.props._id })
   }
 
   onCommentIconClick = () => {
-    this.props.onCommentIconClick && this.props.onCommentIconClick()
+    this.props.onCommentIconClick()
   }
 
   render() {
@@ -102,15 +112,16 @@ class Post extends Component {
       replied,
       favorited,
     } = this.props
+
     return (
       <Container onClick={this.onItemClick}>
-        <LeftContainer>
+        <ImageContainer>
           <Link to={`/@${username}`}>
             <ProfilePicture src={userImageUrl} alt={username} width={48} />
           </Link>
-        </LeftContainer>
+        </ImageContainer>
 
-        <RightContainer>
+        <TextContainer>
           <Header>
             <Link to={`/@${username}`}>
               <strong>{name}</strong>
@@ -147,7 +158,7 @@ class Post extends Component {
               {starCount > 0 && starCount}
             </FavoriteItem>
           </FooterList>
-        </RightContainer>
+        </TextContainer>
       </Container>
     )
   }
