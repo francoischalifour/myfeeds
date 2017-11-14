@@ -8,6 +8,7 @@
     "start": "react-scripts start",
     "now-start": "serve --single ./build",
     "build": "react-scripts build",
+    "deploy": "react-scripts build && cp build/index.html build/404.html",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "format": "./node_modules/.bin/prettier --write 'src/**/*.{js,json,css}'"
