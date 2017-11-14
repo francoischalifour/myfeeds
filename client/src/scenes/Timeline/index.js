@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
-import MdList from 'react-icons/lib/md/list'
 import MdCreate from 'react-icons/lib/md/create'
 import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
@@ -8,6 +7,7 @@ import api from 'api'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
 import Sidebar from 'components/Sidebar'
+import Loader from 'components/Loader'
 import Feed from 'components/Feed'
 import PostForm from 'components/PostForm'
 import PostList from 'components/PostList'
@@ -63,7 +63,7 @@ class TimelineScene extends Component {
   )
 
   renderTimeline = () => (
-    <div style={{ backgroundColor: 'white' }}>
+    <div style={{ backgroundColor: '#fff' }}>
       <PostForm {...this.activeUser} onSubmit={this.onSubmit} />
 
       <Feed
@@ -85,7 +85,7 @@ class TimelineScene extends Component {
         )}
         renderLoading={() => (
           <div style={{ textAlign: 'center' }}>
-            <MdList size={200} color="#ddd" />
+            <Loader />
           </div>
         )}
         renderEmpty={() => (
