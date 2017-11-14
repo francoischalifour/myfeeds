@@ -7,14 +7,37 @@ import MdLocation from 'react-icons/lib/md/location-on'
 import MdLink from 'react-icons/lib/md/link'
 import MdDateRange from 'react-icons/lib/md/date-range'
 import ProfilePicture from 'components/ProfilePicture'
-import Container from './components/Container'
-import Content from './components/Content'
-import Header from './components/Header'
-import ImageContainer from './components/ImageContainer'
 
-const Sidenav = glamorous(Container)({
+const Sidenav = glamorous.aside({
+  gridArea: 'sidebar',
   position: 'sticky',
   top: 84,
+  background: '#fff',
+  boxShadow: '0 1px 4px rgba(0,0,0,.1)',
+  borderRadius: 3,
+})
+
+const Content = glamorous.div({
+  padding: '75px 24px 24px 24px',
+})
+
+const Header = glamorous('header', { propsAreCssOverrides: true })({
+  position: 'relative',
+  backgroundColor: '#212121',
+  height: 114,
+})
+
+const ImageContainer = glamorous.div({
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: '-85px',
+  left: '50%',
+  width: 150,
+  height: 150,
+  borderRadius: '50%',
+  border: '2px solid white',
+  backgroundColor: '#212121',
+  transform: 'translateX(-50%)',
 })
 
 const Name = glamorous.h2({
