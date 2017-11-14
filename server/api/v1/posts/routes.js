@@ -14,6 +14,32 @@ module.exports = (fastify, opts, next) => {
         },
       })
     })
+    .get('/posts/limit/:limit/as/:userid', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.getFeedPaginated(
+        {},
+        {
+          as: {
+            user_id: request.params.userid,
+          },
+          limit: request.params.limit,
+        }
+      )
+    })
+    .get('/posts/start/:id/limit/:limit/as/:userid', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.getFeedPaginated(
+        {
+          _id: request.params.id,
+        },
+        {
+          as: {
+            user_id: request.params.userid,
+          },
+          limit: request.params.limit,
+        }
+      )
+    })
     .get('/posts/:id', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.get({
@@ -39,6 +65,41 @@ module.exports = (fastify, opts, next) => {
         parent_id: request.params.id,
       })
     })
+    .get(
+      '/posts/:parentid/replies/start/:id/limit/:limit/as/:userid',
+      async (request, reply) => {
+        reply.type('application/json').code(200)
+        return Posts.getFeedPaginated(
+          {
+            _id: request.params.id,
+            parent_id: request.params.parentid,
+          },
+          {
+            as: {
+              user_id: request.params.userid,
+            },
+            limit: request.params.limit,
+          }
+        )
+      }
+    )
+    .get(
+      '/posts/:parentid/replies/start/null/limit/:limit/as/:userid',
+      async (request, reply) => {
+        reply.type('application/json').code(200)
+        return Posts.getFeedPaginated(
+          {
+            parent_id: request.params.parentid,
+          },
+          {
+            as: {
+              user_id: request.params.userid,
+            },
+            limit: request.params.limit,
+          }
+        )
+      }
+    )
     .get('/posts/:id/replies/as/:userid', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.getReplies(

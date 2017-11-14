@@ -40,6 +40,55 @@ const Posts = {
 
     return result
   },
+  async getFeedPaginated(dataFilter, outputFilter = {}) {
+    const objectifiedFilter = objectifyProps(dataFilter)
+    let filter
+
+    if (objectifiedFilter.parent_id) {
+      filter = objectifiedFilter._id
+        ? {
+            _id: { $gt: objectifiedFilter._id },
+            parent_id: objectifiedFilter.parent_id,
+          }
+        : {
+            parent_id: objectifiedFilter.parent_id,
+          }
+    } else {
+      filter = objectifiedFilter._id
+        ? {
+            _id: { $lt: objectifiedFilter._id },
+            parent_id: { $exists: false },
+          }
+        : {
+            parent_id: { $exists: false },
+          }
+    }
+
+    const sort = objectifiedFilter.parent_id
+      ? { created_at: 1 }
+      : { created_at: -1 }
+
+    const db = await connect()
+    const posts = await db
+      .collection(COLLECTION_POSTS)
+      .find(filter)
+      .sort(sort)
+      .limit(parseInt(outputFilter.limit, 10))
+      .toArray()
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (outputFilter.as) {
+      result = await getPostsWithMetadata(
+        result,
+        ObjectId(outputFilter.as.user_id),
+        db
+      )
+    }
+
+    db.close()
+
+    return result
+  },
   async get(dataFilter, outputFilter = {}) {
     const filter = objectifyProps(dataFilter)
 

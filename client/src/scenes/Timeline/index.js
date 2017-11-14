@@ -12,8 +12,10 @@ import Feed from 'components/Feed'
 import PostForm from 'components/PostForm'
 import PostList from 'components/PostList'
 import Post from 'components/Post'
+import LoadMoreButton from 'components/LoadMoreButton'
 
 class TimelineScene extends Component {
+  static POST_COUNT = 15
   activeUser = getActiveUser()
   state = {
     error: '',
@@ -22,7 +24,10 @@ class TimelineScene extends Component {
 
   async componentDidMount() {
     document.title = SITE_TITLE
-    const posts = await api.getAllPostsAsUserId(this.activeUser._id)
+    const posts = await api.getAllPostsAsUserId({
+      userId: this.activeUser._id,
+      limit: TimelineScene.POST_COUNT,
+    })
 
     if (Array.isArray(posts)) {
       this.setState({
@@ -35,26 +40,6 @@ class TimelineScene extends Component {
     }
   }
 
-  onSubmit = async ({ text }) => {
-    const post = {
-      text,
-      user_id: this.activeUser._id,
-    }
-    const success = !!await api.addPost(post)
-
-    if (success) {
-      const posts = await api.getAllPostsAsUserId(this.activeUser._id)
-
-      this.setState({
-        posts,
-      })
-    } else {
-      this.setState({
-        error: "We can't save your post.",
-      })
-    }
-  }
-
   renderError = error => (
     <div style={{ textAlign: 'center' }}>
       <MdCloudOff size={200} color="#bbb" />
@@ -63,40 +48,54 @@ class TimelineScene extends Component {
   )
 
   renderTimeline = () => (
-    <div style={{ backgroundColor: 'white' }}>
-      <PostForm {...this.activeUser} onSubmit={this.onSubmit} />
+    <Feed
+      name="Timeline"
+      posts={this.state.posts}
+      limit={TimelineScene.POST_COUNT}
+      render={({
+        posts,
+        onFavorite,
+        onItemClick,
+        onPostRef,
+        onLoadMore,
+        onSubmit,
+      }) => (
+        <div>
+          <div style={{ backgroundColor: 'white' }}>
+            <PostForm {...this.activeUser} onSubmit={onSubmit} />
 
-      <Feed
-        name="Timeline"
-        posts={this.state.posts}
-        render={({ posts, onFavorite, onItemClick, onPostRef }) => (
-          <PostList>
-            {posts.map(post => (
-              <li key={post._id}>
-                <Post
-                  {...post}
-                  onFavorite={onFavorite}
-                  onItemClick={onItemClick}
-                  ref={onPostRef}
-                />
-              </li>
-            ))}
-          </PostList>
-        )}
-        renderLoading={() => (
-          <div style={{ textAlign: 'center' }}>
-            <MdList size={200} color="#ddd" />
+            <PostList>
+              {posts.map(post => (
+                <li key={post._id}>
+                  <Post
+                    {...post}
+                    onFavorite={onFavorite}
+                    onItemClick={onItemClick}
+                    ref={onPostRef}
+                  />
+                </li>
+              ))}
+            </PostList>
           </div>
-        )}
-        renderEmpty={() => (
-          <div style={{ textAlign: 'center', padding: 24 }}>
-            <MdCreate size={200} color="#ddd" />
 
-            <p>Nobody has posted yet. Be the first!</p>
+          <div style={{ paddingTop: 40, textAlign: 'center' }}>
+            <LoadMoreButton onClick={onLoadMore}>Load more</LoadMoreButton>
           </div>
-        )}
-      />
-    </div>
+        </div>
+      )}
+      renderLoading={() => (
+        <div style={{ textAlign: 'center' }}>
+          <MdList size={200} color="#ddd" />
+        </div>
+      )}
+      renderEmpty={() => (
+        <div style={{ textAlign: 'center', padding: 24 }}>
+          <MdCreate size={200} color="#ddd" />
+
+          <p>Nobody has posted yet. Be the first!</p>
+        </div>
+      )}
+    />
   )
 
   render() {

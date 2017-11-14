@@ -26,19 +26,25 @@ const isServerUp = async () => {
   }
 }
 
-const getAllPosts = () => getV1('/posts')
-
-const getAllPostsAsUserId = id => getV1(`/posts/as/${id}`)
-
-const getPostById = id => getV1(`/posts/${id}`)
+const getAllPostsAsUserId = ({ userId, startId, postId, limit }) => {
+  if (postId) {
+    return getPostRepliesByIdAsUserId({ userId, startId, postId, limit })
+  } else {
+    return startId
+      ? getV1(`/posts/start/${startId}/limit/${limit}/as/${userId}`)
+      : getV1(`/posts/limit/${limit}/as/${userId}`)
+  }
+}
 
 const getPostByIdAsUserId = (postId, userId) =>
   getV1(`/posts/${postId}/as/${userId}`)
 
-const getPostRepliesById = id => getV1(`/posts/${id}/replies`)
-
-const getPostRepliesByIdAsUserId = (postId, userId) =>
-  getV1(`/posts/${postId}/replies/as/${userId}`)
+const getPostRepliesByIdAsUserId = ({ postId, userId, startId, limit }) =>
+  startId
+    ? getV1(
+        `/posts/${postId}/replies/start/${startId}/limit/${limit}/as/${userId}`
+      )
+    : getV1(`/posts/${postId}/replies/start/null/limit/${limit}/as/${userId}`)
 
 const getPostFavoritesById = id => getV1(`/posts/${id}/favorites`)
 
@@ -46,17 +52,11 @@ const getUserById = id => getV1(`/users/${id}`)
 
 const getUserByUsername = username => getV1(`/users/@${username}`)
 
-const getAllPostsByUsername = username => getV1(`/users/@${username}/posts`)
-
 const getAllPostsByUsernameAsUserId = (username, userId) =>
   getV1(`/users/@${username}/posts/as/${userId}`)
 
-const getAllPostsMatching = query => getV1(`/search/${query}`)
-
 const getAllPostsMatchingAsUserId = (query, userId) =>
   getV1(`/search/${query}/as/${userId}`)
-
-const getAllPostsHashtag = query => getV1(`/hashtags/${query}`)
 
 const getAllPostsHashtagAsUserId = (query, userId) =>
   getV1(`/hashtags/${query}/as/${userId}`)
@@ -77,20 +77,14 @@ const unfavorite = fav => postV1('/favorites/delete', fav)
 
 export default {
   isServerUp,
-  getAllPosts,
   getAllPostsAsUserId,
-  getPostById,
   getPostByIdAsUserId,
-  getPostRepliesById,
   getPostRepliesByIdAsUserId,
   getPostFavoritesById,
   getUserById,
   getUserByUsername,
-  getAllPostsByUsername,
   getAllPostsByUsernameAsUserId,
-  getAllPostsMatching,
   getAllPostsMatchingAsUserId,
-  getAllPostsHashtag,
   getAllPostsHashtagAsUserId,
   getPublicProfileById,
   login,

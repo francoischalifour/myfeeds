@@ -5,6 +5,10 @@ import { LOCALE_STORAGE_FEED_SCROLL } from '../constants'
 import { getActiveUser } from 'utils'
 
 class Feed extends Component {
+  static defaultProps = {
+    limit: 10,
+  }
+
   activeUser = getActiveUser()
   state = {
     loading: true,
@@ -35,6 +39,50 @@ class Feed extends Component {
     )
   }
 
+  onLoadMore = async (
+    {
+      startId = this.state.posts[this.state.posts.length - 1]._id,
+      limit = this.props.limit,
+      postId = this.state.posts[0].parent_id,
+    } = {}
+  ) => {
+    const newPosts = await api.getAllPostsAsUserId({
+      userId: this.activeUser._id,
+      postId,
+      startId,
+      limit,
+    })
+
+    this.setState(state => ({
+      posts: [...state.posts, ...newPosts],
+    }))
+
+    return limit
+  }
+
+  onSubmit = async ({ text } = {}) => {
+    const post = {
+      text,
+      user_id: this.activeUser._id,
+    }
+    const success = !!await api.addPost(post)
+
+    if (success) {
+      const newPost = (await api.getAllPostsAsUserId({
+        userId: this.activeUser._id,
+        limit: 1,
+      }))[0]
+
+      this.setState(state => ({
+        posts: [newPost, ...state.posts],
+      }))
+    } else {
+      this.setState({
+        error: 'Error while saving the post.',
+      })
+    }
+  }
+
   onPostRef = () => {
     if (!this.props.name) {
       return
@@ -56,7 +104,7 @@ class Feed extends Component {
     }
   }
 
-  onFavorite = async ({ postId, favorited }) => {
+  onFavorite = async ({ postId, favorited } = {}) => {
     const fav = {
       post_id: postId,
       user_id: this.activeUser._id,
@@ -91,7 +139,7 @@ class Feed extends Component {
     }
   }
 
-  onItemClick = ({ postId }) => {
+  onItemClick = ({ postId } = {}) => {
     // Store the current scroll position for when the user comes back to this feed
     if (this.props.name) {
       const scrollTop = document.documentElement.scrollTop
@@ -131,6 +179,8 @@ class Feed extends Component {
       onFavorite: this.onFavorite,
       onItemClick: this.onItemClick,
       onPostRef: this.onPostRef,
+      onLoadMore: this.onLoadMore,
+      onSubmit: this.onSubmit,
     })
   }
 }

@@ -12,16 +12,15 @@ import Feed from 'components/Feed'
 import PostList from 'components/PostList'
 import Post from 'components/Post'
 import PostForm from 'components/PostForm'
+import LoadMoreButton from 'components/LoadMoreButton'
 
-const Container = glamorous.div({
+const PostContainer = glamorous.div({
   backgroundColor: '#fff',
   boxShadow: '0 1px 4px rgba(0,0,0,.1)',
-  ':not(:last-of-type)': {
-    borderBottom: '1px solid #e6ecf0',
-  },
 })
 
 class PostScene extends Component {
+  static REPLY_COUNT = 4
   activeUser = getActiveUser()
   initialState = {
     loading: true,
@@ -54,10 +53,11 @@ class PostScene extends Component {
       })
 
       if (!post.error) {
-        const replies = await api.getPostRepliesByIdAsUserId(
+        const replies = await api.getPostRepliesByIdAsUserId({
           postId,
-          this.activeUser._id
-        )
+          userId: this.activeUser._id,
+          limit: PostScene.REPLY_COUNT,
+        })
         const favorites = await api.getPostFavoritesById(postId)
 
         this.setState({
@@ -123,10 +123,11 @@ class PostScene extends Component {
     const success = !!await api.addPost(post)
 
     if (success) {
-      const replies = await api.getPostRepliesByIdAsUserId(
-        postId,
-        this.activeUser._id
-      )
+      const replies = await api.getPostRepliesByIdAsUserId({
+        postId: postId,
+        userId: this.activeUser._id,
+        limit: PostScene.REPLY_COUNT,
+      })
       const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
 
       this.setState({
@@ -159,13 +160,15 @@ class PostScene extends Component {
 
   renderPost = () => {
     return (
-      <Container>
-        <Post
-          {...this.state.post}
-          favorites={this.state.favorites}
-          onFavorite={this.onPostFavorite}
-          onCommentIconClick={this.onCommentIconClick}
-        />
+      <div>
+        <PostContainer>
+          <Post
+            {...this.state.post}
+            favorites={this.state.favorites}
+            onFavorite={this.onPostFavorite}
+            onCommentIconClick={this.onCommentIconClick}
+          />
+        </PostContainer>
 
         <PostForm
           {...this.activeUser}
@@ -179,30 +182,41 @@ class PostScene extends Component {
 
         <Feed
           posts={this.state.replies}
-          render={({ posts: replies, onFavorite }) => (
-            <PostList>
-              {replies.map(reply => (
-                <li key={reply._id}>
-                  <Post
-                    {...reply}
-                    onFavorite={onFavorite}
-                    onItemClick={this.onItemClick}
-                  />
-                </li>
-              ))}
-            </PostList>
+          limit={PostScene.REPLY_COUNT}
+          render={({ posts: replies, onFavorite, onLoadMore }) => (
+            <div>
+              <PostList>
+                {replies.map(reply => (
+                  <li key={reply._id}>
+                    <Post
+                      {...reply}
+                      onFavorite={onFavorite}
+                      onItemClick={this.onItemClick}
+                    />
+                  </li>
+                ))}
+              </PostList>
+
+              {this.state.post.reply_count > replies.length && (
+                <div style={{ paddingTop: 40, textAlign: 'center' }}>
+                  <LoadMoreButton onClick={onLoadMore}>
+                    Load more
+                  </LoadMoreButton>
+                </div>
+              )}
+            </div>
           )}
           renderLoading={
             this.state.post.reply_count > 0
               ? () => (
-                  <div style={{ textAlign: 'center' }}>
+                  <div style={{ textAlign: 'center', backgroundColor: '#fff' }}>
                     <MdList size={110} color="#ddd" />
                   </div>
                 )
               : null
           }
         />
-      </Container>
+      </div>
     )
   }
 
