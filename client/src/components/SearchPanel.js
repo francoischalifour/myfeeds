@@ -1,7 +1,6 @@
 import React from 'react'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import MdList from 'react-icons/lib/md/list'
 import MdClose from 'react-icons/lib/md/close'
 import Feed from 'components/Feed'
 import PostList from 'components/PostList'
@@ -46,11 +45,6 @@ const SearchPanel = ({ posts, search, onItemClick, onClose }) => (
             </li>
           ))}
         </PostList>
-      )}
-      renderLoading={() => (
-        <div style={{ textAlign: 'center' }}>
-          <MdList size={200} color="#ddd" />
-        </div>
       )}
       renderEmpty={() => (
         <div style={{ textAlign: 'center' }}>

@@ -100,11 +100,9 @@ class Sidebar extends Component {
       <Sidenav>
         {imageUrl && header}
         <Content>
-          <Name>
-            <Link to={`/@${username}`}>{name}</Link>
-          </Name>
+          <Name>{name && <Link to={`/@${username}`}>{name}</Link>}</Name>
           <Username>
-            <Link to={`/@${username}`}>@{username}</Link>
+            {username && <Link to={`/@${username}`}>@{username}</Link>}
           </Username>
 
           {description && (

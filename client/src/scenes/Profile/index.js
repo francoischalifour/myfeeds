@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import MdList from 'react-icons/lib/md/list'
 import MdCreate from 'react-icons/lib/md/create'
 import api from 'api'
 import { getActiveUser } from 'utils'
@@ -8,6 +7,7 @@ import { SITE_TITLE } from '../../constants'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
+import Loader from 'components/Loader'
 import Feed from 'components/Feed'
 import PostList from 'components/PostList'
 import Post from 'components/Post'
@@ -16,7 +16,7 @@ class ProfileScene extends Component {
   activeUser = getActiveUser()
   state = {
     error: '',
-    user: {},
+    user: { ...this.props.location.state },
     posts: [],
   }
 
@@ -39,8 +39,9 @@ class ProfileScene extends Component {
     } else {
       this.setState({
         loading: false,
-        error: `The user <strong>@${this.props.match.params
-          .username}</strong> doesn't exist.`,
+        error: `The user <strong>@${
+          this.props.match.params.username
+        }</strong> doesn't exist.`,
         user: this.activeUser,
       })
     }
@@ -81,7 +82,7 @@ class ProfileScene extends Component {
               )}
               renderLoading={() => (
                 <div style={{ textAlign: 'center' }}>
-                  <MdList size={200} color="#ddd" />
+                  <Loader />
                 </div>
               )}
               renderEmpty={() => (

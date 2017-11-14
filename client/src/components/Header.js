@@ -42,7 +42,7 @@ const Searchbar = glamorous.div({
 })
 
 const Header = ({ isLoggedIn }) => (
-  <Navbar>
+  <Navbar className="navbar">
     <Container>
       <Title>
         <Link to="/">

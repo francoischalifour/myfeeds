@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import { LOCALE_STORAGE_USER } from '../../constants'
 import api from 'api'
+import Loader from 'components/Loader'
 
 const Container = glamorous.div({
   padding: 24,
@@ -12,6 +13,16 @@ const Form = glamorous.form({
   flexDirection: 'column',
   maxWidth: 300,
   margin: '0 auto',
+})
+
+const LoginButton = glamorous.button({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '& svg': {
+    position: 'absolute',
+    right: '24',
+  },
 })
 
 const Error = glamorous.p({
@@ -25,10 +36,15 @@ class LoginScene extends Component {
     email: '',
     password: '',
     error: '',
+    fetching: false,
   }
 
   onSubmit = async event => {
     event.preventDefault()
+
+    this.setState({
+      fetching: true,
+    })
 
     const user = await api.login(this.state.email, this.state.password)
 
@@ -37,6 +53,7 @@ class LoginScene extends Component {
       window.location.href = '/'
     } else {
       this.setState({
+        fetching: false,
         error: 'Invalid email address or password.',
       })
     }
@@ -61,9 +78,17 @@ class LoginScene extends Component {
             onChange={e => this.setState({ password: e.target.value })}
           />
 
-          <button className="button" disabled={!this.state.email}>
-            Sign in
-          </button>
+          <LoginButton
+            className="button"
+            disabled={!this.state.email || this.state.fetching}
+          >
+            {this.state.fetching
+              ? [
+                  <Loader color="#fff" size={32} key="Loader" />,
+                  'Signing in...',
+                ]
+              : 'Sign in'}
+          </LoginButton>
         </Form>
       </Container>
     )
