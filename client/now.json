@@ -1,0 +1,4 @@
+{
+  "name": "myfeeds",
+  "dotenv": ".env.production"
+}

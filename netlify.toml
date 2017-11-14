@@ -1,0 +1,10 @@
+# Netlify configuration
+#
+# “publish” is the directory to publish (relative to root of the repo)
+# “command” is the build command
+# “base” is directory to change to before starting build
+
+[build]
+  base    = "client"
+  publish = "client/build"
+  command = "yarn build"

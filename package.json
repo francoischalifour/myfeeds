@@ -5,12 +5,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "format": "npm run format --prefix ./client && npm run format --prefix ./server",
     "postinstall": "npm install --prefix ./server && npm install --prefix ./client",
     "start:server": "npm start --prefix ./server",
     "start:client": "npm start --prefix ./client",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
-    "preview": "npm run build --prefix ./client"
+    "format": "npm run format --prefix ./client && npm run format --prefix ./server"
   },
   "dependencies": {
     "concurrently": "^3.5.0"
