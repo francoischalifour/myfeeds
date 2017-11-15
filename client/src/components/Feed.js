@@ -14,6 +14,7 @@ class Feed extends Component {
   state = {
     loading: true,
     redirect: false,
+    hasMorePosts: true,
     error: '',
     posts: [],
   }
@@ -23,6 +24,7 @@ class Feed extends Component {
       loading: false,
       posts: nextProps.posts,
       limit: nextProps.limit,
+      hasMorePosts: nextProps.posts.length >= nextProps.limit,
     })
 
     // We keep track of the number of mounted elements if the feed has a name.
@@ -58,6 +60,7 @@ class Feed extends Component {
     this.setState(state => ({
       posts: [...state.posts, ...newPosts],
       limit: state.limit + limit,
+      hasMorePosts: newPosts.length >= limit,
     }))
 
     return limit
@@ -197,6 +200,7 @@ class Feed extends Component {
     return this.props.render({
       posts: this.state.posts,
       limit: this.state.limit,
+      hasMorePosts: this.state.hasMorePosts,
       onFavorite: this.onFavorite,
       onItemClick: this.onItemClick,
       onPostRef: this.onPostRef,

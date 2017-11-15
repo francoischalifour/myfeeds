@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import 'intersection-observer'
+import Observer from '@researchgate/react-intersection-observer'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
 import MdCreate from 'react-icons/lib/md/create'
 import { getActiveUser } from 'utils'
@@ -59,6 +61,7 @@ class TimelineScene extends Component {
         onPostRef,
         onLoadMore,
         onSubmit,
+        hasMorePosts,
       }) => (
         <div>
           <div style={{ backgroundColor: '#fff' }}>
@@ -78,9 +81,13 @@ class TimelineScene extends Component {
             </PostList>
           </div>
 
-          <div style={{ paddingTop: 40, textAlign: 'center' }}>
-            <LoadMoreButton onClick={onLoadMore}>Load more</LoadMoreButton>
-          </div>
+          {hasMorePosts && (
+            <div style={{ paddingTop: 40, textAlign: 'center' }}>
+              <Observer onChange={onLoadMore} rootMargin="0% -25%">
+                <LoadMoreButton onClick={onLoadMore}>Load more</LoadMoreButton>
+              </Observer>
+            </div>
+          )}
         </div>
       )}
       renderLoading={() => (
