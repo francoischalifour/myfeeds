@@ -12,7 +12,6 @@ import Feed from 'components/Feed'
 import PostList from 'components/PostList'
 import Post from 'components/Post'
 import PostForm from 'components/PostForm'
-import LoadMoreButton from 'components/LoadMoreButton'
 
 const PostContainer = glamorous.div({
   backgroundColor: '#fff',
@@ -20,7 +19,6 @@ const PostContainer = glamorous.div({
 })
 
 class PostScene extends Component {
-  static REPLY_COUNT = 4
   activeUser = getActiveUser()
   initialState = {
     error: '',
@@ -76,9 +74,10 @@ class PostScene extends Component {
 
   fetchReplies = async ({ postId }) => {
     const replies =
-      (await api.getPostReplies({
+      (await api.getAllPosts({
         postId,
         userId: this.activeUser._id,
+        sort: 'asc',
       })) || []
 
     this.setState({
@@ -130,36 +129,17 @@ class PostScene extends Component {
     }
   }
 
-  onSubmit = async ({ text }) => {
+  onSubmit = async () => {
     const postId = this.state.post._id
-    const post = {
-      text,
-      userId: this.activeUser._id,
-      postId,
-    }
-    const success = !!await api.addPost(post)
+    const post = await api.getPost({ postId, userId: this.activeUser._id })
 
-    if (success) {
-      const replies = await api.getPostReplies({
-        postId,
-        userId: this.activeUser._id,
-        limit: PostScene.REPLY_COUNT,
-      })
-      const post = await api.getPost({ postId, userId: this.activeUser._id })
+    this.setState({
+      post,
+    })
 
-      this.setState({
-        replies,
-        post,
-      })
-
-      this.props.history.replace({
-        state: post,
-      })
-    } else {
-      this.setState({
-        error: "We can't save your reply.",
-      })
-    }
+    this.props.history.replace({
+      state: post,
+    })
   }
 
   renderLoading = () => {
@@ -191,24 +171,24 @@ class PostScene extends Component {
           />
         </PostContainer>
 
-        <PostForm
-          {...this.activeUser}
-          placeholder={`Reply to @${this.state.post.username || ''}`}
-          isFocused={this.state.isCommentInputFocused}
-          onCommentIconBlur={() =>
-            this.setState({ isCommentInputFocused: false })
-          }
-          onSubmit={this.onSubmit}
-        />
-
         <Feed
           posts={this.state.replies}
-          limit={PostScene.REPLY_COUNT}
-          render={({ posts: replies, onFavorite, onLoadMore }) => (
+          render={({ posts: replies, onFavorite, onSubmit }) => (
             <div>
+              <PostForm
+                {...this.activeUser}
+                parentId={this.state.post._id}
+                placeholder={`Reply to @${this.state.post.username || ''}`}
+                isFocused={this.state.isCommentInputFocused}
+                onCommentIconBlur={() =>
+                  this.setState({ isCommentInputFocused: false })
+                }
+                onSubmit={props => onSubmit(props).then(this.onSubmit)}
+              />
+
               <PostList>
                 {replies.map(reply => (
-                  <li key={reply._id}>
+                  <li key={reply._id} id={`reply-${reply._id}`}>
                     <Post
                       {...reply}
                       onFavorite={onFavorite}
@@ -217,14 +197,6 @@ class PostScene extends Component {
                   </li>
                 ))}
               </PostList>
-
-              {this.state.post.reply_count > replies.length && (
-                <div style={{ paddingTop: 40, textAlign: 'center' }}>
-                  <LoadMoreButton onClick={onLoadMore}>
-                    Load more
-                  </LoadMoreButton>
-                </div>
-              )}
             </div>
           )}
           renderLoading={

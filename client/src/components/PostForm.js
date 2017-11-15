@@ -86,7 +86,7 @@ class PostForm extends Component {
     const text = this.state.value.trim()
     if (text.length < 2) return
 
-    this.props.onSubmit({ text })
+    this.props.onSubmit({ text, postId: this.props.parentId })
 
     this.setState({
       value: '',
@@ -119,7 +119,7 @@ class PostForm extends Component {
               className="button"
               type="submit"
               hidden={!this.state.value && !this.state.isFocused}
-              disabled={!this.state.value}
+              disabled={this.state.value.length < 2}
             >
               Post
             </button>

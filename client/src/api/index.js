@@ -34,15 +34,25 @@ const isServerUp = async () => {
   }
 }
 
-const getAllPosts = ({ userId, postId, since = '', limit = '' }) =>
+const getAllPosts = ({
+  userId,
+  postId,
+  since = '',
+  limit = '',
+  sort = 'desc',
+}) =>
   postId
-    ? getPostReplies({ userId, postId, since, limit })
-    : getV1(`/posts?as=${userId}&since=${since}&limit=${limit}`)
+    ? getPostReplies({ userId, postId, since, limit, sort })
+    : getV1(`/posts?as=${userId}&since=${since}&limit=${limit}&sort=${sort}`)
 
 const getPost = ({ postId, userId }) => getV1(`/posts/${postId}?as=${userId}`)
 
-const getPostReplies = ({ postId, userId, since = '', limit = '' }) =>
-  getV1(`/posts/${postId}/replies?as=${userId}&since=${since}&limit=${limit}`)
+const getPostReplies = ({ postId, userId, since, limit, sort }) =>
+  getV1(
+    `/posts/${postId}/replies?as=${userId}&since=${since}&limit=${limit}&sort=${
+      sort
+    }`
+  )
 
 const getPostFavorites = ({ postId }) => getV1(`/posts/${postId}/favorites`)
 
@@ -76,7 +86,6 @@ export default {
   isServerUp,
   getAllPosts,
   getPost,
-  getPostReplies,
   getPostFavorites,
   getUser,
   getAllUserPosts,

@@ -4,11 +4,15 @@ module.exports = (fastify, opts, next) => {
   fastify
     .get('/posts', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getFeed({
-        as: request.query.as,
-        since: request.query.since,
-        limit: request.query.limit,
-      })
+      return Posts.getFeed(
+        {},
+        {
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
+          sort: request.query.sort,
+        }
+      )
     })
     .get('/posts/:id', async (request, reply) => {
       reply.type('application/json').code(200)
@@ -23,7 +27,7 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/posts/:id/replies', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getReplies(
+      return Posts.getFeed(
         {
           parent_id: request.params.id,
         },
@@ -31,6 +35,7 @@ module.exports = (fastify, opts, next) => {
           as: request.query.as,
           since: request.query.since,
           limit: request.query.limit,
+          sort: request.query.sort,
         }
       )
     })

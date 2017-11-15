@@ -6,7 +6,6 @@ import { getActiveUser } from 'utils'
 
 class Feed extends Component {
   static defaultProps = {
-    limit: 10,
     posts: [],
     render: () => null,
   }
@@ -23,6 +22,7 @@ class Feed extends Component {
     this.setState({
       loading: false,
       posts: nextProps.posts,
+      limit: nextProps.limit,
     })
 
     // We keep track of the number of mounted elements if the feed has a name.
@@ -57,20 +57,31 @@ class Feed extends Component {
 
     this.setState(state => ({
       posts: [...state.posts, ...newPosts],
+      limit: state.limit + limit,
     }))
 
     return limit
   }
 
-  onSubmit = async ({ text } = {}) => {
+  onSubmit = async ({ text, postId } = {}) => {
     const post = {
       text,
+      postId,
       userId: this.activeUser._id,
     }
+
     const success = !!await api.addPost(post)
 
     if (success) {
+      // We increment the limit to make the last post appear
+      if (this.state.limit) {
+        this.setState(state => ({
+          limit: state.limit + 1,
+        }))
+      }
+
       const newPost = (await api.getAllPosts({
+        postId,
         userId: this.activeUser._id,
         limit: 1,
       }))[0]
@@ -78,10 +89,14 @@ class Feed extends Component {
       this.setState(state => ({
         posts: [newPost, ...state.posts],
       }))
+
+      return Promise.resolve(newPost)
     } else {
       this.setState({
         error: 'Error while saving the post.',
       })
+
+      return Promise.reject(this.state.error)
     }
   }
 
@@ -181,6 +196,7 @@ class Feed extends Component {
 
     return this.props.render({
       posts: this.state.posts,
+      limit: this.state.limit,
       onFavorite: this.onFavorite,
       onItemClick: this.onItemClick,
       onPostRef: this.onPostRef,

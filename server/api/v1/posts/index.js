@@ -49,9 +49,9 @@ const Posts = {
 
     return result
   },
-  async getFeed({ as, since, limit }) {
+  async getFeed({ parent_id }, { as, since, limit, sort = 'desc' }) {
     const filter = {
-      parent_id: { $exists: false },
+      parent_id: parent_id ? ObjectId(parent_id) : { $exists: false },
     }
     since && (filter._id = { $lt: ObjectId(since) })
 
@@ -60,32 +60,7 @@ const Posts = {
       .collection(COLLECTION_POSTS)
       .find(filter)
       .sort({
-        created_at: -1,
-      })
-      .limit(Number(limit))
-      .toArray()
-    let result = await getPostsWithAuthors(posts, db)
-
-    if (as) {
-      result = await getPostsWithMetadata(result, ObjectId(as), db)
-    }
-
-    db.close()
-
-    return result
-  },
-  async getReplies({ parent_id }, { as, since, limit }) {
-    const filter = {
-      parent_id: ObjectId(parent_id),
-    }
-    since && (filter._id = { $gt: ObjectId(since) })
-
-    const db = await connect()
-    const posts = await db
-      .collection(COLLECTION_POSTS)
-      .find(filter)
-      .sort({
-        created_at: 1,
+        created_at: sort === 'asc' ? 1 : -1,
       })
       .limit(Number(limit))
       .toArray()
@@ -180,6 +155,8 @@ const Posts = {
     return result
   },
   async add(rawPost) {
+    !rawPost.parent_id && delete rawPost.parent_id
+
     const post = objectifyProps({
       ...rawPost,
       reply_count: 0,
