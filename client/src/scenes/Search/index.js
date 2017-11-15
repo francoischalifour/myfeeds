@@ -21,10 +21,10 @@ class SearchScene extends Component {
     this.search = params.get('q')
 
     // `/` redirects to another route, we need to remove it
-    const posts = await api.getAllPostsMatchingAsUserId(
-      this.search.replace('/', ' '),
-      this.activeUser._id
-    )
+    const posts = await api.getAllPostsMatching({
+      query: this.search.replace('/', ' '),
+      userId: this.activeUser._id,
+    })
 
     this.setState({
       posts,

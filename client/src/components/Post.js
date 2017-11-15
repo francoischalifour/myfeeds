@@ -209,8 +209,8 @@ class Post extends Component {
                 style={{ display: 'flex', alignItems: 'center', marginTop: 4 }}
               >
                 <FavoriteItemList>
-                  {favorites.map(fav => (
-                    <li key={fav.username}>
+                  {favorites.map((fav, i) => (
+                    <li key={`${fav.username}_${i}`}>
                       <Link
                         to={{
                           pathname: `/@${fav.username}`,

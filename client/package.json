@@ -14,10 +14,12 @@
     "format": "./node_modules/.bin/prettier --write 'src/**/*.{js,json,css}'"
   },
   "dependencies": {
+    "@researchgate/react-intersection-observer": "^0.4.0",
     "date-fns": "^1.29.0",
     "dotenv": "^4.0.0",
     "glamor": "^2.20.40",
     "glamorous": "^4.11.0",
+    "intersection-observer": "^0.4.3",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-icons": "^2.2.7",

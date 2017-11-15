@@ -19,10 +19,10 @@ class HashtagScene extends Component {
 
   async componentDidMount() {
     document.title = `#${this.props.match.params.hashtag} - ${SITE_TITLE}`
-    const posts = await api.getAllPostsHashtagAsUserId(
-      this.props.match.params.hashtag,
-      this.activeUser._id
-    )
+    const posts = await api.getAllPostsHashtag({
+      query: this.props.match.params.hashtag,
+      userId: this.activeUser._id,
+    })
 
     this.setState({
       posts,

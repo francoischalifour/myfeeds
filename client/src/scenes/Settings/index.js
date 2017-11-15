@@ -8,7 +8,7 @@ class SettingsScene extends Component {
   async componentDidMount() {
     document.title = `Settings - ${SITE_TITLE}`
 
-    this.user = await api.getPublicProfileById(getActiveUser()._id)
+    this.user = await api.getPublicProfile({ userId: getActiveUser()._id })
 
     Object.keys(this.user).forEach(prop => {
       this.setState({

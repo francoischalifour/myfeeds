@@ -34,44 +34,43 @@ const isServerUp = async () => {
   }
 }
 
-const getAllPosts = () => getV1('/posts')
+const getAllPosts = ({
+  userId,
+  postId,
+  since = '',
+  limit = '',
+  sort = 'desc',
+}) =>
+  postId
+    ? getPostReplies({ userId, postId, since, limit, sort })
+    : getV1(`/posts?as=${userId}&since=${since}&limit=${limit}&sort=${sort}`)
 
-const getAllPostsAsUserId = id => getV1(`/posts/as/${id}`)
+const getPost = ({ postId, userId }) => getV1(`/posts/${postId}?as=${userId}`)
 
-const getPostById = id => getV1(`/posts/${id}`)
+const getPostReplies = ({ postId, userId, since, limit, sort }) =>
+  getV1(
+    `/posts/${postId}/replies?as=${userId}&since=${since}&limit=${limit}&sort=${
+      sort
+    }`
+  )
 
-const getPostByIdAsUserId = (postId, userId) =>
-  getV1(`/posts/${postId}/as/${userId}`)
+const getPostFavorites = ({ postId }) => getV1(`/posts/${postId}/favorites`)
 
-const getPostRepliesById = id => getV1(`/posts/${id}/replies`)
+const getUser = ({ userId, username }) =>
+  username ? getV1(`/users/@${username}`) : getV1(`/users/${userId}`)
 
-const getPostRepliesByIdAsUserId = (postId, userId) =>
-  getV1(`/posts/${postId}/replies/as/${userId}`)
+const getAllUserPosts = ({ username, userId }) =>
+  getV1(`/users/@${username}/posts?as=${userId}`)
 
-const getPostFavoritesById = id => getV1(`/posts/${id}/favorites`)
+const getAllPostsMatching = ({ query, userId }) =>
+  getV1(`/search/${query}?as=${userId}`)
 
-const getUserById = id => getV1(`/users/${id}`)
+const getAllPostsHashtag = ({ query, userId }) =>
+  getV1(`/hashtags/${query}?as=${userId}`)
 
-const getUserByUsername = username => getV1(`/users/@${username}`)
+const getPublicProfile = ({ userId }) => getV1(`/users/${userId}/public`)
 
-const getAllPostsByUsername = username => getV1(`/users/@${username}/posts`)
-
-const getAllPostsByUsernameAsUserId = (username, userId) =>
-  getV1(`/users/@${username}/posts/as/${userId}`)
-
-const getAllPostsMatching = query => getV1(`/search/${query}`)
-
-const getAllPostsMatchingAsUserId = (query, userId) =>
-  getV1(`/search/${query}/as/${userId}`)
-
-const getAllPostsHashtag = query => getV1(`/hashtags/${query}`)
-
-const getAllPostsHashtagAsUserId = (query, userId) =>
-  getV1(`/hashtags/${query}/as/${userId}`)
-
-const getPublicProfileById = id => getV1(`/users/${id}/public`)
-
-const login = (email, password) =>
+const login = ({ email, password }) =>
   postV1('/login', {
     email,
     password,
@@ -86,21 +85,13 @@ const unfavorite = fav => postV1('/favorites/delete', fav)
 export default {
   isServerUp,
   getAllPosts,
-  getAllPostsAsUserId,
-  getPostById,
-  getPostByIdAsUserId,
-  getPostRepliesById,
-  getPostRepliesByIdAsUserId,
-  getPostFavoritesById,
-  getUserById,
-  getUserByUsername,
-  getAllPostsByUsername,
-  getAllPostsByUsernameAsUserId,
+  getPost,
+  getPostFavorites,
+  getUser,
+  getAllUserPosts,
   getAllPostsMatching,
-  getAllPostsMatchingAsUserId,
   getAllPostsHashtag,
-  getAllPostsHashtagAsUserId,
-  getPublicProfileById,
+  getPublicProfile,
   login,
   addPost,
   favorite,

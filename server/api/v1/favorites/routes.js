@@ -5,15 +5,15 @@ module.exports = (fastify, opts, next) => {
     .post('/favorites/create', async (request, reply) => {
       reply.type('application/json').code(201)
       return Favorites.add({
-        post_id: request.body.post_id,
-        user_id: request.body.user_id,
+        post_id: request.body.postId,
+        user_id: request.body.userId,
       })
     })
     .post('/favorites/delete', async (request, reply) => {
       reply.type('application/json').code(201)
       return Favorites.remove({
-        post_id: request.body.post_id,
-        user_id: request.body.user_id,
+        post_id: request.body.postId,
+        user_id: request.body.userId,
       })
     })
 

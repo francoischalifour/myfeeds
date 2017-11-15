@@ -4,51 +4,38 @@ module.exports = (fastify, opts, next) => {
   fastify
     .get('/posts', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getFeed()
-    })
-    .get('/posts/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getFeed({
-        as: {
-          user_id: request.params.userid,
-        },
-      })
+      return Posts.getFeed(
+        {},
+        {
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
+          sort: request.query.sort,
+        }
+      )
     })
     .get('/posts/:id', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.get({
-        _id: request.params.id,
-      })
-    })
-    .get('/posts/:id/as/:userid', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.get(
         {
           _id: request.params.id,
         },
         {
-          as: {
-            user_id: request.params.userid,
-          },
+          as: request.query.as,
         }
       )
     })
     .get('/posts/:id/replies', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getReplies({
-        parent_id: request.params.id,
-      })
-    })
-    .get('/posts/:id/replies/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getReplies(
+      return Posts.getFeed(
         {
           parent_id: request.params.id,
         },
         {
-          as: {
-            user_id: request.params.userid,
-          },
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
+          sort: request.query.sort,
         }
       )
     })
@@ -58,51 +45,49 @@ module.exports = (fastify, opts, next) => {
         post_id: request.params.id,
       })
     })
-    .get('/search/:query', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchQuery(request.params.query)
-    })
-    .get('/search/:query/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchQuery(request.params.query, {
-        as: { user_id: request.params.userid },
-      })
-    })
-    .get('/hashtags/:hashtag', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchHashtag(request.params.hashtag)
-    })
-    .get('/hashtags/:hashtag/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchHashtag(request.params.hashtag, {
-        as: {
-          user_id: request.params.userid,
-        },
-      })
-    })
     .get('/users/@:username/posts', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getUserFeed({
-        username: request.params.username,
-      })
-    })
-    .get('/users/@:username/posts/as/:userid', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.getUserFeed(
         {
           username: request.params.username,
         },
         {
-          as: {
-            user_id: request.params.userid,
-          },
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
+        }
+      )
+    })
+    .get('/search/:query', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.searchQuery(
+        { query: request.params.query },
+        {
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
+        }
+      )
+    })
+    .get('/hashtags/:hashtag', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.searchHashtag(
+        { query: request.params.hashtag },
+        {
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
         }
       )
     })
 
   fastify.post('/posts', async (request, reply) => {
     reply.type('application/json').code(201)
-    return Posts.add(request.body)
+    return Posts.add({
+      text: request.body.text,
+      user_id: request.body.userId,
+      parent_id: request.body.postId,
+    })
   })
 
   next()

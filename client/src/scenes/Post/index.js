@@ -13,12 +13,9 @@ import PostList from 'components/PostList'
 import Post from 'components/Post'
 import PostForm from 'components/PostForm'
 
-const Container = glamorous.div({
+const PostContainer = glamorous.div({
   backgroundColor: '#fff',
   boxShadow: '0 1px 4px rgba(0,0,0,.1)',
-  ':not(:last-of-type)': {
-    borderBottom: '1px solid #e6ecf0',
-  },
 })
 
 class PostScene extends Component {
@@ -33,15 +30,15 @@ class PostScene extends Component {
   state = this.initialState
 
   async componentDidMount() {
-    // Fetch the post from the database
+    // The post is not in the location state, fetch from the database
     if (!this.state.post._id) {
       this.setState({
         loading: true,
       })
-      const post = await api.getPostByIdAsUserId(
-        this.props.match.params.postid,
-        this.activeUser._id
-      )
+      const post = await api.getPost({
+        postId: this.props.match.params.postid,
+        userId: this.activeUser._id,
+      })
       this.setState({
         loading: false,
         post,
@@ -68,7 +65,7 @@ class PostScene extends Component {
   }
 
   fetchFavorites = async ({ postId }) => {
-    const favorites = (await api.getPostFavoritesById(postId)) || []
+    const favorites = (await api.getPostFavorites({ postId })) || []
 
     this.setState({
       favorites: favorites.slice(0, 10),
@@ -77,7 +74,11 @@ class PostScene extends Component {
 
   fetchReplies = async ({ postId }) => {
     const replies =
-      (await api.getPostRepliesByIdAsUserId(postId, this.activeUser._id)) || []
+      (await api.getAllPosts({
+        postId,
+        userId: this.activeUser._id,
+        sort: 'asc',
+      })) || []
 
     this.setState({
       replies,
@@ -107,8 +108,8 @@ class PostScene extends Component {
 
   onPostFavorite = async ({ postId }) => {
     const fav = {
-      post_id: postId,
-      user_id: this.activeUser._id,
+      postId: postId,
+      userId: this.activeUser._id,
     }
 
     const success = this.state.post.favorited
@@ -116,40 +117,29 @@ class PostScene extends Component {
       : await api.favorite(fav)
 
     if (success) {
-      const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
-      const favorites = await api.getPostFavoritesById(postId)
+      const post = await api.getPost({ postId, userId: this.activeUser._id })
+      const favorites = await api.getPostFavorites({ postId })
       this.setState({
         post,
         favorites,
       })
+      this.props.history.replace({
+        state: post,
+      })
     }
   }
 
-  onSubmit = async ({ text }) => {
+  onSubmit = async () => {
     const postId = this.state.post._id
-    const post = {
-      text,
-      user_id: this.activeUser._id,
-      parent_id: postId,
-    }
-    const success = !!await api.addPost(post)
+    const post = await api.getPost({ postId, userId: this.activeUser._id })
 
-    if (success) {
-      const replies = await api.getPostRepliesByIdAsUserId(
-        postId,
-        this.activeUser._id
-      )
-      const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
+    this.setState({
+      post,
+    })
 
-      this.setState({
-        replies,
-        post,
-      })
-    } else {
-      this.setState({
-        error: "We can't save your reply.",
-      })
-    }
+    this.props.history.replace({
+      state: post,
+    })
   }
 
   renderLoading = () => {
@@ -171,39 +161,43 @@ class PostScene extends Component {
 
   renderPost = () => {
     return (
-      <Container>
-        <Post
-          {...this.state.post}
-          favorites={this.state.favorites}
-          onFavorite={this.onPostFavorite}
-          onCommentIconClick={this.onCommentIconClick}
-        />
-
-        <PostForm
-          {...this.activeUser}
-          placeholder={`Reply to @${this.state.post.username || ''}`}
-          parentId={this.state.post._id}
-          isFocused={this.state.isCommentInputFocused}
-          onCommentIconBlur={() =>
-            this.setState({ isCommentInputFocused: false })
-          }
-          onSubmit={this.onSubmit}
-        />
+      <div>
+        <PostContainer>
+          <Post
+            {...this.state.post}
+            favorites={this.state.favorites}
+            onFavorite={this.onPostFavorite}
+            onCommentIconClick={this.onCommentIconClick}
+          />
+        </PostContainer>
 
         <Feed
           posts={this.state.replies}
-          render={({ posts: replies, onFavorite }) => (
-            <PostList>
-              {replies.map(reply => (
-                <li key={reply._id}>
-                  <Post
-                    {...reply}
-                    onFavorite={onFavorite}
-                    onItemClick={this.onItemClick}
-                  />
-                </li>
-              ))}
-            </PostList>
+          render={({ posts: replies, onFavorite, onSubmit }) => (
+            <div>
+              <PostForm
+                {...this.activeUser}
+                parentId={this.state.post._id}
+                placeholder={`Reply to @${this.state.post.username || ''}`}
+                isFocused={this.state.isCommentInputFocused}
+                onCommentIconBlur={() =>
+                  this.setState({ isCommentInputFocused: false })
+                }
+                onSubmit={props => onSubmit(props).then(this.onSubmit)}
+              />
+
+              <PostList>
+                {replies.map(reply => (
+                  <li key={reply._id} id={`reply-${reply._id}`}>
+                    <Post
+                      {...reply}
+                      onFavorite={onFavorite}
+                      onItemClick={this.onItemClick}
+                    />
+                  </li>
+                ))}
+              </PostList>
+            </div>
           )}
           renderLoading={
             this.state.post.reply_count > 0
@@ -215,7 +209,7 @@ class PostScene extends Component {
               : null
           }
         />
-      </Container>
+      </div>
     )
   }
 

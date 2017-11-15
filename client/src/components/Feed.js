@@ -5,10 +5,16 @@ import { LOCALE_STORAGE_FEED_SCROLL } from '../constants'
 import { getActiveUser } from 'utils'
 
 class Feed extends Component {
+  static defaultProps = {
+    posts: [],
+    render: () => null,
+  }
+
   activeUser = getActiveUser()
   state = {
     loading: true,
     redirect: false,
+    hasMorePosts: true,
     error: '',
     posts: [],
   }
@@ -17,6 +23,8 @@ class Feed extends Component {
     this.setState({
       loading: false,
       posts: nextProps.posts,
+      limit: nextProps.limit,
+      hasMorePosts: nextProps.posts.length >= nextProps.limit,
     })
 
     // We keep track of the number of mounted elements if the feed has a name.
@@ -33,6 +41,66 @@ class Feed extends Component {
     window.localStorage.removeItem(
       `${LOCALE_STORAGE_FEED_SCROLL}_${this.props.name.toUpperCase()}`
     )
+  }
+
+  onLoadMore = async (
+    {
+      since = this.state.posts[this.state.posts.length - 1]._id,
+      limit = this.props.limit,
+      postId = this.state.posts[0].parent_id,
+    } = {}
+  ) => {
+    const newPosts = await api.getAllPosts({
+      userId: this.activeUser._id,
+      postId,
+      since,
+      limit,
+    })
+
+    this.setState(state => ({
+      posts: [...state.posts, ...newPosts],
+      limit: state.limit + limit,
+      hasMorePosts: newPosts.length >= limit,
+    }))
+
+    return limit
+  }
+
+  onSubmit = async ({ text, postId } = {}) => {
+    const post = {
+      text,
+      postId,
+      userId: this.activeUser._id,
+    }
+
+    const success = !!await api.addPost(post)
+
+    if (success) {
+      // We increment the limit to make the last post appear
+      if (this.state.limit) {
+        this.setState(state => ({
+          limit: state.limit + 1,
+        }))
+      }
+
+      const newPost = (await api.getAllPosts({
+        postId,
+        userId: this.activeUser._id,
+        limit: 1,
+      }))[0]
+
+      this.setState(state => ({
+        posts: [newPost, ...state.posts],
+      }))
+
+      return Promise.resolve(newPost)
+    } else {
+      this.setState({
+        error: 'Error while saving the post.',
+      })
+
+      return Promise.reject(this.state.error)
+    }
   }
 
   onPostRef = () => {
@@ -56,10 +124,10 @@ class Feed extends Component {
     }
   }
 
-  onFavorite = async ({ postId, favorited }) => {
+  onFavorite = async ({ postId, favorited } = {}) => {
     const fav = {
-      post_id: postId,
-      user_id: this.activeUser._id,
+      postId: postId,
+      userId: this.activeUser._id,
     }
 
     const success = favorited
@@ -67,10 +135,10 @@ class Feed extends Component {
       : await api.unfavorite(fav)
 
     if (success) {
-      const postUpdated = await api.getPostByIdAsUserId(
+      const postUpdated = await api.getPost({
         postId,
-        this.activeUser._id
-      )
+        userId: this.activeUser._id,
+      })
       const posts = this.state.posts
       const postUpdatedIndex = posts.findIndex(post => post._id === postId)
       posts[postUpdatedIndex] = {
@@ -131,9 +199,13 @@ class Feed extends Component {
 
     return this.props.render({
       posts: this.state.posts,
+      limit: this.state.limit,
+      hasMorePosts: this.state.hasMorePosts,
       onFavorite: this.onFavorite,
       onItemClick: this.onItemClick,
       onPostRef: this.onPostRef,
+      onLoadMore: this.onLoadMore,
+      onSubmit: this.onSubmit,
     })
   }
 }
