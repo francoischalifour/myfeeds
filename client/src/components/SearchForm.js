@@ -70,8 +70,6 @@ class SearchForm extends Component {
   }
 
   onChange = async event => {
-    document.documentElement.scrollTop = 0
-
     this.setState({
       fetching: true,
     })
@@ -93,6 +91,7 @@ class SearchForm extends Component {
         })
 
         if (posts.length > 0) {
+          document.documentElement.scrollTop = 0
           const searchPath = `/search?q=${this.state.search}`
           const pageTitle = `${search} - MyFeeds`
           document.title = pageTitle
