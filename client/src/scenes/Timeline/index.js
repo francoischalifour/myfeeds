@@ -3,7 +3,7 @@ import 'intersection-observer'
 import Observer from '@researchgate/react-intersection-observer'
 import MdCloudOff from 'react-icons/lib/md/cloud-off'
 import MdCreate from 'react-icons/lib/md/create'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
@@ -18,7 +18,7 @@ import LoadMoreButton from 'components/LoadMoreButton'
 
 class TimelineScene extends Component {
   static POST_COUNT = 5
-  activeUser = getActiveUser()
+  activeUser = getLocalUser()
   state = {
     error: '',
     posts: [],

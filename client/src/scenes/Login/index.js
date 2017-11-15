@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
-import { LOCALE_STORAGE_USER } from '../../constants'
+import { LOCAL_STORAGE_USER } from '../../constants'
 import api from 'api'
 import Loader from 'components/Loader'
 
@@ -52,7 +52,7 @@ class LoginScene extends Component {
     })
 
     if (user && user._id) {
-      window.localStorage.setItem(LOCALE_STORAGE_USER, JSON.stringify(user))
+      window.localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(user))
       window.location.href = '/'
     } else {
       this.setState({

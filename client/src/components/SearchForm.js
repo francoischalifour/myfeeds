@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import glamorous from 'glamorous'
 import api from 'api'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 import SearchPanel from 'components/SearchPanel'
 import Loader from 'components/Loader'
 
@@ -28,7 +28,7 @@ class SearchForm extends Component {
     placeholder: '',
   }
 
-  activeUser = getActiveUser()
+  activeUser = getLocalUser()
 
   constructor(props) {
     super(props)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import api from 'api'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import Loader from 'components/Loader'
 
@@ -8,7 +8,7 @@ class SettingsScene extends Component {
   async componentDidMount() {
     document.title = `Settings - ${SITE_TITLE}`
 
-    this.user = await api.getPublicProfile({ userId: getActiveUser()._id })
+    this.user = await api.getPublicProfile({ userId: getLocalUser()._id })
 
     Object.keys(this.user).forEach(prop => {
       this.setState({
