@@ -17,7 +17,7 @@ import Post from 'components/Post'
 import LoadMoreButton from 'components/LoadMoreButton'
 
 class TimelineScene extends Component {
-  static POST_COUNT = 15
+  static POST_COUNT = 5
   activeUser = getActiveUser()
   state = {
     error: '',
