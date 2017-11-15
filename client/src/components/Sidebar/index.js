@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 import Sidebar from './Sidebar'
 
 class SidebarContainer extends Component {
-  activeUser = getActiveUser()
+  activeUser = getLocalUser()
   state = {
     isFollowing: false,
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import MdCreate from 'react-icons/lib/md/create'
 import api from 'api'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
@@ -13,7 +13,7 @@ import PostList from 'components/PostList'
 import Post from 'components/Post'
 
 class ProfileScene extends Component {
-  activeUser = getActiveUser()
+  activeUser = getLocalUser()
   state = {
     error: '',
     user: { ...this.props.location.state },

@@ -1,10 +1,10 @@
 import Parser from 'simple-text-parser'
-import { LOCALE_STORAGE_USER } from '../constants'
+import { LOCAL_STORAGE_USER } from '../constants'
 
-export const getActiveUser = () => {
+export const getLocalUser = () => {
   try {
     // TODO: check validation token
-    return JSON.parse(window.localStorage.getItem(LOCALE_STORAGE_USER))
+    return JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_USER))
   } catch (err) {
     destroyActiveUser()
     window.location.reload()
@@ -12,9 +12,9 @@ export const getActiveUser = () => {
 }
 
 export const destroyActiveUser = () =>
-  window.localStorage.removeItem(LOCALE_STORAGE_USER)
+  window.localStorage.removeItem(LOCAL_STORAGE_USER)
 
-export const isLoggedIn = () => getActiveUser() && getActiveUser()._id
+export const isLoggedIn = () => getLocalUser() && getLocalUser()._id
 
 export const getLocationLink = location =>
   `https://www.google.com/maps/place/${location.replace(' ', '+')}`

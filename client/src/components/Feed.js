@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import api from 'api'
 import { LOCALE_STORAGE_FEED_SCROLL } from '../constants'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 
 class Feed extends Component {
   static defaultProps = {
@@ -10,7 +10,7 @@ class Feed extends Component {
     render: () => null,
   }
 
-  activeUser = getActiveUser()
+  activeUser = getLocalUser()
   state = {
     loading: true,
     redirect: false,

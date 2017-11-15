@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 import Sidebar from 'components/Sidebar'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
@@ -11,7 +11,7 @@ import PostList from 'components/PostList'
 import Post from 'components/Post'
 
 class SearchScene extends Component {
-  activeUser = getActiveUser()
+  activeUser = getLocalUser()
   state = {
     posts: [],
   }

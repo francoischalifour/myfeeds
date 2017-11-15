@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import { getActiveUser } from 'utils'
+import { getLocalUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
@@ -19,7 +19,7 @@ const PostContainer = glamorous.div({
 })
 
 class PostScene extends Component {
-  activeUser = getActiveUser()
+  activeUser = getLocalUser()
   initialState = {
     error: '',
     isCommentInputFocused: false,
