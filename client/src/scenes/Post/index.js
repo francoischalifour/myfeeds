@@ -37,10 +37,10 @@ class PostScene extends Component {
       this.setState({
         loading: true,
       })
-      const post = await api.getPostByIdAsUserId(
-        this.props.match.params.postid,
-        this.activeUser._id
-      )
+      const post = await api.getPost({
+        postId: this.props.match.params.postid,
+        userId: this.activeUser._id,
+      })
       this.setState({
         loading: false,
         post,
@@ -67,7 +67,7 @@ class PostScene extends Component {
   }
 
   fetchFavorites = async ({ postId }) => {
-    const favorites = (await api.getPostFavoritesById(postId)) || []
+    const favorites = (await api.getPostFavorites({ postId })) || []
 
     this.setState({
       favorites: favorites.slice(0, 10),
@@ -76,7 +76,7 @@ class PostScene extends Component {
 
   fetchReplies = async ({ postId }) => {
     const replies =
-      (await api.getPostRepliesByIdAsUserId({
+      (await api.getPostReplies({
         postId,
         userId: this.activeUser._id,
       })) || []
@@ -118,8 +118,8 @@ class PostScene extends Component {
       : await api.favorite(fav)
 
     if (success) {
-      const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
-      const favorites = await api.getPostFavoritesById(postId)
+      const post = await api.getPost({ postId, userId: this.activeUser._id })
+      const favorites = await api.getPostFavorites({ postId })
       this.setState({
         post,
         favorites,
@@ -137,12 +137,12 @@ class PostScene extends Component {
     const success = !!await api.addPost(post)
 
     if (success) {
-      const replies = await api.getPostRepliesByIdAsUserId({
+      const replies = await api.getPostReplies({
         postId: postId,
         userId: this.activeUser._id,
         limit: PostScene.REPLY_COUNT,
       })
-      const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
+      const post = await api.getPost({ postId, userId: this.activeUser._id })
 
       this.setState({
         replies,

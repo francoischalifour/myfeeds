@@ -15,81 +15,7 @@ const {
 } = require('./utils')
 
 const Posts = {
-  async getFeed(outputFilter = {}) {
-    const db = await connect()
-    const posts = await db
-      .collection(COLLECTION_POSTS)
-      .find({
-        parent_id: { $exists: false },
-      })
-      .sort({
-        created_at: -1,
-      })
-      .toArray()
-    let result = await getPostsWithAuthors(posts, db)
-
-    if (outputFilter.as) {
-      result = await getPostsWithMetadata(
-        result,
-        ObjectId(outputFilter.as.user_id),
-        db
-      )
-    }
-
-    db.close()
-
-    return result
-  },
-  async getFeedPaginated(dataFilter, outputFilter = {}) {
-    const objectifiedFilter = objectifyProps(dataFilter)
-    let filter
-
-    if (objectifiedFilter.parent_id) {
-      filter = objectifiedFilter._id
-        ? {
-            _id: { $gt: objectifiedFilter._id },
-            parent_id: objectifiedFilter.parent_id,
-          }
-        : {
-            parent_id: objectifiedFilter.parent_id,
-          }
-    } else {
-      filter = objectifiedFilter._id
-        ? {
-            _id: { $lt: objectifiedFilter._id },
-            parent_id: { $exists: false },
-          }
-        : {
-            parent_id: { $exists: false },
-          }
-    }
-
-    const sort = objectifiedFilter.parent_id
-      ? { created_at: 1 }
-      : { created_at: -1 }
-
-    const db = await connect()
-    const posts = await db
-      .collection(COLLECTION_POSTS)
-      .find(filter)
-      .sort(sort)
-      .limit(parseInt(outputFilter.limit, 10))
-      .toArray()
-    let result = await getPostsWithAuthors(posts, db)
-
-    if (outputFilter.as) {
-      result = await getPostsWithMetadata(
-        result,
-        ObjectId(outputFilter.as.user_id),
-        db
-      )
-    }
-
-    db.close()
-
-    return result
-  },
-  async get(dataFilter, outputFilter = {}) {
+  async get(dataFilter, { as }) {
     const filter = objectifyProps(dataFilter)
 
     const db = await connect()
@@ -100,36 +26,8 @@ const Posts = {
     let result = { ...post, ...getAuthorData(author) }
     delete result.user_id
 
-    if (outputFilter.as) {
-      result = await getSinglePostWithMetadata(
-        result,
-        ObjectId(outputFilter.as.user_id),
-        db
-      )
-    }
-    db.close()
-
-    return result
-  },
-  async getReplies(dataFilter, outputFilter = {}) {
-    const filter = objectifyProps(dataFilter)
-
-    const db = await connect()
-    const posts = await db
-      .collection(COLLECTION_POSTS)
-      .find(filter)
-      .sort({
-        created_at: 1,
-      })
-      .toArray()
-    let result = await getPostsWithAuthors(posts, db)
-
-    if (outputFilter.as) {
-      result = await getPostsWithMetadata(
-        result,
-        ObjectId(outputFilter.as.user_id),
-        db
-      )
+    if (as) {
+      result = await getSinglePostWithMetadata(result, ObjectId(as), db)
     }
     db.close()
 
@@ -151,34 +49,82 @@ const Posts = {
 
     return result
   },
-  async getUserFeed(dataFilter, outputFilter = {}) {
-    const filter = objectifyProps(dataFilter)
+  async getFeed({ as, since, limit }) {
+    const filter = {
+      parent_id: { $exists: false },
+    }
+    since && (filter._id = { $lt: ObjectId(since) })
 
+    const db = await connect()
+    const posts = await db
+      .collection(COLLECTION_POSTS)
+      .find(filter)
+      .sort({
+        created_at: -1,
+      })
+      .limit(Number(limit))
+      .toArray()
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (as) {
+      result = await getPostsWithMetadata(result, ObjectId(as), db)
+    }
+
+    db.close()
+
+    return result
+  },
+  async getReplies({ parent_id }, { as, since, limit }) {
+    const filter = {
+      parent_id: ObjectId(parent_id),
+    }
+    since && (filter._id = { $gt: ObjectId(since) })
+
+    const db = await connect()
+    const posts = await db
+      .collection(COLLECTION_POSTS)
+      .find(filter)
+      .sort({
+        created_at: 1,
+      })
+      .limit(Number(limit))
+      .toArray()
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (as) {
+      result = await getPostsWithMetadata(result, ObjectId(as), db)
+    }
+
+    db.close()
+
+    return result
+  },
+  async getUserFeed(filter, { as, since, limit }) {
     const db = await connect()
     const user = await db
       .collection(COLLECTION_USERS)
       .findOne(filter, { _id: 1 })
     let result
 
-    if (!user) {
+    if (!user._id) {
       result = []
     } else {
+      const postsFilter = { user_id: ObjectId(user._id) }
+      since && (postsFilter._id = { $gt: ObjectId(since) })
+
       const posts = await db
         .collection(COLLECTION_POSTS)
-        .find({ user_id: ObjectId(user._id) })
+        .find(postsFilter)
         .sort({
           created_at: -1,
         })
+        .limit(Number(limit))
         .toArray()
 
       result = await getPostsWithAuthors(posts, db)
 
-      if (outputFilter.as) {
-        result = await getPostsWithMetadata(
-          result,
-          ObjectId(outputFilter.as.user_id),
-          db
-        )
+      if (as) {
+        result = await getPostsWithMetadata(result, ObjectId(as), db)
       }
     }
 
@@ -186,48 +132,48 @@ const Posts = {
 
     return result
   },
-  async searchQuery(query, outputFilter = {}) {
+  async searchQuery({ query }, { as, since, limit }) {
+    const filter = { $text: { $search: query } }
+    since && (filter._id = { $gt: ObjectId(since) })
+
     const db = await connect()
     const posts = await db
       .collection(COLLECTION_POSTS)
-      .find({ $text: { $search: query } }, { score: { $meta: 'textScore' } })
+      .find(filter, { score: { $meta: 'textScore' } })
       .sort({
         score: { $meta: 'textScore' },
         created_at: -1,
       })
+      .limit(Number(limit))
       .toArray()
       .then(posts => highlightTerms(posts, query))
     let result = await getPostsWithAuthors(posts, db)
 
-    if (outputFilter.as) {
-      result = await getPostsWithMetadata(
-        result,
-        ObjectId(outputFilter.as.user_id),
-        db
-      )
+    if (as) {
+      result = await getPostsWithMetadata(result, ObjectId(as), db)
     }
     db.close()
 
     return result
   },
-  async searchHashtag(query, outputFilter = {}) {
+  async searchHashtag({ query }, { as, since, limit }) {
+    const filter = { hashtags: { $in: [query.toLowerCase()] } }
+    since && (filter._id = { $gt: ObjectId(since) })
+
     const db = await connect()
     const posts = await db
       .collection(COLLECTION_POSTS)
-      .find({ hashtags: { $in: [query.toLowerCase()] } })
+      .find(filter)
       .sort({
         created_at: -1,
       })
+      .limit(Number(limit))
       .toArray()
       .then(posts => highlightTerms(posts, query))
     let result = await getPostsWithAuthors(posts, db)
 
-    if (outputFilter.as) {
-      result = await getPostsWithMetadata(
-        result,
-        ObjectId(outputFilter.as.user_id),
-        db
-      )
+    if (as) {
+      result = await getPostsWithMetadata(result, ObjectId(as), db)
     }
     db.close()
 

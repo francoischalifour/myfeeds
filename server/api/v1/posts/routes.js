@@ -4,112 +4,33 @@ module.exports = (fastify, opts, next) => {
   fastify
     .get('/posts', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getFeed()
-    })
-    .get('/posts/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
       return Posts.getFeed({
-        as: {
-          user_id: request.params.userid,
-        },
+        as: request.query.as,
+        since: request.query.since,
+        limit: request.query.limit,
       })
-    })
-    .get('/posts/limit/:limit/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getFeedPaginated(
-        {},
-        {
-          as: {
-            user_id: request.params.userid,
-          },
-          limit: request.params.limit,
-        }
-      )
-    })
-    .get('/posts/start/:id/limit/:limit/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getFeedPaginated(
-        {
-          _id: request.params.id,
-        },
-        {
-          as: {
-            user_id: request.params.userid,
-          },
-          limit: request.params.limit,
-        }
-      )
     })
     .get('/posts/:id', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.get({
-        _id: request.params.id,
-      })
-    })
-    .get('/posts/:id/as/:userid', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.get(
         {
           _id: request.params.id,
         },
         {
-          as: {
-            user_id: request.params.userid,
-          },
+          as: request.query.as,
         }
       )
     })
     .get('/posts/:id/replies', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getReplies({
-        parent_id: request.params.id,
-      })
-    })
-    .get(
-      '/posts/:parentid/replies/start/:id/limit/:limit/as/:userid',
-      async (request, reply) => {
-        reply.type('application/json').code(200)
-        return Posts.getFeedPaginated(
-          {
-            _id: request.params.id,
-            parent_id: request.params.parentid,
-          },
-          {
-            as: {
-              user_id: request.params.userid,
-            },
-            limit: request.params.limit,
-          }
-        )
-      }
-    )
-    .get(
-      '/posts/:parentid/replies/start/null/limit/:limit/as/:userid',
-      async (request, reply) => {
-        reply.type('application/json').code(200)
-        return Posts.getFeedPaginated(
-          {
-            parent_id: request.params.parentid,
-          },
-          {
-            as: {
-              user_id: request.params.userid,
-            },
-            limit: request.params.limit,
-          }
-        )
-      }
-    )
-    .get('/posts/:id/replies/as/:userid', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.getReplies(
         {
           parent_id: request.params.id,
         },
         {
-          as: {
-            user_id: request.params.userid,
-          },
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
         }
       )
     })
@@ -119,44 +40,38 @@ module.exports = (fastify, opts, next) => {
         post_id: request.params.id,
       })
     })
-    .get('/search/:query', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchQuery(request.params.query)
-    })
-    .get('/search/:query/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchQuery(request.params.query, {
-        as: { user_id: request.params.userid },
-      })
-    })
-    .get('/hashtags/:hashtag', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchHashtag(request.params.hashtag)
-    })
-    .get('/hashtags/:hashtag/as/:userid', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.searchHashtag(request.params.hashtag, {
-        as: {
-          user_id: request.params.userid,
-        },
-      })
-    })
     .get('/users/@:username/posts', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Posts.getUserFeed({
-        username: request.params.username,
-      })
-    })
-    .get('/users/@:username/posts/as/:userid', async (request, reply) => {
       reply.type('application/json').code(200)
       return Posts.getUserFeed(
         {
           username: request.params.username,
         },
         {
-          as: {
-            user_id: request.params.userid,
-          },
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
+        }
+      )
+    })
+    .get('/search/:query', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.searchQuery(
+        { query: request.params.query },
+        {
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
+        }
+      )
+    })
+    .get('/hashtags/:hashtag', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Posts.searchHashtag(
+        { query: request.params.hashtag },
+        {
+          as: request.query.as,
+          since: request.query.since,
+          limit: request.query.limit,
         }
       )
     })

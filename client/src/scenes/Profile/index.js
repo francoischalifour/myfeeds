@@ -22,14 +22,14 @@ class ProfileScene extends Component {
 
   async componentDidMount() {
     const username = this.props.match.params.username
-    const user = await api.getUserByUsername(username)
+    const user = await api.getUser({ username })
 
     if (user && user._id) {
       document.title = `${user.name} - ${SITE_TITLE}`
-      const posts = await api.getAllPostsByUsernameAsUserId(
+      const posts = await api.getAllUserPosts({
         username,
-        this.activeUser._id
-      )
+        userId: this.activeUser._id,
+      })
 
       this.setState({
         loading: false,

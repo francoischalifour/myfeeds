@@ -41,15 +41,15 @@ class Feed extends Component {
 
   onLoadMore = async (
     {
-      startId = this.state.posts[this.state.posts.length - 1]._id,
+      since = this.state.posts[this.state.posts.length - 1]._id,
       limit = this.props.limit,
       postId = this.state.posts[0].parent_id,
     } = {}
   ) => {
-    const newPosts = await api.getAllPostsAsUserId({
+    const newPosts = await api.getAllPosts({
       userId: this.activeUser._id,
       postId,
-      startId,
+      since,
       limit,
     })
 
@@ -68,7 +68,7 @@ class Feed extends Component {
     const success = !!await api.addPost(post)
 
     if (success) {
-      const newPost = (await api.getAllPostsAsUserId({
+      const newPost = (await api.getAllPosts({
         userId: this.activeUser._id,
         limit: 1,
       }))[0]
@@ -115,10 +115,10 @@ class Feed extends Component {
       : await api.unfavorite(fav)
 
     if (success) {
-      const postUpdated = await api.getPostByIdAsUserId(
+      const postUpdated = await api.getPost({
         postId,
-        this.activeUser._id
-      )
+        userId: this.activeUser._id,
+      })
       const posts = this.state.posts
       const postUpdatedIndex = posts.findIndex(post => post._id === postId)
       posts[postUpdatedIndex] = {

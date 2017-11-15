@@ -46,7 +46,10 @@ class LoginScene extends Component {
       fetching: true,
     })
 
-    const user = await api.login(this.state.email, this.state.password)
+    const user = await api.login({
+      email: this.state.email,
+      password: this.state.password,
+    })
 
     if (user && user._id) {
       window.localStorage.setItem(LOCALE_STORAGE_USER, JSON.stringify(user))

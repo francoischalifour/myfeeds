@@ -82,10 +82,10 @@ class SearchForm extends Component {
     this.setState({ search }, async () => {
       if (search.length > 0) {
         // `/` redirects to another route, we need to remove it
-        const posts = await api.getAllPostsMatchingAsUserId(
-          this.state.search.replace('/', ' '),
-          this.activeUser._id
-        )
+        const posts = await api.getAllPostsMatching({
+          query: this.state.search.replace('/', ' '),
+          userId: this.activeUser._id,
+        })
 
         this.setState({
           posts,

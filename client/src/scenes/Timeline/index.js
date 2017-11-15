@@ -24,7 +24,7 @@ class TimelineScene extends Component {
 
   async componentDidMount() {
     document.title = SITE_TITLE
-    const posts = await api.getAllPostsAsUserId({
+    const posts = await api.getAllPosts({
       userId: this.activeUser._id,
       limit: TimelineScene.POST_COUNT,
     })
@@ -61,7 +61,7 @@ class TimelineScene extends Component {
         onSubmit,
       }) => (
         <div>
-          <div style={{ backgroundColor: 'white' }}>
+          <div style={{ backgroundColor: '#fff' }}>
             <PostForm {...this.activeUser} onSubmit={onSubmit} />
 
             <PostList>
@@ -76,10 +76,10 @@ class TimelineScene extends Component {
                 </li>
               ))}
             </PostList>
+          </div>
 
-            <div style={{ paddingTop: 40, textAlign: 'center' }}>
-              <LoadMoreButton onClick={onLoadMore}>Load more</LoadMoreButton>
-            </div>
+          <div style={{ paddingTop: 40, textAlign: 'center' }}>
+            <LoadMoreButton onClick={onLoadMore}>Load more</LoadMoreButton>
           </div>
         </div>
       )}
