@@ -58,7 +58,15 @@ const SearchPanel = ({ posts, search, onItemClick, onClose }) => (
     />
 
     <PanelFooter>
-      <LinkButton href={`/search?q=${search}`}>More results</LinkButton>
+      <LinkButton
+        to={{
+          pathname: '/search',
+          search: `?q=${search}`,
+        }}
+        onClick={() => window.location.reload()}
+      >
+        More results
+      </LinkButton>
 
       <div style={{ marginTop: 40 }}>
         <Button title="Close the search panel" onClick={onClose}>

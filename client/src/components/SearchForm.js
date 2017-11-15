@@ -125,8 +125,8 @@ class SearchForm extends Component {
     }
   }
 
-  onItemClick = ({ postId }) => {
-    window.location.href = `/posts/${postId}`
+  onItemClick = ({ _id }) => {
+    window.location.href = `/posts/${_id}`
   }
 
   render() {

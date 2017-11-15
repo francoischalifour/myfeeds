@@ -29,13 +29,13 @@ const App = () => (
           path="/"
           render={() => (isConnected ? <Timeline /> : <Login />)}
         />
-        <Route exact path="/settings" component={Settings} />
 
         {isConnected && [
           <Route path="/@:username" component={Profile} key="Profile" />,
           <Route path="/posts/:postid" component={Post} key="Post" />,
           <Route path="/hashtag/:hashtag" component={Hashtag} key="Hashtag" />,
           <Route path="/search" component={Search} key="Search" />,
+          <Route exact path="/settings" component={Settings} key="Settings" />,
           <Route exact path="/logout" component={Logout} key="Logout" />,
         ]}
 
