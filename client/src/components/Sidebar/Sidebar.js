@@ -73,6 +73,10 @@ const Ul = glamorous.ul({
 })
 
 class Sidebar extends Component {
+  static defaultProps = {
+    user: {},
+  }
+
   onFollow = ({ following }) => {
     this.props.onFollow({ following })
   }

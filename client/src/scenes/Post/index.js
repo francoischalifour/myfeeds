@@ -24,67 +24,79 @@ const Container = glamorous.div({
 class PostScene extends Component {
   activeUser = getActiveUser()
   initialState = {
-    loading: true,
     error: '',
     isCommentInputFocused: false,
-    post: {},
+    post: { ...this.props.location.state },
     replies: [],
     favorites: [],
   }
   state = this.initialState
 
-  componentDidMount() {
-    document.title = `Post - ${SITE_TITLE}`
-    const postId = this.props.match.params.postid
-    this.fetchPost({ postId })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const postId = nextProps.match.params.postid
-    this.fetchPost({ postId })
-  }
-
-  fetchPost = async ({ postId }) => {
-    const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
-
-    if (post && post._id) {
+  async componentDidMount() {
+    // Fetch the post from the database
+    if (!this.state.post._id) {
+      this.setState({
+        loading: true,
+      })
+      const post = await api.getPostByIdAsUserId(
+        this.props.match.params.postid,
+        this.activeUser._id
+      )
       this.setState({
         loading: false,
         post,
       })
-
-      if (!post.error) {
-        const replies = await api.getPostRepliesByIdAsUserId(
-          postId,
-          this.activeUser._id
-        )
-        const favorites = await api.getPostFavoritesById(postId)
-
-        this.setState({
-          replies,
-          favorites: favorites.slice(0, 10),
-        })
-      } else {
-        this.setState({
-          replies: [],
-          favorites: [],
-        })
-      }
-    } else {
-      this.setState({
-        loading: false,
-        error: "This post doesn't exist",
-      })
     }
+
+    document.title = `Post by @${this.state.post.username} - ${SITE_TITLE}`
+    this.fetchReplies({ postId: this.state.post._id })
+    this.fetchFavorites({ postId: this.state.post._id })
   }
 
-  onItemClick = ({ postId }) => {
+  componentWillReceiveProps(nextProps) {
+    this.setState(
+      {
+        ...this.initialState,
+        post: { ...nextProps.location.state },
+      },
+      () => {
+        document.title = `Post by @${this.state.post.username} - ${SITE_TITLE}`
+        this.fetchReplies({ postId: this.state.post._id })
+        this.fetchFavorites({ postId: this.state.post._id })
+      }
+    )
+  }
+
+  fetchFavorites = async ({ postId }) => {
+    const favorites = (await api.getPostFavoritesById(postId)) || []
+
     this.setState({
-      ...this.initialState,
+      favorites: favorites.slice(0, 10),
+    })
+  }
+
+  fetchReplies = async ({ postId }) => {
+    const replies =
+      (await api.getPostRepliesByIdAsUserId(postId, this.activeUser._id)) || []
+
+    this.setState({
+      replies,
+    })
+  }
+
+  onItemClick = post => {
+    this.props.history.push({
+      pathname: `/posts/${post._id}`,
+      state: post,
     })
 
-    this.props.history.push(`/posts/${postId}`)
-    this.fetchPost({ postId })
+    this.setState({
+      ...this.initialState,
+      post,
+    })
+
+    this.fetchReplies({ postId: post._id })
+    this.fetchFavorites({ postId: post._id })
   }
 
   onCommentIconClick = () => {

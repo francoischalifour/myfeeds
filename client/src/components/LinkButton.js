@@ -1,6 +1,7 @@
 import glamorous from 'glamorous'
+import { Link } from 'react-router-dom'
 
-const LinkButton = glamorous.a({
+const LinkButton = glamorous(Link)({
   padding: '16px 32px',
   borderRadius: '30px',
   color: '#fff',

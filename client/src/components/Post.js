@@ -97,13 +97,13 @@ class Post extends Component {
     })
   }
 
-  onItemClick = event => {
+  onItemClick = (event, postData) => {
     if (['A', 'IMG'].includes(event.target.tagName)) {
       return
     }
 
     event.preventDefault()
-    this.props.onItemClick({ postId: this.props._id })
+    this.props.onItemClick(postData)
   }
 
   onCommentIconClick = () => {
@@ -111,6 +111,13 @@ class Post extends Component {
   }
 
   render() {
+    const {
+      onCommentIconClick,
+      onFavorite,
+      onItemClick,
+      ...postData
+    } = this.props
+
     const {
       _id: postId,
       text,
@@ -123,10 +130,10 @@ class Post extends Component {
       replied,
       favorited,
       favorites,
-    } = this.props
+    } = postData
 
     return (
-      <Container onClick={this.onItemClick}>
+      <Container onClick={event => this.onItemClick(event, postData)}>
         <ImageContainer>
           <Link
             to={{
@@ -165,7 +172,13 @@ class Post extends Component {
                 title={format(createdAt, 'HH:mm - DD MMM YYYY')}
               >
                 {''} • {''}
-                <Link to={`/posts/${postId}`} onClick={this.onItemClick}>
+                <Link
+                  to={{
+                    pathname: `/posts/${postId}`,
+                    state: postData,
+                  }}
+                  onClick={this.onItemClick}
+                >
                   {distanceInWordsStrict(createdAt, new Date())}
                 </Link>
               </time>
