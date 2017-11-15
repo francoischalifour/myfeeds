@@ -1,8 +1,7 @@
 /**
  * This script populates the database with fake data from `fixtures/`.
  */
-const { MongoClient, ObjectID } = require('mongodb')
-const connect = require('../../utils/connect')
+const { connect } = require('../../utils/db')
 const {
   COLLECTION_USERS,
   COLLECTION_POSTS,

@@ -5,7 +5,7 @@
  *  - Creates indexes
  */
 const { MongoClient } = require('mongodb')
-const connect = require('../../utils/connect')
+const { connect } = require('../../utils/db')
 const {
   COLLECTION_USERS,
   COLLECTION_POSTS,

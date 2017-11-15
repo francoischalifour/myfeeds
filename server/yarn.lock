@@ -469,6 +469,19 @@ fastify-cli@^0.11.0:
     pump "^1.0.2"
     update-notifier "^2.1.0"
 
+fastify-mongodb@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/fastify-mongodb/-/fastify-mongodb-0.2.0.tgz#5f62a78bebad216f97887b40e18c7124806c33ac"
+  dependencies:
+    fastify-plugin "^0.1.1"
+    mongodb "^2.2.33"
+
+fastify-plugin@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-0.1.1.tgz#13a94f495a90fd5a7ae4bcd827c54ea5986c794f"
+  dependencies:
+    semver "^5.3.0"
+
 fastify@^0.33.0:
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/fastify/-/fastify-0.33.0.tgz#d3247e35431e8be9274608ac8031c4fd9ecdfe89"

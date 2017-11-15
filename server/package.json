@@ -20,6 +20,7 @@
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "fastify": "^0.33.0",
+    "fastify-mongodb": "^0.2.0",
     "mongodb": "^2.2.33"
   },
   "devDependencies": {

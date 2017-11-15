@@ -1,14 +1,12 @@
-const connect = require('../../../utils/connect')
-const { COLLECTION_POSTS, COLLECTION_FAVORITES } = require('../../../constants')
 const { objectifyProps } = require('../../../utils')
+const { COLLECTION_POSTS, COLLECTION_FAVORITES } = require('../../../constants')
 
 const Favorites = {
-  async add(rawFav) {
+  async add(rawFav, { db }) {
     const fav = objectifyProps({
       ...rawFav,
       created_at: new Date(),
     })
-    const db = await connect()
     let result
 
     const hasAlreadyFavorited = await db
@@ -34,13 +32,10 @@ const Favorites = {
       result = false
     }
 
-    db.close()
-
     return result
   },
-  async remove(rawFav) {
+  async remove(rawFav, { db }) {
     const star = objectifyProps({ ...rawFav })
-    const db = await connect()
     let result
 
     const isFavorited = await db.collection(COLLECTION_FAVORITES).findOne({
@@ -63,8 +58,6 @@ const Favorites = {
       console.info('User has not starred this post yet.')
       result = false
     }
-
-    db.close()
 
     return result
   },
