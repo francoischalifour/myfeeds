@@ -7,6 +7,7 @@ module.exports = (fastify, opts, next) => {
       return Posts.getFeed(
         {},
         {
+          db: fastify.mongo.db,
           as: request.query.as,
           since: request.query.since,
           limit: request.query.limit,
@@ -21,6 +22,7 @@ module.exports = (fastify, opts, next) => {
           _id: request.params.id,
         },
         {
+          db: fastify.mongo.db,
           as: request.query.as,
         }
       )
@@ -32,6 +34,7 @@ module.exports = (fastify, opts, next) => {
           parent_id: request.params.id,
         },
         {
+          db: fastify.mongo.db,
           as: request.query.as,
           since: request.query.since,
           limit: request.query.limit,
@@ -41,9 +44,14 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/posts/:id/favorites', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getFavorites({
-        post_id: request.params.id,
-      })
+      return Posts.getFavorites(
+        {
+          post_id: request.params.id,
+        },
+        {
+          db: fastify.mongo.db,
+        }
+      )
     })
     .get('/users/@:username/posts', async (request, reply) => {
       reply.type('application/json').code(200)
@@ -52,6 +60,7 @@ module.exports = (fastify, opts, next) => {
           username: request.params.username,
         },
         {
+          db: fastify.mongo.db,
           as: request.query.as,
           since: request.query.since,
           limit: request.query.limit,
@@ -63,6 +72,7 @@ module.exports = (fastify, opts, next) => {
       return Posts.searchQuery(
         { query: request.params.query },
         {
+          db: fastify.mongo.db,
           as: request.query.as,
           since: request.query.since,
           limit: request.query.limit,
@@ -74,6 +84,7 @@ module.exports = (fastify, opts, next) => {
       return Posts.searchHashtag(
         { query: request.params.hashtag },
         {
+          db: fastify.mongo.db,
           as: request.query.as,
           since: request.query.since,
           limit: request.query.limit,
@@ -83,11 +94,16 @@ module.exports = (fastify, opts, next) => {
 
   fastify.post('/posts', async (request, reply) => {
     reply.type('application/json').code(201)
-    return Posts.add({
-      text: request.body.text,
-      user_id: request.body.userId,
-      parent_id: request.body.postId,
-    })
+    return Posts.add(
+      {
+        text: request.body.text,
+        user_id: request.body.userId,
+        parent_id: request.body.postId,
+      },
+      {
+        db: fastify.mongo.db,
+      }
+    )
   })
 
   next()

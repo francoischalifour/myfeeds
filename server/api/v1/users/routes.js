@@ -5,21 +5,36 @@ module.exports = (fastify, opts, next) => {
   fastify
     .get('/users/:id', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Users.get({
-        _id: request.params.id,
-      })
+      return Users.get(
+        {
+          _id: request.params.id,
+        },
+        {
+          db: fastify.mongo.db,
+        }
+      )
     })
     .get('/users/@:username', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Users.get({
-        username: request.params.username,
-      })
+      return Users.get(
+        {
+          username: request.params.username,
+        },
+        {
+          db: fastify.mongo.db,
+        }
+      )
     })
     .get('/users/:id/public', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Users.getPublic({
-        _id: request.params.id,
-      })
+      return Users.getPublic(
+        {
+          _id: request.params.id,
+        },
+        {
+          db: fastify.mongo.db,
+        }
+      )
     })
 
   next()

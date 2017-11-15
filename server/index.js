@@ -1,10 +1,15 @@
 require('dotenv').config()
 const fastify = require('fastify')()
 const cors = require('cors')
+const { getConnectUrl } = require('./utils/db')
 
 const { SERVER_HOST, SERVER_PORT } = process.env
 
 fastify.use(cors())
+
+fastify.register(require('fastify-mongodb'), {
+  url: getConnectUrl(),
+})
 
 /**
  * Checks if the server is up.
