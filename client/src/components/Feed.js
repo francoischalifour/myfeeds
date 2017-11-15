@@ -7,6 +7,8 @@ import { getActiveUser } from 'utils'
 class Feed extends Component {
   static defaultProps = {
     limit: 10,
+    posts: [],
+    render: () => null,
   }
 
   activeUser = getActiveUser()
