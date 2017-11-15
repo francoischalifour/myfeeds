@@ -109,8 +109,8 @@ class PostScene extends Component {
 
   onPostFavorite = async ({ postId }) => {
     const fav = {
-      post_id: postId,
-      user_id: this.activeUser._id,
+      postId: postId,
+      userId: this.activeUser._id,
     }
 
     const success = this.state.post.favorited
@@ -124,6 +124,9 @@ class PostScene extends Component {
         post,
         favorites,
       })
+      this.props.history.replace({
+        state: post,
+      })
     }
   }
 
@@ -131,14 +134,14 @@ class PostScene extends Component {
     const postId = this.state.post._id
     const post = {
       text,
-      user_id: this.activeUser._id,
-      parent_id: postId,
+      userId: this.activeUser._id,
+      parentId: postId,
     }
     const success = !!await api.addPost(post)
 
     if (success) {
       const replies = await api.getPostReplies({
-        postId: postId,
+        postId,
         userId: this.activeUser._id,
         limit: PostScene.REPLY_COUNT,
       })

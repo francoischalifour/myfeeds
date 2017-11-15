@@ -63,7 +63,7 @@ class Feed extends Component {
   onSubmit = async ({ text } = {}) => {
     const post = {
       text,
-      user_id: this.activeUser._id,
+      userId: this.activeUser._id,
     }
     const success = !!await api.addPost(post)
 
@@ -106,8 +106,8 @@ class Feed extends Component {
 
   onFavorite = async ({ postId, favorited } = {}) => {
     const fav = {
-      post_id: postId,
-      user_id: this.activeUser._id,
+      postId: postId,
+      userId: this.activeUser._id,
     }
 
     const success = favorited
