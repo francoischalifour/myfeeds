@@ -1,6 +1,10 @@
 require('dotenv').config()
 
-const { REACT_APP_SERVER_HOST, REACT_APP_SERVER_PORT } = process.env
+const {
+  REACT_APP_SERVER_HOST,
+  REACT_APP_SERVER_PORT,
+  REACT_APP_MAINTENANCE,
+} = process.env
 const ENDPOINT = `${REACT_APP_SERVER_HOST}:${REACT_APP_SERVER_PORT}`
 
 const get = (resource, prefix = '', endpoint = ENDPOINT) =>
@@ -18,6 +22,10 @@ const post = (resource, body, prefix = '', endpoint = ENDPOINT) =>
 const postV1 = (resource, body) => post(resource, body, '/v1')
 
 const isServerUp = async () => {
+  if (REACT_APP_MAINTENANCE) {
+    return false
+  }
+
   try {
     await get('/status')
     return true

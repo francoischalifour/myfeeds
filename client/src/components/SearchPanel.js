@@ -1,7 +1,6 @@
 import React from 'react'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import MdList from 'react-icons/lib/md/list'
 import MdClose from 'react-icons/lib/md/close'
 import Feed from 'components/Feed'
 import PostList from 'components/PostList'
@@ -47,11 +46,6 @@ const SearchPanel = ({ posts, search, onItemClick, onClose }) => (
           ))}
         </PostList>
       )}
-      renderLoading={() => (
-        <div style={{ textAlign: 'center' }}>
-          <MdList size={200} color="#ddd" />
-        </div>
-      )}
       renderEmpty={() => (
         <div style={{ textAlign: 'center' }}>
           <MdFindInPage size={200} color="#ddd" />
@@ -64,7 +58,15 @@ const SearchPanel = ({ posts, search, onItemClick, onClose }) => (
     />
 
     <PanelFooter>
-      <LinkButton href={`/search?q=${search}`}>More results</LinkButton>
+      <LinkButton
+        to={{
+          pathname: '/search',
+          search: `?q=${search}`,
+        }}
+        onClick={() => window.location.reload()}
+      >
+        More results
+      </LinkButton>
 
       <div style={{ marginTop: 40 }}>
         <Button title="Close the search panel" onClick={onClose}>

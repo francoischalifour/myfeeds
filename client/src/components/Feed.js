@@ -139,7 +139,7 @@ class Feed extends Component {
     }
   }
 
-  onItemClick = ({ postId } = {}) => {
+  onItemClick = post => {
     // Store the current scroll position for when the user comes back to this feed
     if (this.props.name) {
       const scrollTop = document.documentElement.scrollTop
@@ -153,7 +153,10 @@ class Feed extends Component {
     }
 
     this.setState({
-      redirect: `/posts/${postId}`,
+      redirect: {
+        pathname: `/posts/${post._id}`,
+        state: post,
+      },
     })
   }
 

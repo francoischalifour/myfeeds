@@ -78,6 +78,7 @@ button.button.outline:hover a.button.outline:hover {
 }
 
 button.button[disabled] {
+  position: relative;
   background-color: #4fc3f7;
   border-color: #4fc3f7;
   cursor: not-allowed;

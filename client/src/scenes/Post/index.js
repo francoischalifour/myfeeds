@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
-import MdList from 'react-icons/lib/md/list'
 import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
 import api from 'api'
 import Scaffold from 'components/Scaffold'
 import Content from 'components/Content'
 import Sidebar from 'components/Sidebar'
+import Loader from 'components/Loader'
 import Feed from 'components/Feed'
 import PostList from 'components/PostList'
 import Post from 'components/Post'
@@ -23,68 +23,82 @@ class PostScene extends Component {
   static REPLY_COUNT = 4
   activeUser = getActiveUser()
   initialState = {
-    loading: true,
     error: '',
     isCommentInputFocused: false,
-    post: {},
+    post: { ...this.props.location.state },
     replies: [],
     favorites: [],
   }
   state = this.initialState
 
-  componentDidMount() {
-    document.title = `Post - ${SITE_TITLE}`
-    const postId = this.props.match.params.postid
-    this.fetchPost({ postId })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const postId = nextProps.match.params.postid
-    this.fetchPost({ postId })
-  }
-
-  fetchPost = async ({ postId }) => {
-    const post = await api.getPostByIdAsUserId(postId, this.activeUser._id)
-
-    if (post && post._id) {
+  async componentDidMount() {
+    // The post is not in the location state, fetch from the database
+    if (!this.state.post._id) {
+      this.setState({
+        loading: true,
+      })
+      const post = await api.getPostByIdAsUserId(
+        this.props.match.params.postid,
+        this.activeUser._id
+      )
       this.setState({
         loading: false,
         post,
       })
-
-      if (!post.error) {
-        const replies = await api.getPostRepliesByIdAsUserId({
-          postId,
-          userId: this.activeUser._id,
-          limit: PostScene.REPLY_COUNT,
-        })
-        const favorites = await api.getPostFavoritesById(postId)
-
-        this.setState({
-          replies,
-          favorites: favorites.slice(0, 10),
-        })
-      } else {
-        this.setState({
-          replies: [],
-          favorites: [],
-        })
-      }
-    } else {
-      this.setState({
-        loading: false,
-        error: "This post doesn't exist",
-      })
     }
+
+    document.title = `Post by @${this.state.post.username} - ${SITE_TITLE}`
+    this.fetchReplies({ postId: this.state.post._id })
+    this.fetchFavorites({ postId: this.state.post._id })
   }
 
-  onItemClick = ({ postId }) => {
+  componentWillReceiveProps(nextProps) {
+    this.setState(
+      {
+        ...this.initialState,
+        post: { ...nextProps.location.state },
+      },
+      () => {
+        document.title = `Post by @${this.state.post.username} - ${SITE_TITLE}`
+        this.fetchReplies({ postId: this.state.post._id })
+        this.fetchFavorites({ postId: this.state.post._id })
+      }
+    )
+  }
+
+  fetchFavorites = async ({ postId }) => {
+    const favorites = (await api.getPostFavoritesById(postId)) || []
+
     this.setState({
-      ...this.initialState,
+      favorites: favorites.slice(0, 10),
+    })
+  }
+
+  fetchReplies = async ({ postId }) => {
+    const replies =
+      (await api.getPostRepliesByIdAsUserId({
+        postId,
+        userId: this.activeUser._id,
+      })) || []
+
+    this.setState({
+      replies,
+    })
+  }
+
+  onItemClick = post => {
+    this.props.history.push({
+      pathname: `/posts/${post._id}`,
+      state: post,
     })
 
-    this.props.history.push(`/posts/${postId}`)
-    this.fetchPost({ postId })
+    this.setState({
+      ...this.initialState,
+      post,
+    })
+
+    this.fetchReplies({ postId: post._id })
+    this.fetchFavorites({ postId: post._id })
   }
 
   onCommentIconClick = () => {
@@ -144,7 +158,7 @@ class PostScene extends Component {
   renderLoading = () => {
     return (
       <div style={{ textAlign: 'center' }}>
-        <p>Loading...</p>
+        <Loader />
       </div>
     )
   }
@@ -176,7 +190,8 @@ class PostScene extends Component {
           parentId={this.state.post._id}
           isFocused={this.state.isCommentInputFocused}
           onCommentIconBlur={() =>
-            this.setState({ isCommentInputFocused: false })}
+            this.setState({ isCommentInputFocused: false })
+          }
           onSubmit={this.onSubmit}
         />
 
@@ -209,8 +224,8 @@ class PostScene extends Component {
           renderLoading={
             this.state.post.reply_count > 0
               ? () => (
-                  <div style={{ textAlign: 'center', backgroundColor: '#fff' }}>
-                    <MdList size={110} color="#ddd" />
+                  <div style={{ textAlign: 'center' }}>
+                    <Loader />
                   </div>
                 )
               : null

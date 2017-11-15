@@ -1,13 +1,13 @@
 import Parser from 'simple-text-parser'
 import { LOCALE_STORAGE_USER } from '../constants'
-import logout from 'components/Logout'
 
 export const getActiveUser = () => {
   try {
     // TODO: check validation token
     return JSON.parse(window.localStorage.getItem(LOCALE_STORAGE_USER))
   } catch (err) {
-    logout()
+    destroyActiveUser()
+    window.location.reload()
   }
 }
 

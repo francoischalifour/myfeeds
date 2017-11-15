@@ -4,6 +4,12 @@ import glamorous from 'glamorous'
 import api from 'api'
 import { getActiveUser } from 'utils'
 import SearchPanel from 'components/SearchPanel'
+import Loader from 'components/Loader'
+
+const Form = glamorous.form({
+  display: 'flex',
+  alignItems: 'center',
+})
 
 const Input = glamorous.input({
   background: 'none',
@@ -12,6 +18,9 @@ const Input = glamorous.input({
   color: '#fff',
   marginBottom: '0 !important',
   paddingLeft: '6px !important',
+  '&::-webkit-search-cancel-button': {
+    display: 'none',
+  },
 })
 
 class SearchForm extends Component {
@@ -29,6 +38,7 @@ class SearchForm extends Component {
     this.panelContainer.classList.add('search-wrapper')
 
     this.state = {
+      fetching: false,
       search,
       posts: [],
     }
@@ -37,10 +47,17 @@ class SearchForm extends Component {
   componentDidMount() {
     this.resultContainer = document.getElementById('search-results')
     document.body.appendChild(this.panelContainer)
+    this.navbar = document.querySelector('.navbar a')
+    this.navbar.addEventListener('click', this.onNavbarLinkClick)
   }
 
   componentWillUnmount() {
     document.body.removeChild(this.panelContainer)
+    this.navbar.removeEventListener('click', this.onNavbarLinkClick)
+  }
+
+  onNavbarLinkClick = event => {
+    this.onClose()
   }
 
   onFocus = event => {
@@ -53,6 +70,12 @@ class SearchForm extends Component {
   }
 
   onChange = async event => {
+    document.documentElement.scrollTop = 0
+
+    this.setState({
+      fetching: true,
+    })
+
     const search = event.target.value
     document.body.classList.toggle('searching', search.length > 0)
 
@@ -66,6 +89,7 @@ class SearchForm extends Component {
 
         this.setState({
           posts,
+          fetching: false,
         })
 
         if (posts.length > 0) {
@@ -85,9 +109,13 @@ class SearchForm extends Component {
     document.body.classList.remove('searching')
     this.setState({
       posts: [],
+      fetching: false,
     })
 
-    if (!this.originLocation.pathname.startsWith('/search')) {
+    if (
+      this.originLocation &&
+      !this.originLocation.pathname.startsWith('/search')
+    ) {
       document.title = this.originLocation.title
       window.history.pushState(
         {},
@@ -97,14 +125,14 @@ class SearchForm extends Component {
     }
   }
 
-  onItemClick = ({ postId }) => {
-    window.location.href = `/posts/${postId}`
+  onItemClick = ({ _id }) => {
+    window.location.href = `/posts/${_id}`
   }
 
   render() {
     return (
       <div>
-        <form action="/search">
+        <Form action="/search">
           <Input
             type="search"
             name="q"
@@ -114,7 +142,8 @@ class SearchForm extends Component {
             placeholder={this.props.placeholder}
             autoComplete="off"
           />
-        </form>
+          {this.state.fetching && <Loader size={24} color="#fff" delay={200} />}
+        </Form>
 
         {ReactDOM.createPortal(
           <SearchPanel

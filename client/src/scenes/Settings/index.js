@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import api from 'api'
 import { getActiveUser } from 'utils'
 import { SITE_TITLE } from '../../constants'
+import Loader from 'components/Loader'
 
 class SettingsScene extends Component {
   async componentDidMount() {
@@ -27,7 +28,7 @@ class SettingsScene extends Component {
 
   render() {
     return !this.user ? (
-      'Loading settings...'
+      <Loader />
     ) : (
       <ul>
         {Object.keys(this.user).map(prop => (

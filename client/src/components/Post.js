@@ -46,25 +46,28 @@ const PostText = glamorous.p({
 })
 
 const FooterList = glamorous.ul({
-  userSelect: 'none',
   display: 'flex',
+  alignItems: 'center',
   color: '#999',
   fontWeight: 500,
+  userSelect: 'none',
   '& > li': {
     cursor: 'pointer',
-    paddingRight: 24,
+    '&:not(:last-of-type)': {
+      marginRight: 24,
+    },
   },
 })
 
 const ReplyItem = glamorous.li(props => ({
-  color: props.fill ? '#03A9F4' : '',
+  color: props.fill ? '#03A9F4' : 'inherit',
   '&:hover': {
     color: '#03A9F4',
   },
 }))
 
 const FavoriteItem = glamorous.li(props => ({
-  color: props.fill ? '#E91E63' : '',
+  color: props.fill ? '#E91E63' : 'inherit',
   '&:hover': {
     color: '#E91E63',
   },
@@ -72,8 +75,9 @@ const FavoriteItem = glamorous.li(props => ({
 
 const FavoriteItemList = glamorous.ul({
   display: 'flex',
-  paddingTop: 2,
-  '& li': { paddingRight: 4 },
+  alignItems: 'center',
+  minHeight: 27,
+  '& > li:not(:last-of-type)': { marginRight: 4 },
 })
 
 class Post extends Component {
@@ -93,13 +97,13 @@ class Post extends Component {
     })
   }
 
-  onItemClick = event => {
+  onItemClick = (event, postData) => {
     if (['A', 'IMG'].includes(event.target.tagName)) {
       return
     }
 
     event.preventDefault()
-    this.props.onItemClick({ postId: this.props._id })
+    this.props.onItemClick(postData)
   }
 
   onCommentIconClick = () => {
@@ -107,6 +111,13 @@ class Post extends Component {
   }
 
   render() {
+    const {
+      onCommentIconClick,
+      onFavorite,
+      onItemClick,
+      ...postData
+    } = this.props
+
     const {
       _id: postId,
       text,
@@ -119,30 +130,55 @@ class Post extends Component {
       replied,
       favorited,
       favorites,
-    } = this.props
+    } = postData
 
     return (
-      <Container onClick={this.onItemClick}>
+      <Container onClick={event => this.onItemClick(event, postData)}>
         <ImageContainer>
-          <Link to={`/@${username}`}>
+          <Link
+            to={{
+              pathname: `/@${username}`,
+              state: { username, name, profile_image_url: userImageUrl },
+            }}
+          >
             <ProfilePicture src={userImageUrl} alt={username} width={48} />
           </Link>
         </ImageContainer>
 
         <TextContainer>
           <Header>
-            <Link to={`/@${username}`}>
-              <strong>{name}</strong>
-            </Link>
+            <strong>
+              <Link
+                to={{
+                  pathname: `/@${username}`,
+                  state: { username, name, profile_image_url: userImageUrl },
+                }}
+              >
+                {name}
+              </Link>
+            </strong>
             <Small>
               {' '}
-              <Link to={`/@${username}`}>@{username}</Link>
+              <Link
+                to={{
+                  pathname: `/@${username}`,
+                  state: { username, name, profile_image_url: userImageUrl },
+                }}
+              >
+                @{username}
+              </Link>
               <time
                 dateTime={format(createdAt)}
                 title={format(createdAt, 'HH:mm - DD MMM YYYY')}
               >
                 {''} • {''}
-                <Link to={`/posts/${postId}`} onClick={this.onItemClick}>
+                <Link
+                  to={{
+                    pathname: `/posts/${postId}`,
+                    state: postData,
+                  }}
+                  onClick={this.onItemClick}
+                >
                   {distanceInWordsStrict(createdAt, new Date())}
                 </Link>
               </time>
@@ -169,15 +205,27 @@ class Post extends Component {
               {starCount > 0 && starCount}
             </FavoriteItem>
             {favorites && (
-              <li>
+              <li
+                style={{ display: 'flex', alignItems: 'center', marginTop: 4 }}
+              >
                 <FavoriteItemList>
                   {favorites.map(fav => (
                     <li key={fav.username}>
-                      <Link to={`/@${fav.username}`} title={`@${fav.name}`}>
+                      <Link
+                        to={{
+                          pathname: `/@${fav.username}`,
+                          state: {
+                            username: fav.username,
+                            name: fav.name,
+                            profile_image_url: fav.profile_image_url,
+                          },
+                        }}
+                        title={`@${fav.name}`}
+                      >
                         <ProfilePicture
                           src={fav.profile_image_url}
                           alt={fav.username}
-                          width={20}
+                          width={18}
                         />
                       </Link>
                     </li>
