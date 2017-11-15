@@ -81,7 +81,7 @@ module.exports = (fastify, opts, next) => {
     return Posts.add({
       text: request.body.text,
       user_id: request.body.userId,
-      post_id: request.body.postId,
+      parent_id: request.body.postId,
     })
   })
 

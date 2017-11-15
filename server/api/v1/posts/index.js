@@ -196,7 +196,7 @@ const Posts = {
     hashtags.length > 0 && (post.hashtags = hashtags)
 
     const db = await connect()
-    const result = await db.collection(COLLECTION_POSTS).insert(post)
+    const result = await db.collection(COLLECTION_POSTS).insertOne(post)
 
     if (post.parent_id) {
       await db

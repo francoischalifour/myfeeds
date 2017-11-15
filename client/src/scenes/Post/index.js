@@ -135,7 +135,7 @@ class PostScene extends Component {
     const post = {
       text,
       userId: this.activeUser._id,
-      parentId: postId,
+      postId,
     }
     const success = !!await api.addPost(post)
 
@@ -150,6 +150,10 @@ class PostScene extends Component {
       this.setState({
         replies,
         post,
+      })
+
+      this.props.history.replace({
+        state: post,
       })
     } else {
       this.setState({
@@ -190,7 +194,6 @@ class PostScene extends Component {
         <PostForm
           {...this.activeUser}
           placeholder={`Reply to @${this.state.post.username || ''}`}
-          parentId={this.state.post._id}
           isFocused={this.state.isCommentInputFocused}
           onCommentIconBlur={() =>
             this.setState({ isCommentInputFocused: false })
