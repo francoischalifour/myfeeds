@@ -11,9 +11,13 @@ const Container = glamorous.div({
 })
 
 const PictureContainer = glamorous.div({
-  width: 64,
-  paddingRight: 16,
+  width: 36,
+  height: 36,
+  marginRight: 16,
+  marginLeft: 12,
   textAlign: 'right',
+  backgroundColor: '#212121',
+  borderRadius: 4,
 })
 
 const TextContainer = glamorous.div({
@@ -97,11 +101,13 @@ class PostForm extends Component {
     return (
       <Container>
         <PictureContainer>
-          <ProfilePicture
-            src={this.props.profile_image_url}
-            alt={this.props.username}
-            width={36}
-          />
+          {this.props.profile_image_url && (
+            <ProfilePicture
+              src={this.props.profile_image_url}
+              alt={this.props.username}
+              width={36}
+            />
+          )}
         </PictureContainer>
 
         <TextContainer>

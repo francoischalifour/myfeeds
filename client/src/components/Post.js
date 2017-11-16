@@ -26,6 +26,13 @@ const ImageContainer = glamorous.div({
   width: 64,
 })
 
+const DefaultImage = glamorous.div({
+  width: 48,
+  height: 48,
+  backgroundColor: '#212121',
+  borderRadius: 4,
+})
+
 const TextContainer = glamorous.div({
   flex: 1,
 })
@@ -141,7 +148,11 @@ class Post extends Component {
               state: { username, name, profile_image_url: userImageUrl },
             }}
           >
-            <ProfilePicture src={userImageUrl} alt={username} width={48} />
+            {userImageUrl ? (
+              <ProfilePicture src={userImageUrl} alt={username} width={48} />
+            ) : (
+              <DefaultImage />
+            )}
           </Link>
         </ImageContainer>
 

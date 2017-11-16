@@ -90,38 +90,49 @@ class Sidebar extends Component {
 
     const [, month, , year] = String(new Date(createdAt)).split(' ')
 
-    let header
+    let header = null
 
-    // Disable CORS errors coming from Amazon and `react-image-palette` avatars for now
-    if (imageUrl && imageUrl.startsWith('https://s3.amazonaws.com')) {
+    if (!imageUrl) {
       header = (
         <Header>
           <Link to={`/@${username}`}>
-            <ImageContainer>
-              <ProfilePicture src={imageUrl} alt={name} />
-            </ImageContainer>
+            <ImageContainer />
           </Link>
         </Header>
       )
-    } else if (imageUrl) {
-      header = (
-        <ImagePalette image={imageUrl} crossOrigin={true}>
-          {({ backgroundColor, color, alternativeColor }) => (
-            <Header backgroundColor={backgroundColor}>
-              <Link to={`/@${username}`}>
-                <ImageContainer>
-                  <ProfilePicture src={imageUrl} alt={name} />
-                </ImageContainer>
-              </Link>
-            </Header>
-          )}
-        </ImagePalette>
-      )
+    } else {
+      // Disable CORS errors coming from Amazon and `react-image-palette` avatars for now
+      if (imageUrl && imageUrl.startsWith('https://s3.amazonaws.com')) {
+        header = (
+          <Header>
+            <Link to={`/@${username}`}>
+              <ImageContainer>
+                <ProfilePicture src={imageUrl} alt={name} />
+              </ImageContainer>
+            </Link>
+          </Header>
+        )
+      } else if (imageUrl) {
+        header = (
+          <ImagePalette image={imageUrl} crossOrigin={true}>
+            {({ backgroundColor, color, alternativeColor }) => (
+              <Header backgroundColor={backgroundColor}>
+                <Link to={`/@${username}`}>
+                  <ImageContainer>
+                    <ProfilePicture src={imageUrl} alt={name} />
+                  </ImageContainer>
+                </Link>
+              </Header>
+            )}
+          </ImagePalette>
+        )
+      }
     }
 
     return (
       <Sidenav>
-        {imageUrl && header}
+        {header}
+
         <Content>
           <Name>{name && <Link to={`/@${username}`}>{name}</Link>}</Name>
           <Username>
