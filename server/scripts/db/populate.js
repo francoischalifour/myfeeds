@@ -12,26 +12,27 @@ const { users, posts, favorites } = require('./fixtures/faker')
 const run = async () => {
   const db = await connect()
 
-  console.log(`💾 Populating collection "${COLLECTION_USERS}"...`)
+  console.log('💾 Populating collections')
+  console.log(`  ▶ ${COLLECTION_USERS}`)
   await db
     .collection(COLLECTION_USERS)
     .insertMany(users)
-    .catch(err => console.error(err))
+    .catch(console.error)
 
-  console.log(`💾 Populating collection "${COLLECTION_POSTS}"...`)
+  console.log(`  ▶ ${COLLECTION_POSTS}`)
   await db
     .collection(COLLECTION_POSTS)
     .insertMany(posts)
-    .catch(err => console.error(err))
+    .catch(console.error)
 
-  console.log(`💾 Populating collection "${COLLECTION_FAVORITES}"...`)
+  console.log(`  ▶ ${COLLECTION_FAVORITES}`)
   await db
     .collection(COLLECTION_FAVORITES)
     .insertMany(favorites)
-    .catch(err => console.error(err))
+    .catch(console.error)
 
-  await db.close().catch(err => console.error(err))
-  console.log('\n👍 All done populating the database!')
+  await db.close().catch(console.error)
+  console.log('\n👍 All done populating the database!\n')
 }
 
 run()
