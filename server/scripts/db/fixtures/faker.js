@@ -2,37 +2,12 @@ const faker = require('faker')
 const bcrypt = require('bcryptjs')
 const { ObjectId } = require('mongodb')
 
-const PERMANENT_USERS = [
-  {
-    _id: ObjectId(),
-    username: 'francoischalifour',
-    name: 'François Chalifour',
-    description:
-      'Freelancer • CS Student • Code • Design • 🎷 • 🎸 – GitHub: https://github.com/francoischalifour',
-    profile_image_url:
-      'https://pbs.twimg.com/profile_images/870713221333884928/AUeuxQ0f_400x400.jpg',
-    location: 'Québec, Canada',
-    url: 'https://francoischalifour.com',
-    email: 'francois.chalifour@gmail.com',
-    password: bcrypt.hashSync('francois', 10),
-    created_at: faker.date.recent(),
-  },
-  {
-    _id: ObjectId(),
-    username: 'michaelbouffard',
-    name: 'Michael Bouffard',
-    email: 'michaelbouffard1992@gmail.com',
-    password: bcrypt.hashSync('michael', 10),
-    created_at: faker.date.recent(),
-  },
-]
+const USER_COUNT = 100
+const POST_COUNT = 500
+const REPLY_COUNT = 750
+const STAR_COUNT = 800
 
-const USER_COUNT = 10 - PERMANENT_USERS.length
-const POST_COUNT = 20
-const REPLY_COUNT = 50
-const STAR_COUNT = 50
-
-const users = Array.from({ length: USER_COUNT }).map((_v, i) => {
+const users = Array.from({ length: USER_COUNT }).map(() => {
   const createdAt = faker.date.between(2017, new Date())
 
   return {
@@ -44,12 +19,12 @@ const users = Array.from({ length: USER_COUNT }).map((_v, i) => {
     location: faker.address.state(),
     url: faker.internet.url(),
     email: faker.internet.email(),
-    password: faker.internet.password(),
+    password: bcrypt.hashSync(faker.internet.password(), 10),
     created_at: createdAt,
   }
 })
 
-const posts = Array.from({ length: POST_COUNT }).map((_v, i) => {
+const posts = Array.from({ length: POST_COUNT }).map(() => {
   const createdAt = faker.date.between(2017, new Date())
   const userIndex = faker.random.number(USER_COUNT - 2)
 
@@ -63,7 +38,7 @@ const posts = Array.from({ length: POST_COUNT }).map((_v, i) => {
   }
 })
 
-const replies = Array.from({ length: REPLY_COUNT }).map((_v, i) => {
+const replies = Array.from({ length: REPLY_COUNT }).map(() => {
   const createdAt = faker.date.between(2017, new Date())
   const userIndex = faker.random.number(USER_COUNT - 1)
   const parentPostIndex = faker.random.number(POST_COUNT - 2)
@@ -81,7 +56,7 @@ const replies = Array.from({ length: REPLY_COUNT }).map((_v, i) => {
   }
 })
 
-const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
+const favorites = Array.from({ length: STAR_COUNT }).map(() => {
   const createdAt = faker.date.between(2017, new Date())
   const userIndex = faker.random.number(USER_COUNT - 2)
   const postIndex = faker.random.number(POST_COUNT - 2)
@@ -98,7 +73,7 @@ const favorites = Array.from({ length: STAR_COUNT }).map((_v, i) => {
 })
 
 module.exports = {
-  users: [...users, ...PERMANENT_USERS],
+  users,
   posts: [...posts, ...replies],
   favorites,
 }
