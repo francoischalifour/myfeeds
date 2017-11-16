@@ -233,11 +233,22 @@ class Post extends Component {
                         }}
                         title={`@${fav.name}`}
                       >
-                        <ProfilePicture
-                          src={fav.profile_image_url}
-                          alt={fav.username}
-                          width={18}
-                        />
+                        {fav.profile_image_url ? (
+                          <ProfilePicture
+                            src={fav.profile_image_url}
+                            alt={fav.username}
+                            width={18}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              width: 18,
+                              height: 18,
+                              backgroundColor: '#212121',
+                              borderRadius: 4,
+                            }}
+                          />
+                        )}
                       </Link>
                     </li>
                   ))}
