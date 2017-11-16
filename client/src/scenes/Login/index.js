@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
-import { LOCAL_STORAGE_USER } from '../../constants'
+import { LOCAL_STORAGE_USER, SITE_TITLE } from '../../constants'
 import api from 'api'
 import Loader from 'components/Loader'
 
@@ -38,6 +38,10 @@ class LoginScene extends Component {
     password: '',
     error: '',
     fetching: false,
+  }
+
+  componentDidMount() {
+    document.title = `Login - ${SITE_TITLE}`
   }
 
   onSubmit = async event => {
