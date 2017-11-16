@@ -56,8 +56,6 @@ class LoginScene extends Component {
       password: this.state.password,
     })
 
-    console.log(result)
-
     if (!result.error) {
       window.localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(result))
       window.location.href = '/'
