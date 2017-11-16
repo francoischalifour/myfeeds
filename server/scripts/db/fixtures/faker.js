@@ -1,4 +1,5 @@
 const faker = require('faker')
+const bcrypt = require('bcryptjs')
 const { ObjectId } = require('mongodb')
 
 const PERMANENT_USERS = [
@@ -13,7 +14,7 @@ const PERMANENT_USERS = [
     location: 'Québec, Canada',
     url: 'https://francoischalifour.com',
     email: 'francois.chalifour@gmail.com',
-    password: 'francois',
+    password: bcrypt.hashSync('francois', 10),
     created_at: faker.date.recent(),
   },
   {
@@ -21,7 +22,7 @@ const PERMANENT_USERS = [
     username: 'michaelbouffard',
     name: 'Michael Bouffard',
     email: 'michaelbouffard1992@gmail.com',
-    password: 'michael',
+    password: bcrypt.hashSync('michael', 10),
     created_at: faker.date.recent(),
   },
 ]

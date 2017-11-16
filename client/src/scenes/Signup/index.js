@@ -16,7 +16,7 @@ const Form = glamorous.form({
   margin: '0 auto',
 })
 
-const LoginButton = glamorous.button({
+const SubmitButton = glamorous.button({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -32,8 +32,10 @@ const Error = glamorous.p({
   textAlign: 'center',
 })
 
-class LoginScene extends Component {
+class SignupScene extends Component {
   state = {
+    name: '',
+    username: '',
     email: '',
     password: '',
     error: '',
@@ -41,7 +43,7 @@ class LoginScene extends Component {
   }
 
   componentDidMount() {
-    document.title = `Login - ${SITE_TITLE}`
+    document.title = `Sign up - ${SITE_TITLE}`
   }
 
   onSubmit = async event => {
@@ -51,7 +53,9 @@ class LoginScene extends Component {
       fetching: true,
     })
 
-    const result = await api.login({
+    const result = await api.signup({
+      name: this.state.name,
+      username: this.state.username,
       email: this.state.email,
       password: this.state.password,
     })
@@ -68,11 +72,29 @@ class LoginScene extends Component {
   }
 
   render() {
+    const valid =
+      this.state.name &&
+      this.state.username &&
+      this.state.email &&
+      this.state.password
+
     return (
       <Container>
         <Form onSubmit={this.onSubmit}>
           {this.state.error && <Error>{this.state.error}</Error>}
 
+          <input
+            type="text"
+            placeholder="Full name"
+            value={this.state.name}
+            onChange={e => this.setState({ name: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="Username"
+            value={this.state.username}
+            onChange={e => this.setState({ username: e.target.value })}
+          />
           <input
             type="email"
             placeholder="Email"
@@ -86,20 +108,20 @@ class LoginScene extends Component {
             onChange={e => this.setState({ password: e.target.value })}
           />
 
-          <LoginButton
+          <SubmitButton
             className="button"
-            disabled={!this.state.email || this.state.fetching}
+            disabled={!valid || this.state.fetching}
           >
             {this.state.fetching
               ? [
                   <Loader color="#fff" size={32} key="Loader" />,
-                  'Signing in...',
+                  'Signing up...',
                 ]
-              : 'Sign in'}
-          </LoginButton>
+              : 'Sign up'}
+          </SubmitButton>
 
           <p style={{ textAlign: 'center' }}>
-            <Link to="/signup">Don't have an account yet? Sign up.</Link>
+            <Link to="/">Already have an account? Sign in.</Link>
           </p>
         </Form>
       </Container>
@@ -107,4 +129,4 @@ class LoginScene extends Component {
   }
 }
 
-export default LoginScene
+export default SignupScene

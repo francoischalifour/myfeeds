@@ -70,11 +70,9 @@ const getAllPostsHashtag = ({ query, userId }) =>
 
 const getPublicProfile = ({ userId }) => getV1(`/users/${userId}/public`)
 
-const login = ({ email, password }) =>
-  postV1('/login', {
-    email,
-    password,
-  })
+const login = info => postV1('/login', info)
+
+const signup = info => postV1('/signup', info)
 
 const addPost = post => postV1('/posts', post)
 
@@ -93,6 +91,7 @@ export default {
   getAllPostsHashtag,
   getPublicProfile,
   login,
+  signup,
   addPost,
   favorite,
   unfavorite,
