@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const { objectifyProps } = require('../../../utils')
 const { COLLECTION_USERS } = require('../../../constants')
 
 const Auth = {
@@ -37,6 +38,10 @@ const Auth = {
         name,
         username,
         email,
+        description: '',
+        location: '',
+        url: '',
+        profile_image_url: '',
         password: hash,
       })
 
@@ -50,6 +55,22 @@ const Auth = {
           message: 'This user is already registered.',
         },
       }
+    }
+  },
+  async updateAccount(info, { db }) {
+    const user = objectifyProps(info)
+
+    const result = await db
+      .collection(COLLECTION_USERS)
+      .updateOne({ _id: user._id }, { $set: user })
+
+    if (result) {
+      return user
+    }
+    return {
+      error: {
+        message: 'An error has occurred updating your profile.',
+      },
     }
   },
 }

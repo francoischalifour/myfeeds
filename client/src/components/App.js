@@ -14,7 +14,7 @@ import Search from 'scenes/Search'
 import Settings from 'scenes/Settings'
 import Login from 'scenes/Login'
 import Signup from 'scenes/Signup'
-import Header from 'components/Header'
+import Navbar from 'components/Navbar'
 import Logout from 'components/Logout'
 
 const isConnected = isLoggedIn()
@@ -22,7 +22,7 @@ const isConnected = isLoggedIn()
 const App = () => (
   <Router>
     <div>
-      <Header isLoggedIn={isConnected} />
+      <Navbar isLoggedIn={isConnected} />
 
       <Switch>
         {isConnected

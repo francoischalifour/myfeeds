@@ -68,11 +68,11 @@ const getAllPostsMatching = ({ query, userId }) =>
 const getAllPostsHashtag = ({ query, userId }) =>
   getV1(`/hashtags/${query}?as=${userId}`)
 
-const getPublicProfile = ({ userId }) => getV1(`/users/${userId}/public`)
-
 const login = info => postV1('/login', info)
 
 const signup = info => postV1('/signup', info)
+
+const update = info => postV1('/update', info)
 
 const addPost = post => postV1('/posts', post)
 
@@ -89,9 +89,9 @@ export default {
   getAllUserPosts,
   getAllPostsMatching,
   getAllPostsHashtag,
-  getPublicProfile,
   login,
   signup,
+  update,
   addPost,
   favorite,
   unfavorite,

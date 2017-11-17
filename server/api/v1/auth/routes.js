@@ -28,6 +28,12 @@ module.exports = (fastify, opts, next) => {
         }
       )
     })
+    .post('/update', async (request, reply) => {
+      reply.type('application/json').code(200)
+      return Auth.updateAccount(request.body, {
+        db: fastify.mongo.db,
+      })
+    })
 
   next()
 }

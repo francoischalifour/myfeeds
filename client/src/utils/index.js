@@ -14,7 +14,11 @@ export const getLocalUser = () => {
 export const destroyActiveUser = () =>
   window.localStorage.removeItem(LOCAL_STORAGE_USER)
 
-export const isLoggedIn = () => getLocalUser() && getLocalUser()._id
+export const isLoggedIn = () => {
+  const localUser = getLocalUser()
+
+  return localUser.username
+}
 
 export const getLocationLink = location =>
   `https://www.google.com/maps/place/${location.replace(' ', '+')}`
