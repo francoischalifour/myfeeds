@@ -2,7 +2,7 @@ const { objectifyProps } = require('../../../utils')
 const { COLLECTION_POSTS, COLLECTION_FAVORITES } = require('../../../constants')
 
 const Favorites = {
-  async add(rawFav, { db }) {
+  async add(rawFav = {}, { db }) {
     const fav = objectifyProps({
       ...rawFav,
       created_at: new Date(),
@@ -34,7 +34,7 @@ const Favorites = {
 
     return result
   },
-  async remove(rawFav, { db }) {
+  async remove(rawFav = {}, { db }) {
     const star = objectifyProps({ ...rawFav })
     let result
 

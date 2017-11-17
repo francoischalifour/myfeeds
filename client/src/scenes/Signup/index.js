@@ -60,13 +60,15 @@ class SignupScene extends Component {
       password: this.state.password,
     })
 
+    console.log(result)
+
     if (!result.error) {
       window.localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(result))
       window.location.href = '/'
     } else {
       this.setState({
         fetching: false,
-        error: result.error.message,
+        error: result.message,
       })
     }
   }
