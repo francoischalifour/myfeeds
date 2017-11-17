@@ -25,17 +25,6 @@ module.exports = (fastify, opts, next) => {
         }
       )
     })
-    .get('/users/:id/public', async (request, reply) => {
-      reply.type('application/json').code(200)
-      return Users.getPublic(
-        {
-          _id: request.params.id,
-        },
-        {
-          db: fastify.mongo.db,
-        }
-      )
-    })
 
   next()
 }
