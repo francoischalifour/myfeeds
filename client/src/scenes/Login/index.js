@@ -62,7 +62,7 @@ class LoginScene extends Component {
     } else {
       this.setState({
         fetching: false,
-        error: result.error.message,
+        error: result.message,
       })
     }
   }
