@@ -17,7 +17,7 @@ export const destroyActiveUser = () =>
 export const isLoggedIn = () => {
   const localUser = getLocalUser()
 
-  return localUser.username
+  return localUser ? localUser.username : false
 }
 
 export const getLocationLink = location =>
