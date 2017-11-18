@@ -10,7 +10,7 @@ const { ObjectId } = require('mongodb')
  */
 const objectifyProps = props => {
   return Object.keys(props).reduce((acc, key) => {
-    if (key.slice(-3) === '_id') {
+    if (key.slice(-3) === '_id' && ObjectId.isValid(props[key])) {
       acc[key] = ObjectId(props[key])
     } else {
       acc[key] = props[key]
@@ -20,6 +20,19 @@ const objectifyProps = props => {
   }, {})
 }
 
+/**
+ * Custom error to handle bad API requests.
+ */
+class APIError extends Error {
+  constructor({ code, message }) {
+    super(message)
+
+    this.name = 'APIError'
+    this.code = code
+  }
+}
+
 module.exports = {
   objectifyProps,
+  APIError,
 }

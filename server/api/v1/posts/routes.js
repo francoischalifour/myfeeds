@@ -4,7 +4,7 @@ module.exports = (fastify, opts, next) => {
   fastify
     .get('/posts', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getFeed(
+      return await Posts.getFeed(
         {},
         {
           db: fastify.mongo.db,
@@ -17,19 +17,24 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/posts/:id', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.get(
-        {
-          _id: request.params.id,
-        },
-        {
-          db: fastify.mongo.db,
-          as: request.query.as,
-        }
-      )
+      try {
+        return await Posts.get(
+          {
+            _id: request.params.id,
+          },
+          {
+            db: fastify.mongo.db,
+            as: request.query.as,
+          }
+        )
+      } catch (err) {
+        reply.type('application/json').code(err.code)
+        return err
+      }
     })
     .get('/posts/:id/replies', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getFeed(
+      return await Posts.getFeed(
         {
           parent_id: request.params.id,
         },
@@ -44,7 +49,7 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/posts/:id/favorites', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getFavorites(
+      return await Posts.getFavorites(
         {
           post_id: request.params.id,
         },
@@ -55,7 +60,7 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/users/@:username/posts', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.getUserFeed(
+      return await Posts.getUserFeed(
         {
           username: request.params.username,
         },
@@ -69,7 +74,7 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/search/:query', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.searchQuery(
+      return await Posts.searchQuery(
         { query: request.params.query },
         {
           db: fastify.mongo.db,
@@ -81,7 +86,7 @@ module.exports = (fastify, opts, next) => {
     })
     .get('/hashtags/:hashtag', async (request, reply) => {
       reply.type('application/json').code(200)
-      return Posts.searchHashtag(
+      return await Posts.searchHashtag(
         { query: request.params.hashtag },
         {
           db: fastify.mongo.db,
@@ -94,7 +99,7 @@ module.exports = (fastify, opts, next) => {
 
   fastify.post('/posts', async (request, reply) => {
     reply.type('application/json').code(201)
-    return Posts.add(
+    return await Posts.add(
       {
         text: request.body.text,
         user_id: request.body.userId,

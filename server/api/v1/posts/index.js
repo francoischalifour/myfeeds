@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb')
-const { objectifyProps } = require('../../../utils')
+const { APIError, objectifyProps } = require('../../../utils')
 const {
   COLLECTION_POSTS,
   COLLECTION_USERS,
@@ -14,10 +14,17 @@ const {
 } = require('./utils')
 
 const Posts = {
-  async get(dataFilter, { db, as }) {
+  async get(dataFilter = {}, { db, as }) {
     const filter = objectifyProps(dataFilter)
-
     const post = await db.collection(COLLECTION_POSTS).findOne(filter)
+
+    if (!post) {
+      throw new APIError({
+        code: 404,
+        message: "This post doesn't exist.",
+      })
+    }
+
     const author = await db
       .collection(COLLECTION_USERS)
       .findOne({ _id: post.user_id })
@@ -30,9 +37,8 @@ const Posts = {
 
     return result
   },
-  async getFavorites(dataFilter, { db }) {
+  async getFavorites(dataFilter = {}, { db }) {
     const filter = objectifyProps(dataFilter)
-
     const favorites = await db
       .collection(COLLECTION_FAVORITES)
       .find(filter, { _id: 0, post_id: 0 })
@@ -44,7 +50,7 @@ const Posts = {
 
     return result
   },
-  async getFeed({ parent_id }, { db, as, since, limit, sort = 'desc' }) {
+  async getFeed({ parent_id } = {}, { db, as, since, limit, sort = 'desc' }) {
     const filter = {
       parent_id: parent_id ? ObjectId(parent_id) : { $exists: false },
     }
@@ -66,7 +72,7 @@ const Posts = {
 
     return result
   },
-  async getUserFeed(filter, { db, as, since, limit }) {
+  async getUserFeed(filter = {}, { db, as, since, limit }) {
     const user = await db
       .collection(COLLECTION_USERS)
       .findOne(filter, { _id: 1 })
@@ -96,7 +102,7 @@ const Posts = {
 
     return result
   },
-  async searchQuery({ query }, { db, as, since, limit }) {
+  async searchQuery({ query = '' } = {}, { db, as, since, limit }) {
     const filter = { $text: { $search: query } }
     since && (filter._id = { $gt: ObjectId(since) })
 
@@ -118,7 +124,7 @@ const Posts = {
 
     return result
   },
-  async searchHashtag({ query }, { db, as, since, limit }) {
+  async searchHashtag({ query = '' } = {}, { db, as, since, limit }) {
     const filter = { hashtags: { $in: [query.toLowerCase()] } }
     since && (filter._id = { $gt: ObjectId(since) })
 
@@ -139,7 +145,7 @@ const Posts = {
 
     return result
   },
-  async add(rawPost, { db }) {
+  async add(rawPost = {}, { db }) {
     !rawPost.parent_id && delete rawPost.parent_id
 
     const post = objectifyProps({

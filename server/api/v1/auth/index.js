@@ -1,20 +1,19 @@
 const bcrypt = require('bcryptjs')
-const { objectifyProps } = require('../../../utils')
+const { APIError, objectifyProps } = require('../../../utils')
 const { COLLECTION_USERS } = require('../../../constants')
 
 const Auth = {
-  async getAccount({ email, password }, { db }) {
+  async getAccount({ email = '', password = '' } = {}, { db }) {
     const account = await db.collection(COLLECTION_USERS).findOne({
       email: new RegExp(['^', email, '$'].join(''), 'i'),
     })
 
     if (!account) {
-      return {
-        error: {
-          message:
-            'This email address is not registered. Did you mean to sign up?',
-        },
-      }
+      throw new APIError({
+        code: 400,
+        message:
+          'This email address is not registered. Did you mean to sign up?',
+      })
     }
 
     const passwordMatched = await bcrypt.compare(password, account.password)
@@ -22,15 +21,27 @@ const Auth = {
     if (passwordMatched) {
       delete account.password
       return account
-    }
-
-    return {
-      error: {
+    } else {
+      throw new APIError({
+        code: 400,
         message: 'Invalid email address or password.',
-      },
+      })
     }
   },
-  async addAccount({ name, username, email, password }, { db }) {
+  async addAccount(
+    { name = '', username = '', email = '', password = '' } = {},
+    { db }
+  ) {
+    const properties = arguments[0]
+    Object.keys(properties).forEach(prop => {
+      if (!properties[prop] || properties[prop].length < 2) {
+        throw new APIError({
+          code: 400,
+          message: `The ${prop} is not valid.`,
+        })
+      }
+    })
+
     const hash = await bcrypt.hash(password, 10)
 
     try {
@@ -50,14 +61,22 @@ const Auth = {
 
       return user
     } catch (err) {
-      return {
-        error: {
-          message: 'This user is already registered.',
-        },
-      }
+      throw new APIError({
+        code: 400,
+        message: 'This user is already registered.',
+      })
     }
   },
-  async updateAccount(info, { db }) {
+  async updateAccount(info = {}, { db }) {
+    const requiredProperties = ['name', 'username', 'email']
+    requiredProperties.forEach(prop => {
+      if (!info[prop] || info[prop].length < 2) {
+        throw new APIError({
+          code: 400,
+          message: `The ${prop} is not valid.`,
+        })
+      }
+    })
     const user = objectifyProps(info)
 
     const result = await db
@@ -67,11 +86,11 @@ const Auth = {
     if (result) {
       return user
     }
-    return {
-      error: {
-        message: 'An error has occurred updating your profile.',
-      },
-    }
+
+    throw new APIError({
+      code: 400,
+      message: 'An error has occurred updating your profile.',
+    })
   },
 }
 
