@@ -22,7 +22,7 @@ class ProfileScene extends Component {
 
   async componentDidMount() {
     const username = this.props.match.params.username
-    const user = await api.getUser({ username })
+    const user = await api.getUser({ username, as: this.activeUser._id })
 
     if (user && user._id) {
       document.title = `${user.name} - ${SITE_TITLE}`

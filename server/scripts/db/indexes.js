@@ -2,6 +2,7 @@ const {
   COLLECTION_USERS,
   COLLECTION_POSTS,
   COLLECTION_FAVORITES,
+  COLLECTION_FOLLOWERS,
 } = require('../../constants')
 
 const indexes = {
@@ -13,6 +14,12 @@ const indexes = {
     {
       description: "get a user's account (login and signup)",
       value: [{ email: 1 }, { unique: true }],
+    },
+  ],
+  [COLLECTION_FOLLOWERS]: [
+    {
+      description: 'check if a user has followed another',
+      value: [{ follower_id: 1, user_id: 1 }],
     },
   ],
   [COLLECTION_POSTS]: [
