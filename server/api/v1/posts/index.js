@@ -204,7 +204,7 @@ const Posts = {
       .limit(Number(limit))
       .toArray()
 
-    result = await getPostsWithAuthors(posts, db)
+    let result = await getPostsWithAuthors(posts, db)
 
     if (as) {
       result = await getPostsWithMetadata(result, ObjectId(as), db)
@@ -243,7 +243,7 @@ const Posts = {
       .limit(Number(limit))
       .toArray()
 
-    result = await getPostsWithAuthors(posts, db)
+    let result = await getPostsWithAuthors(posts, db)
 
     if (as) {
       result = await getPostsWithMetadata(result, ObjectId(as), db)
@@ -294,7 +294,7 @@ const Posts = {
       .limit(Number(limit))
       .toArray()
 
-    result = await getPostsWithAuthors(posts, db)
+    let result = await getPostsWithAuthors(posts, db)
 
     if (as) {
       result = await getPostsWithMetadata(result, ObjectId(as), db)
