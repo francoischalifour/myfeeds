@@ -173,6 +173,135 @@ const Posts = {
 
     return result
   },
+  async getAllBest(rawFilter = {}, { db, as, since, limit, sort }) {
+    const posts = await db
+      .collection(COLLECTION_POSTS)
+      .aggregate([
+        {
+          $match: { _id: since ? { $lt: ObjectId(since) } : { $exists: true } },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            star_count: { $first: '$star_count' },
+            user_id: { $first: '$user_id' },
+            text: { $first: '$text' },
+            star_count: { $first: '$star_count' },
+            reply_count: { $first: '$reply_count' },
+            created_at: { $first: '$created_at' },
+          },
+        },
+        {
+          $match: { star_count: { $gt: 0 } },
+        },
+        {
+          $sort: {
+            star_count: sort === 'asc' ? 1 : -1,
+            created_at: sort === 'asc' ? 1 : -1,
+          },
+        },
+      ])
+      .limit(Number(limit))
+      .toArray()
+
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (as) {
+      result = await getPostsWithMetadata(result, ObjectId(as), db)
+    }
+
+    return result
+  },
+  async getAllControversed(rawFilter = {}, { db, as, since, limit, sort }) {
+    const posts = await db
+      .collection(COLLECTION_POSTS)
+      .aggregate([
+        {
+          $match: { _id: since ? { $lt: ObjectId(since) } : { $exists: true } },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            star_count: { $first: '$star_count' },
+            user_id: { $first: '$user_id' },
+            text: { $first: '$text' },
+            star_count: { $first: '$star_count' },
+            reply_count: { $first: '$reply_count' },
+            created_at: { $first: '$created_at' },
+          },
+        },
+        {
+          $match: { reply_count: { $gt: 0 } },
+        },
+        {
+          $sort: {
+            reply_count: sort === 'asc' ? 1 : -1,
+            created_at: sort === 'asc' ? 1 : -1,
+          },
+        },
+      ])
+      .limit(Number(limit))
+      .toArray()
+
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (as) {
+      result = await getPostsWithMetadata(result, ObjectId(as), db)
+    }
+
+    return result
+  },
+  async getAllPopular(rawFilter = {}, { db, as, since, limit, sort }) {
+    const posts = await db
+      .collection(COLLECTION_POSTS)
+      .aggregate([
+        {
+          $match: { _id: since ? { $lt: ObjectId(since) } : { $exists: true } },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            star_count: { $first: '$star_count' },
+            user_id: { $first: '$user_id' },
+            text: { $first: '$text' },
+            star_count: { $first: '$star_count' },
+            reply_count: { $first: '$reply_count' },
+            created_at: { $first: '$created_at' },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            star_count: 1,
+            user_id: 1,
+            text: 1,
+            star_count: 1,
+            reply_count: 1,
+            created_at: 1,
+            score: { $sum: ['$star_count', '$reply_count'] },
+          },
+        },
+        {
+          $match: { score: { $gt: 0 } },
+        },
+        {
+          $sort: {
+            score: sort === 'asc' ? 1 : -1,
+            created_at: sort === 'asc' ? 1 : -1,
+          },
+        },
+      ])
+      .limit(Number(limit))
+      .toArray()
+
+    let result = await getPostsWithAuthors(posts, db)
+
+    if (as) {
+      result = await getPostsWithMetadata(result, ObjectId(as), db)
+    }
+
+    return result
+  },
 }
 
 module.exports = Posts

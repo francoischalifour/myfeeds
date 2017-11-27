@@ -89,6 +89,9 @@ const Navbar = ({ isLoggedIn: username }) => (
               <a href={`/@${username}`}>Profile</a>
             </li>
             <li>
+              <Link to="/moments">Moments</Link>
+            </li>
+            <li>
               <Link to="/settings">Settings</Link>
             </li>
           </NavList>
