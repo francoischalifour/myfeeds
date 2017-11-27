@@ -1,4 +1,5 @@
 {
   "name": "myfeeds",
+  "alias": "myfeeds.now.sh",
   "dotenv": ".env.production"
 }
