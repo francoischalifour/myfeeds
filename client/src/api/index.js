@@ -68,6 +68,26 @@ const getAllPostsMatching = ({ query, userId }) =>
 const getAllPostsHashtag = ({ query, userId }) =>
   getV1(`/hashtags/${query}?as=${userId}`)
 
+const getBestPosts = ({ userId, since = '', limit = 10, sort = 'desc' }) =>
+  getV1(`/moments/best?as=${userId}&since=${since}&limit=${limit}&sort=${sort}`)
+
+const getControversedPosts = ({
+  userId,
+  since = '',
+  limit = 10,
+  sort = 'desc',
+}) =>
+  getV1(
+    `/moments/controversed?as=${userId}&since=${since}&limit=${limit}&sort=${
+      sort
+    }`
+  )
+
+const getPopularPosts = ({ userId, since = '', limit = 10, sort = 'desc' }) =>
+  getV1(
+    `/moments/popular?as=${userId}&since=${since}&limit=${limit}&sort=${sort}`
+  )
+
 const login = info => postV1('/login', info)
 
 const signup = info => postV1('/signup', info)
@@ -89,6 +109,9 @@ export default {
   getAllUserPosts,
   getAllPostsMatching,
   getAllPostsHashtag,
+  getBestPosts,
+  getControversedPosts,
+  getPopularPosts,
   login,
   signup,
   update,

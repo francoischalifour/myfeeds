@@ -12,6 +12,7 @@ import Post from 'scenes/Post'
 import Hashtag from 'scenes/Hashtag'
 import Search from 'scenes/Search'
 import Settings from 'scenes/Settings'
+import Moments from 'scenes/Moments'
 import Login from 'scenes/Login'
 import Signup from 'scenes/Signup'
 import Navbar from 'components/Navbar'
@@ -28,6 +29,14 @@ const App = () => (
         {isConnected
           ? [
               <Route exact path="/" component={Timeline} key="Timeline" />,
+              <Route exact path="/moments" component={Moments} key="Moments" />,
+              <Route
+                exact
+                path="/settings"
+                component={Settings}
+                key="Settings"
+              />,
+              <Route exact path="/logout" component={Logout} key="Logout" />,
               <Route path="/@:username" component={Profile} key="Profile" />,
               <Route path="/posts/:postid" component={Post} key="Post" />,
               <Route
@@ -36,13 +45,6 @@ const App = () => (
                 key="Hashtag"
               />,
               <Route path="/search" component={Search} key="Search" />,
-              <Route
-                exact
-                path="/settings"
-                component={Settings}
-                key="Settings"
-              />,
-              <Route exact path="/logout" component={Logout} key="Logout" />,
             ]
           : [
               <Route exact path="/" component={Login} key="Login" />,
