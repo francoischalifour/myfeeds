@@ -1,18 +1,35 @@
-# My Feeds
+<p align="center">
+  <a href="https://myfeeds.netlify.com"><img src="logo.svg" width="64" alt="Logo"></a>
+  <h3 align="center">MyFeeds</h3>
+  <p align="center">Microblogging app with React and MongoDB</p>
+  <hr>
+</p>
 
-> Social network application managed by a NoSQL database.
+This is a basic and non-secure frontend app built with
+[React](https://github.com/facebook/react) to showcase the work with
+[MongoDB](https://github.com/mongodb/mongo). This project is part of the
+_Advanced Databases_ course at Laval University.
 
-This is a basic and non-secure frontend app built with [React](https://github.com/facebook/react) to showcase our work with [MongoDB](https://github.com/mongodb/mongo).
+![Preview](https://user-images.githubusercontent.com/6137112/33275351-a261e26a-d360-11e7-8b7c-dea59350cc19.png)
 
-This project is part of the *Advanced Databases* course at *Laval University*.
+_Built and deployed with: MongoDB, Fastify, React, Netlify, Now, mLab._
 
 ## Features
 
-> In progress
+* User profiles
+* Posts
+* Feeds
+* Favorites
+* Followers
+* Search
+* Instant Search
+* Hashtags
+* Moments
 
 ## Documentation
 
-You'll find the appropriate documentations for the [client](client/) and the [server](server/) in their respective folders.
+You'll find the appropriate documentations for the [client](client/) and the
+[server](server/) in their respective folders.
 
 ## Usage
 
@@ -31,6 +48,20 @@ You'll find the appropriate documentations for the [client](client/) and the [se
 
 More commands are available in the [client](client/) and the [server](server/).
 
+## Preview
+
+### Timeline
+
+![Timeline](https://user-images.githubusercontent.com/6137112/33275351-a261e26a-d360-11e7-8b7c-dea59350cc19.png)
+
+### Post
+
+![Post](https://user-images.githubusercontent.com/6137112/33275357-a70d4d9a-d360-11e7-80cb-3244322efe33.png)
+
+### Instant Search
+
+![Search](https://user-images.githubusercontent.com/6137112/33275364-ac63c224-d360-11e7-8d88-54e7ea77d254.png)
+
 ## License
 
-MIT © [François Chalifour](https://francoischalifour.com) and Michaël Bouffard
+MIT © [François Chalifour](https://francoischalifour.com)
