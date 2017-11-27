@@ -1,6 +1,6 @@
 {
-  "short_name": "My Feeds",
-  "name": "My Feeds - Social Network",
+  "short_name": "MyFeeds",
+  "name": "MyFeeds - Microblogging app",
   "icons": [
     {
       "src": "favicon.png",
