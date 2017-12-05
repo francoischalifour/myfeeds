@@ -9,14 +9,12 @@ const Favorites = {
     })
     let result
 
-    const hasAlreadyFavorited = await db
-      .collection(COLLECTION_FAVORITES)
-      .findOne({
-        user_id: fav.user_id,
-        post_id: fav.post_id,
-      })
+    const isFavorited = await db.collection(COLLECTION_FAVORITES).findOne({
+      user_id: fav.user_id,
+      post_id: fav.post_id,
+    })
 
-    if (!hasAlreadyFavorited) {
+    if (!isFavorited) {
       await db.collection(COLLECTION_FAVORITES).insertOne(fav)
       await db.collection(COLLECTION_POSTS).updateOne(
         {

@@ -12,6 +12,7 @@ module.exports = (fastify, opts, next) => {
           },
           {
             db: fastify.mongo.db,
+            as: request.query.as,
           }
         )
       } catch (err) {
@@ -28,6 +29,7 @@ module.exports = (fastify, opts, next) => {
           },
           {
             db: fastify.mongo.db,
+            as: request.query.as,
           }
         )
       } catch (err) {

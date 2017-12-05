@@ -56,8 +56,10 @@ const getPostReplies = ({ postId, userId, since, limit, sort }) =>
 
 const getPostFavorites = ({ postId }) => getV1(`/posts/${postId}/favorites`)
 
-const getUser = ({ userId, username }) =>
-  username ? getV1(`/users/@${username}`) : getV1(`/users/${userId}`)
+const getUser = ({ userId, username, as }) =>
+  username
+    ? getV1(`/users/@${username}?as=${as}`)
+    : getV1(`/users/${userId}?as=${as}`)
 
 const getAllUserPosts = ({ username, userId }) =>
   getV1(`/users/@${username}/posts?as=${userId}`)
@@ -100,6 +102,10 @@ const favorite = fav => postV1('/favorites/create', fav)
 
 const unfavorite = fav => postV1('/favorites/delete', fav)
 
+const follow = follow => postV1('/followers/create', follow)
+
+const unfollow = follow => postV1('/followers/delete', follow)
+
 export default {
   isServerUp,
   getAllPosts,
@@ -118,4 +124,6 @@ export default {
   addPost,
   favorite,
   unfavorite,
+  follow,
+  unfollow,
 }

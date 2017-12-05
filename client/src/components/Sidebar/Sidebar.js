@@ -73,10 +73,6 @@ const Ul = glamorous.ul({
 })
 
 class Sidebar extends Component {
-  onFollow = ({ following }) => {
-    this.props.onFollow({ following })
-  }
-
   render() {
     const {
       profile_image_url: imageUrl,
@@ -166,17 +162,14 @@ class Sidebar extends Component {
 
           {this.props.showFollowButton && (
             <Footer>
-              {!this.props.isFollowing ? (
-                <button
-                  className="button"
-                  onClick={() => this.onFollow({ following: true })}
-                >
+              {!this.props.followed ? (
+                <button className="button" onClick={this.props.onFollow}>
                   Follow
                 </button>
               ) : (
                 <button
                   className="button outline"
-                  onClick={() => this.onFollow({ following: false })}
+                  onClick={this.props.onFollow}
                 >
                   Unfollow
                 </button>

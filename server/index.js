@@ -21,6 +21,7 @@ fastify.get('/status', async (request, reply) => {
 
 fastify.register(require('./api/v1/auth/routes'), { prefix: '/v1' })
 fastify.register(require('./api/v1/users/routes'), { prefix: '/v1' })
+fastify.register(require('./api/v1/followers/routes'), { prefix: '/v1' })
 fastify.register(require('./api/v1/posts/routes'), { prefix: '/v1' })
 fastify.register(require('./api/v1/favorites/routes'), { prefix: '/v1' })
 fastify.register(require('./api/v1/moments/routes'), { prefix: '/v1' })
