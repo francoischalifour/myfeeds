@@ -1,6 +1,6 @@
-# My Feeds Server
+# MyFeeds Server
 
-> Server for My Feeds.
+> Server for MyFeeds.
 
 ## Getting started
 
@@ -13,15 +13,15 @@
 
 ### Environment
 
-| Variable      | Default   | Description                          |
-|---------------|-----------|--------------------------------------|
-| `SERVER_HOST` | "0.0.0.0" | The address of the server            |
-| `SERVER_PORT` | 9000      | The port of the server               |
-| `DB_HOST`     | ""        | The address of the MongoDB database  |
-| `DB_PORT`     | ""        | The port of the MongoDB database     |
-| `DB_NAME`     | ""        | The name of the MongoDB database     |
-| `DB_USER`     | ""        | The user of the MongoDB database     |
-| `DB_PASSWORD` | ""        | The password of the MongoDB database |
+| Variable      | Default     | Description                          |
+|---------------|-------------|--------------------------------------|
+| `SERVER_HOST` | "localhost" | The address of the server            |
+| `SERVER_PORT` | 9000        | The port of the server               |
+| `DB_HOST`     | ""          | The address of the MongoDB database  |
+| `DB_PORT`     | ""          | The port of the MongoDB database     |
+| `DB_NAME`     | ""          | The name of the MongoDB database     |
+| `DB_USER`     | ""          | The user of the MongoDB database     |
+| `DB_PASSWORD` | ""          | The password of the MongoDB database |
 
 To set MyFeeds's environment variables, duplicate the file [`.env.sample`](.env.sample) and rename it [`.env`](.env). Provide your settings in the latter, which will never be committed.
 

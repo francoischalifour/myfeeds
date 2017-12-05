@@ -1,4 +1,5 @@
 {
   "name": "myfeedsapi",
+  "alias": "myfeedsapi.now.sh",
   "dotenv": ".env.production"
 }
