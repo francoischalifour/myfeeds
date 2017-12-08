@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 import { Link } from 'react-router-dom'
 import ImagePalette from 'react-image-palette'
@@ -73,6 +74,13 @@ const Ul = glamorous.ul({
 })
 
 class Sidebar extends Component {
+  static propTypes = {
+    showFollowButton: PropTypes.bool,
+    followed: PropTypes.bool,
+    onFollow: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+  }
+
   render() {
     const {
       profile_image_url: imageUrl,
@@ -111,7 +119,7 @@ class Sidebar extends Component {
       } else if (imageUrl) {
         header = (
           <ImagePalette image={imageUrl} crossOrigin={true}>
-            {({ backgroundColor, color, alternativeColor }) => (
+            {({ backgroundColor }) => (
               <Header backgroundColor={backgroundColor}>
                 <Link to={`/@${username}`}>
                   <ImageContainer>

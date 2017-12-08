@@ -26,7 +26,7 @@ const Maintenance = () => (
     <MdCloudOff size={150} color="#777" />
     <Heading>Server unreachable</Heading>
     <Description>
-      {SITE_TITLE}' server is down for now, please come back later.{' '}
+      {SITE_TITLE} is down for now, please come back later.{' '}
       <span role="img" aria-label="Bye">
         👋
       </span>

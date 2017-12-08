@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-const Loader = ({ color, size, delay }) => (
+const Loader = ({ color, size }) => (
   <svg
     width={size}
     height={size}
@@ -32,7 +33,16 @@ const Loader = ({ color, size, delay }) => (
   </svg>
 )
 
+Loader.propTypes = {
+  color: PropTypes.string,
+  size: PropTypes.number,
+}
+
 class LoaderContainer extends Component {
+  static propTypes = {
+    delay: PropTypes.number,
+  }
+
   static defaultProps = {
     color: '#ddd',
     size: 100,

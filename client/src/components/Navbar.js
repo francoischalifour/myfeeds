@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdLineWeight from 'react-icons/lib/md/line-weight'
@@ -113,5 +114,9 @@ const Navbar = ({ isLoggedIn: username }) => (
     </Container>
   </Header>
 )
+
+Navbar.propTypes = {
+  isLoggedIn: PropTypes.any,
+}
 
 export default Navbar

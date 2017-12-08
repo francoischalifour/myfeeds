@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import glamorous from 'glamorous'
 import MdChatBubbleOutline from 'react-icons/lib/md/chat-bubble-outline'
@@ -88,6 +89,14 @@ const FavoriteItemList = glamorous.ul({
 })
 
 class Post extends Component {
+  static propTypes = {
+    _id: PropTypes.string,
+    favorited: PropTypes.bool,
+    onFavorite: PropTypes.func,
+    onItemClick: PropTypes.func,
+    onCommentIconClick: PropTypes.func,
+  }
+
   static defaultProps = {
     onFavorite: () => {},
     onItemClick: () => {},

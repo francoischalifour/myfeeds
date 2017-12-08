@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import glamorous from 'glamorous'
 import api from 'api'
@@ -24,6 +25,10 @@ const Input = glamorous.input({
 })
 
 class SearchForm extends Component {
+  static propTypes = {
+    placeholder: PropTypes.string,
+  }
+
   static defaultProps = {
     placeholder: '',
   }
@@ -56,7 +61,7 @@ class SearchForm extends Component {
     this.navbar.removeEventListener('click', this.onNavbarLinkClick)
   }
 
-  onNavbarLinkClick = event => {
+  onNavbarLinkClick = () => {
     this.onClose()
   }
 

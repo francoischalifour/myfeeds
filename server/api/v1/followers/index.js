@@ -1,5 +1,5 @@
 const { objectifyProps } = require('../../../utils')
-const { COLLECTION_USERS, COLLECTION_FOLLOWERS } = require('../../../constants')
+const { COLLECTION_FOLLOWERS } = require('../../../constants')
 
 const Followers = {
   async add(rawFollow = {}, { db }) {

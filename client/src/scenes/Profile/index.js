@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import MdCreate from 'react-icons/lib/md/create'
 import api from 'api'
@@ -13,6 +14,11 @@ import PostList from 'components/PostList'
 import Post from 'components/Post'
 
 class ProfileScene extends Component {
+  static propTypes = {
+    location: PropTypes.object,
+    match: PropTypes.object,
+  }
+
   activeUser = getLocalUser()
   state = {
     error: '',
@@ -90,7 +96,7 @@ class ProfileScene extends Component {
                   <MdCreate size={200} color="#ddd" />
 
                   <p>
-                    <strong>@{this.state.user.username}</strong> hasn't posted
+                    <strong>@{this.state.user.username}</strong> hasn’t posted
                     yet. Get in touch!
                   </p>
                 </div>

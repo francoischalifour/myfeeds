@@ -1,10 +1,21 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import api from 'api'
 import { LOCALE_STORAGE_FEED_SCROLL } from '../constants'
 import { getLocalUser } from 'utils'
 
 class Feed extends Component {
+  static propTypes = {
+    posts: PropTypes.array.isRequired,
+    limit: PropTypes.number,
+    name: PropTypes.string,
+    render: PropTypes.func.isRequired,
+    renderError: PropTypes.func,
+    renderLoading: PropTypes.func,
+    renderEmpty: PropTypes.func,
+  }
+
   static defaultProps = {
     posts: [],
     render: () => null,

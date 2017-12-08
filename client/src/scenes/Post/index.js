@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import { getLocalUser } from 'utils'
@@ -19,6 +20,12 @@ const PostContainer = glamorous.div({
 })
 
 class PostScene extends Component {
+  static propTypes = {
+    location: PropTypes.object,
+    history: PropTypes.object,
+    match: PropTypes.object,
+  }
+
   activeUser = getLocalUser()
   initialState = {
     error: '',

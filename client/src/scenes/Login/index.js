@@ -99,7 +99,7 @@ class LoginScene extends Component {
           </LoginButton>
 
           <p style={{ textAlign: 'center' }}>
-            <Link to="/signup">Don't have an account yet? Sign up.</Link>
+            <Link to="/signup">Don’t have an account yet? Sign up.</Link>
           </p>
         </Form>
       </Container>
