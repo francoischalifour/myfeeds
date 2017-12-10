@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import api from 'api'
 import { getLocalUser } from 'utils'
@@ -11,6 +12,10 @@ import PostList from 'components/PostList'
 import Post from 'components/Post'
 
 class SearchScene extends Component {
+  static propTypes = {
+    location: PropTypes.object,
+  }
+
   activeUser = getLocalUser()
   state = {
     posts: [],

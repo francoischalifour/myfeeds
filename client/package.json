@@ -11,7 +11,8 @@
     "deploy": "react-scripts build && cp build/index.html build/404.html",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "format": "./node_modules/.bin/prettier --write 'src/**/*.{js,json,css}'"
+    "format": "./node_modules/.bin/prettier --write 'src/**/*.{js,json,css}'",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@researchgate/react-intersection-observer": "^0.4.0",
@@ -30,6 +31,11 @@
     "simple-text-parser": "^1.0.0"
   },
   "devDependencies": {
-    "prettier": "1.8.2"
+    "babel-eslint": "^8.0.3",
+    "eslint": "^4.12.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-react": "^7.5.1",
+    "prettier": "1.8.2",
+    "prop-types": "^15.6.0"
   }
 }

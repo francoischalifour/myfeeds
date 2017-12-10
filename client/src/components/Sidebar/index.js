@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import api from 'api'
 import { getLocalUser } from 'utils'
 import Sidebar from './Sidebar'
 
 class SidebarContainer extends Component {
+  static propTypes = {
+    user: PropTypes.object.isRequired,
+  }
+
   activeUser = getLocalUser()
   state = {}
 

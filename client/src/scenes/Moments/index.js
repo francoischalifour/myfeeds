@@ -75,13 +75,7 @@ class Moments extends Component {
 
           <Feed
             posts={this.state.popularPosts}
-            render={({
-              posts,
-              onFavorite,
-              onItemClick,
-              onPostRef,
-              onSubmit,
-            }) => (
+            render={({ posts, onFavorite, onItemClick, onPostRef }) => (
               <div style={{ backgroundColor: '#fff' }}>
                 <PostList>
                   {posts.map(post => (
@@ -117,13 +111,7 @@ class Moments extends Component {
 
               <Feed
                 posts={this.state.bestPosts}
-                render={({
-                  posts,
-                  onFavorite,
-                  onItemClick,
-                  onPostRef,
-                  onSubmit,
-                }) => (
+                render={({ posts, onFavorite, onItemClick, onPostRef }) => (
                   <div style={{ backgroundColor: '#fff' }}>
                     <PostList>
                       {posts.map(post => (
@@ -158,13 +146,7 @@ class Moments extends Component {
 
               <Feed
                 posts={this.state.controversedPosts}
-                render={({
-                  posts,
-                  onFavorite,
-                  onItemClick,
-                  onPostRef,
-                  onSubmit,
-                }) => (
+                render={({ posts, onFavorite, onItemClick, onPostRef }) => (
                   <div style={{ backgroundColor: '#fff' }}>
                     <PostList>
                       {posts.map(post => (

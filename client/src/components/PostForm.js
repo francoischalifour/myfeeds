@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 import ProfilePicture from 'components/ProfilePicture'
 
@@ -37,6 +38,16 @@ const Textarea = glamorous.textarea({
 })
 
 class PostForm extends Component {
+  static propTypes = {
+    isFocused: PropTypes.bool,
+    parentId: PropTypes.string,
+    profile_image_url: PropTypes.string,
+    username: PropTypes.string,
+    placeholder: PropTypes.string,
+    onCommentIconBlur: PropTypes.func,
+    onSubmit: PropTypes.func,
+  }
+
   static defaultProps = {
     placeholder: "What's happening?",
   }

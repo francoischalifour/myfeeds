@@ -173,7 +173,7 @@ const Posts = {
 
     return result
   },
-  async getAllBest(rawFilter = {}, { db, as, since, limit, sort }) {
+  async getAllBest(rawFilter, { db, as, since, limit, sort }) {
     const posts = await db
       .collection(COLLECTION_POSTS)
       .aggregate([
@@ -183,7 +183,6 @@ const Posts = {
         {
           $group: {
             _id: '$_id',
-            star_count: { $first: '$star_count' },
             user_id: { $first: '$user_id' },
             text: { $first: '$text' },
             star_count: { $first: '$star_count' },
@@ -212,7 +211,7 @@ const Posts = {
 
     return result
   },
-  async getAllControversed(rawFilter = {}, { db, as, since, limit, sort }) {
+  async getAllControversed(rawFilter, { db, as, since, limit, sort }) {
     const posts = await db
       .collection(COLLECTION_POSTS)
       .aggregate([
@@ -222,7 +221,6 @@ const Posts = {
         {
           $group: {
             _id: '$_id',
-            star_count: { $first: '$star_count' },
             user_id: { $first: '$user_id' },
             text: { $first: '$text' },
             star_count: { $first: '$star_count' },
@@ -251,7 +249,7 @@ const Posts = {
 
     return result
   },
-  async getAllPopular(rawFilter = {}, { db, as, since, limit, sort }) {
+  async getAllPopular(rawFilter, { db, as, since, limit, sort }) {
     const posts = await db
       .collection(COLLECTION_POSTS)
       .aggregate([
@@ -261,7 +259,6 @@ const Posts = {
         {
           $group: {
             _id: '$_id',
-            star_count: { $first: '$star_count' },
             user_id: { $first: '$user_id' },
             text: { $first: '$text' },
             star_count: { $first: '$star_count' },
@@ -272,7 +269,6 @@ const Posts = {
         {
           $project: {
             _id: 1,
-            star_count: 1,
             user_id: 1,
             text: 1,
             star_count: 1,

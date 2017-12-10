@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import MdClose from 'react-icons/lib/md/close'
@@ -76,5 +77,12 @@ const SearchPanel = ({ posts, search, onItemClick, onClose }) => (
     </PanelFooter>
   </PanelContainer>
 )
+
+SearchPanel.propTypes = {
+  posts: PropTypes.array,
+  search: PropTypes.string,
+  onItemClick: PropTypes.func,
+  onClose: PropTypes.func,
+}
 
 export default SearchPanel

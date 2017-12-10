@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import MdFindInPage from 'react-icons/lib/md/find-in-page'
 import MdList from 'react-icons/lib/md/list'
 import api from 'api'
@@ -12,6 +13,10 @@ import PostList from 'components/PostList'
 import Post from 'components/Post'
 
 class HashtagScene extends Component {
+  static propTypes = {
+    match: PropTypes.object,
+  }
+
   activeUser = getLocalUser()
   state = {
     posts: [],
